@@ -1,0 +1,13 @@
+.fun__broadcastContainer {
+    height: 100%;
+    display: grid;
+    grid-template-rows:  .25fr 8fr;
+    /* grid-auto-rows: minmax(100px, auto);    */
+}
+.fun__broadcastNav {
+    height: 6rem;
+    grid-row: 1/2;
+}
+.fun__broadcastBody {
+    grid-row: 2/3;
+}

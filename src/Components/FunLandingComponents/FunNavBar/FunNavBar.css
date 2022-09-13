@@ -1,0 +1,110 @@
+:root {
+    --nav-x: 1.5rem;
+    --nav-y: 0;
+}
+.fun__navBar {
+    width: 100%;
+    z-index: 100;
+    position: absolute;
+}
+.fun__navBarContainer {
+    background-color: transparent;
+    display: block;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    transition: all 0.3s ease-out 0s;
+}
+
+.fun__navWrapper {
+    display: grid;
+    grid-template-columns: 15rem 1fr 2fr 1fr 15rem;
+    flex-basis: auto;
+    margin-top: calc(var(--nav-y) * -1);
+    margin-right: calc(var(--nav-x)/ -2);
+    margin-left: calc(var(--nav-x)/ -2);
+}
+.fun__navBarStart {
+    grid-column: 2/3;
+}
+
+.fun__navLogo {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    height: 100%;
+}
+
+.fun__navLogo img {
+    width: 180px;
+    height: 80px;
+    padding-left: 2rem;
+}
+
+.fun__navBarMid {
+    grid-column: 3/4;
+    padding: 0 4rem 0 6rem;
+}
+
+.fun__navItems ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    list-style-type: none;
+    text-align: right;
+}
+
+.fun__navItems ul li {
+    margin-left: 10px;
+}
+
+.fun__navItems ul li a {
+    text-decoration: none;
+    font-weight: 600;
+    color: #ffffff;
+    padding: 35px 0;
+    display: inline-flex;
+    transition: all 0.3s ease-out 0s;
+    font-size: 1.1rem;
+}
+
+.fun__navBarEnd {
+    grid-column: 4/5;
+}
+.fun__navItems {
+    height: 100%;
+}
+.fun__liveBtn {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    align-content: center;
+    height: 100%;
+    margin-right: 3rem;
+}
+
+
+@media (max-width: 1550px) {
+
+    .fun__navWrapper {
+        grid-template-columns: 7rem 1fr 2fr 1fr 7rem;
+    }
+    
+}
+
+@media (max-width: 1380px) {
+    .fun__navWrapper {
+        grid-template-columns: 5rem 1fr 2fr 1fr 5rem;
+    }
+    
+}
+
+
+@media (max-width: 1080px) {
+    .fun__navWrapper {
+        grid-template-columns: 2rem 1fr 2fr 1fr 2rem;
+    }
+}
