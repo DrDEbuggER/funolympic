@@ -6,7 +6,6 @@ export const FunChatMessage = ({comment}) => {
         <div className="fun__chatBodyMessage">
             <div className="fun__messageContent">
                 <p>{comment}</p>
-                {/* <p>This is chat message</p> */}
             </div>
         </div>
     )
