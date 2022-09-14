@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="720" height="320" viewBox="0 0 720 320" xml:space="preserve">
+<desc>Created with Fabric.js 4.2.0</desc>
+<defs>
+</defs>
+<g transform="matrix(0 0 0 0 0 0)" id="4e7812da-1be1-4291-b46c-c212f362b9f5"  >
+</g>
+<g transform="matrix(1 0 0 1 360 160)" id="e2847f0c-7d52-42ea-b150-a6a745da518e"  >
+<rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(179,151,192); fill-opacity: 0.99; fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  x="-360" y="-160" rx="0" ry="0" width="720" height="320" />
+</g>
+<g transform="matrix(1 0 0 1 360 160)" style="" id="62e19dad-c4bd-4b63-b526-1cdd6048926c"  >
+		<rect opacity="0" fill="rgb(0,0,0)" x="-288" y="-107.35" width="576" height="214.7"></rect>
+		<text xml:space="preserve" font-family="Raleway" font-size="95" font-style="normal" font-weight="900" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(250,245,250); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-248.14" y="-23.83" >Place Your</tspan><tspan x="-209.85" y="83.52" >Ads Here</tspan></text>
+</g>
+<g transform="matrix(7.99 0 0 3.08 365 159.91)" id="976977ab-25e2-4314-b863-8658648b0c79"  >
+<path style="stroke: rgb(127,117,140); stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(232,224,233); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  transform=" translate(-50, -50)" d="M 90.375 90.375 L 9.625 90.375 L 9.625 9.625 L 90.375 9.625 L 90.375 90.375 z M 11.625 88.375 L 88.375 88.375 L 88.375 11.625 L 11.625 11.625 L 11.625 88.375 z" stroke-linecap="round" />
+</g>
+</svg>

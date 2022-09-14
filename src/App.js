@@ -11,6 +11,7 @@ import { SignupComponent, LoginComponent, VerifyComponent } from './Components';
 import { FunAuthContextProvider } from './FunContext';
 import { FunProtectedRoute, FunRestrictedRoute } from './FunProtectedRoute';
 import { FunRestrictVerificationRoute } from './FunProtectedRoute/FunRestrictVerificationRoute';
+import { FunAdminPanel } from './Container/FunAdminPanel/FunAdminPanel';
 
 function App() {
   return (
@@ -37,6 +38,13 @@ function App() {
               <Route path="/verify" element={<VerifyComponent/>} />
             </Route>
             <Route path="/" element={<FunLandingPage/>} />
+            {/* Admin Route */}
+            <Route>
+              <Route path="/admin/dashboard" element={<FunAdminPanel pageName="dashboard"/>} />
+              <Route path="/admin/users" element={<FunAdminPanel pageName="users"/>} />
+              <Route path="/admin/highlights" element={<FunAdminPanel pageName="highlights"/>} />
+            </Route>
+            
           </Routes>
         </Router>
       </FunAuthContextProvider>

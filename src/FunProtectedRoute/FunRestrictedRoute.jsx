@@ -1,4 +1,4 @@
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { FunUserAuth } from "../FunContext"
 
 export const FunRestrictedRoute = () => {
