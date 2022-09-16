@@ -13,27 +13,27 @@
     padding-left: 10px;
 }
 
-ul{
+.fun__ul{
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-li{
+.fun__ul li{
     display: flex;
     align-items: center;
     padding: 5px;
     cursor: pointer;
 }
 
-li a {
+.fun__ul li a {
     width: 100%;
     text-align: start;
     display: flex;
     text-decoration: none;
 }
 
-li:hover{
+.fun__ul li:hover{
     background-color: #ece8ff;
 }
 

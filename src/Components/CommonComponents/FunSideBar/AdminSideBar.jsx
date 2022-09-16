@@ -8,7 +8,7 @@ export const AdminSidebar = () => {
     return(
         <div className="fun_adminSidebarContainer">
             <div className="fun__adminSidebar">
-                <ul>
+                <ul className="fun__ul">
                     <p className='fun__adminSidebarTitle'>General</p>
                     <AdminCustomLink to="/admin/dashboard">
                         <DashboardRounded className='icon'/>

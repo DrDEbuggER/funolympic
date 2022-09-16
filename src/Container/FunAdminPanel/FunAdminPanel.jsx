@@ -1,4 +1,4 @@
-import { AdminNavBar, FunBroadcastNavBar, FunNavBar } from "../../Components"
+import { AdminDashboard, AdminNavBar } from "../../Components"
 import { AdminSidebar } from "../../Components/CommonComponents"
 import "./FunAdminPanel.css"
 
@@ -22,10 +22,10 @@ export const FunAdminPanel = ({pageName}) => {
                 </div>
                 <div className="fun__adminDashContainer">
                     {
-                        pageName == "dashboard" ? <h1> Dashboard </h1> :
-                        pageName == "users" ? <h1> Users </h1> :
-                        pageName == "highlights" ? <h1> Highlights</h1>:
-                        pageName == "soon" ? <h1> Coming Soon...</h1>: ""
+                        pageName === "dashboard" ? <AdminDashboard /> :
+                        pageName === "users" ? <h1> Users </h1> :
+                        pageName === "highlights" ? <h1> Highlights</h1>:
+                        pageName === "soon" ? <h1> Coming Soon...</h1>: ""
                     }
                 </div>
             </div>

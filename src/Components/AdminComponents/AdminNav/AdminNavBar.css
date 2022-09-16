@@ -23,11 +23,11 @@
     padding: 3px;
 } */
 
-input{
+/* input{
     border: none;
     outline: none;
     background-color: transparent;
-}
+} */
 
 .fun__adminNavbarItems{
     display: flex;
@@ -39,9 +39,7 @@ input{
 .fun__adminNavbarItem{
     display: flex;
     align-items: center;
-    margin: 20px;
-
-    
+    margin: 10px;
 }
 
 .icon{
