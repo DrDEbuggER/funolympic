@@ -16,12 +16,19 @@ export function FunBodyContents() {
                         </div>
                     </div>
                     <div className="fun__bodyHomePromo">
-                        <FunVideoPlayer url="https://youtu.be/Rwk5PdpTxSU" 
+                        {/* <FunVideoPlayer url="https://youtu.be/Rwk5PdpTxSU" 
                         type="promo" 
                         width="100%"
                         height="100%"
                         control= {false}
+                        /> */}
+                        <FunVideoPlayer url="https://firebasestorage.googleapis.com/v0/b/bayjingfunolympic2022.appspot.com/o/files%2Fjohn_sherchan%20.mp4?alt=media&token=29e605ab-f063-46e4-80c8-4d163487ff95" 
+                        type="promo" 
+                        width="100%"
+                        height="100%"
+                        control= {true}
                         />
+                        
                     </div>
                 </div>
             </section>

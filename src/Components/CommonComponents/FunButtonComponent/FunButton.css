@@ -20,13 +20,28 @@
 }
 
 
+/* FUn Light Button */
+.fun__lightButton {
+    padding: .5rem 2rem;
+    cursor: pointer;
+    border: 2px solid #d8b6e9;
+    border-radius: .3rem;
+    background-color: white;
+    font-weight: 600;
+}
+.fun__lightButton:hover {
+    background-color: #d8b6e9;
+    color: #ffffff;
+    font-weight: 600;
+    transition: all 0.3s ease-in 0s;
+}
+
 @media (max-width: 1380px) {
     .fun_button {
         width: 7rem;
         height: 2.5rem;
         font-size: .9rem;
     }
-    
 }
 
 

@@ -18,9 +18,14 @@ export const AdminSidebar = () => {
                         <GroupOutlined className='icon'/>
                         <span>User List</span>
                     </AdminCustomLink>
-                    <AdminCustomLink to="/admin/highlights">
+                    <p className='fun__adminSidebarTitle'>Highlights</p>
+                    <AdminCustomLink to="/admin/highlights/upload">
                         <VideoLibraryOutlined className='icon'/>
-                        <span>Highlights</span>
+                        <span>Upload</span>
+                    </AdminCustomLink>
+                    <AdminCustomLink to="/admin/highlights/all">
+                        <VideoLibraryOutlined className='icon'/>
+                        <span>All Highlights</span>
                     </AdminCustomLink>
                 </ul>
             </div>

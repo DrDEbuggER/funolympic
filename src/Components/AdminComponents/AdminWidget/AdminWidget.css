@@ -55,3 +55,16 @@
     border-radius: 5px;
     align-self: flex-end;
 }
+
+/* Data grid */
+
+
+.cell_circle {
+    display: flex;
+    border: 1px solid green;
+    padding: .2rem;
+    min-width: 80px;
+    width: 100px;
+    justify-content: center;
+    border-radius: 2rem;
+}

@@ -1,4 +1,4 @@
-import { AdminDashboard, AdminNavBar } from "../../Components"
+import { AdminAllHighlights, AdminDashboard, AdminHighlightUpload, AdminNavBar, UserListsMain } from "../../Components"
 import { AdminSidebar } from "../../Components/CommonComponents"
 import "./FunAdminPanel.css"
 
@@ -23,8 +23,9 @@ export const FunAdminPanel = ({pageName}) => {
                 <div className="fun__adminDashContainer">
                     {
                         pageName === "dashboard" ? <AdminDashboard /> :
-                        pageName === "users" ? <h1> Users </h1> :
-                        pageName === "highlights" ? <h1> Highlights</h1>:
+                        pageName === "users" ? <UserListsMain /> :
+                        pageName === "uploadHighlights" ? <AdminHighlightUpload />:
+                        pageName === "allHighlights" ? <AdminAllHighlights />:
                         pageName === "soon" ? <h1> Coming Soon...</h1>: ""
                     }
                 </div>

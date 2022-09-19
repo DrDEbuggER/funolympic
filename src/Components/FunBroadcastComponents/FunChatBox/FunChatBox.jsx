@@ -36,17 +36,6 @@ export const FunChatBox = ({game}) => {
                     {!loading && chatMessages && chatMessages.map((cmt) => {
                         return <FunChatMessage comment={cmt.message}/>
                     })}
-
-                    {/* <div className="fun__chatBodyMessage">
-                        <div className="fun__messageContent">
-                            <p>this is chat box</p>
-                        </div>
-                    </div>
-                    <div className="fun__chatBodyMessage">
-                        <div className="fun__messageContent">
-                            <p>this is second chat box</p>
-                        </div>
-                    </div> */}
                 </div>
                 <div className="fun__chatInput">
                     <input onChange={(e)=>{setMessage(e.target.value)}} value={rmessage}/>

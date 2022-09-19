@@ -1,0 +1,148 @@
+.vid__uploadContainer {
+    padding: 4rem 6rem;
+}
+
+.vid__uploadMain {
+    display: grid;
+    border-radius: 10px;
+    grid-template-columns: 1fr 1fr;
+    /* width: 50vw;
+    justify-self: end; */
+    height: fit-content;
+    background-color: ghostwhite;
+    border: 1px solid #e9e5e5;
+    box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -webkit-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -moz-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    /* margin-left: 1rem; */
+}
+
+
+
+.vid__uploadUpper {
+    width: 100%;
+    grid-column: 1/2;
+    border-right: 1px dotted gray;
+    display: grid;
+    grid-template-rows: 2fr 1fr;
+}
+
+.vid__uploadPlayer {
+    padding: 2rem 2rem 0rem 2rem;
+    min-width: 500px;
+}
+
+.vid__uploadUpperSec {
+    grid-row: 1/2;
+}
+
+.vid__roundKeyUpWrapper {
+    padding-top: 8rem;
+}
+
+.vid__uploadLower {
+    padding-top: 3rem;
+    grid-column: 2/3 ;
+}
+
+.vid__uploadLower > h3 {
+    text-align: start;
+    padding-left: 2rem;
+    color: #494545;
+    font-weight: 700;
+
+}
+
+.vid__roundedKeyUp {
+    padding: 1.5rem;
+    display: flex;
+    border-radius: 50%;
+    width: fit-content;
+    margin: auto;
+    background-color: rgba(217, 223, 223, 0.322);
+    margin-bottom: 2rem;
+    cursor: pointer;
+    grid-row: 1/2;
+}
+
+.vid__uploadInfo {
+    grid-row: 2/3;
+    display: flex;
+    flex-direction: column;
+}
+.vid__uploadInfoLower {
+    grid-row: 2/3;
+    display: flex;
+    flex-direction: column;
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+.vid__uploadNotes > h3 {
+    padding: .5rem;
+    color: gray;
+}
+
+.vid__uploadNotes > p {
+    color: gray;
+}
+
+.vid__uploadButton {
+    padding-top: 1.5rem;
+}
+
+.vid__uploadForm {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 2rem;
+}
+
+.vid__uploadInput {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1rem;
+    color: #494545;
+    font-weight: 600;
+}
+
+
+.vid__uploadInput > input, .vid__uploadInput > textarea {
+    padding: .4rem;
+    border-radius: .3rem;
+    border: 2px solid gray;
+    outline: none;
+    color: #292727;
+    font-weight: 600;
+}
+
+.vid__uploadInput >:first-child {
+    text-align: start;
+    padding-bottom: .1rem;
+}
+
+.vid__uploadParted {
+    display: flex;
+    justify-content: space-between;
+}
+.vid__uploadVideo {
+    padding-top: 1rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.vid__uploadFileInfo {
+    padding: .5rem 1rem;
+    border: 1px solid rgb(142, 160, 240);
+    background-color: rgb(142, 160, 240);
+    cursor: pointer;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: .5rem;
+    margin-top: .3rem;
+}
+
+.vid__uploadInfo > p {
+    padding: 1rem .5rem .5rem .5rem;
+    color: #3f3b3b;
+    font-weight: 600;
+}

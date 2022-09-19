@@ -42,9 +42,9 @@ function App() {
             <Route>
               <Route path="/admin/dashboard" element={<FunAdminPanel pageName="dashboard"/>} />
               <Route path="/admin/users" element={<FunAdminPanel pageName="users"/>} />
-              <Route path="/admin/highlights" element={<FunAdminPanel pageName="highlights"/>} />
+              <Route path="/admin/highlights/upload" element={<FunAdminPanel pageName="uploadHighlights"/>} />
+              <Route path="/admin/highlights/all" element={<FunAdminPanel pageName="allHighlights"/>} />
             </Route>
-            
           </Routes>
         </Router>
       </FunAuthContextProvider>

@@ -18,7 +18,6 @@ export const FunBroadcast = ({pageName}) => {
                     <h1> Page Not found </h1>
                 }
             </div>
-            
         </div>
     )
 }

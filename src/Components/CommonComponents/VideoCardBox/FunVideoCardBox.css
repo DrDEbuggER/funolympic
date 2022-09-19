@@ -1,0 +1,34 @@
+
+
+.fun__videoCardBoxWrapper {
+    width: 250px;
+}
+
+.fun__vidThumbWrapper {
+    
+    width: 100%;
+}
+
+.fun__videoCardBox {
+    padding: .5rem;
+    width: 100%;
+    height: 260px;
+    border: 1px solid gray;
+    border-radius: .5rem;
+    text-align: start;
+    background-color: ghostwhite;
+    border: 1px solid #e9e5e5;
+    box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -webkit-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -moz-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+}
+
+.fun__videoCardBox img {
+    width: 100%;
+    height: 150px;
+}
+
+.fun__vidHighlightDesc h3 {
+    /* text-align: justify; */
+    font-size: 1rem;
+}

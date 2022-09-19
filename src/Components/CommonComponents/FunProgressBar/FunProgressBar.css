@@ -1,0 +1,15 @@
+.fun__prograssBarWrapper {
+    padding: 2rem 2rem .5rem 2rem;
+}
+
+.fun__progressBarContainer {
+    height: 8px;
+    border: 1px solid gray;
+    border-radius: .3rem;
+}
+
+.fun__progressBar {
+    height: 100%;
+    width: 0%;
+    background-color: mediumseagreen;
+}

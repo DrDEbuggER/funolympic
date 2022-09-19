@@ -1,3 +1,6 @@
 export * from "./FunVideoPlayer"
 export * from "./FunButtonComponent"
 export * from "./FunSideBar"
+export * from "./FunSelectComponent"
+export * from "./VideoCardBox"
+export * from "./FunProgressBar"

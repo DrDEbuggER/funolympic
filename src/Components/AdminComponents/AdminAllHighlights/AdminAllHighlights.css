@@ -1,0 +1,20 @@
+.fun__adminHighlightVideos {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 1rem;
+    
+}
+.fun__adminAllHighlights {
+    padding: 0 2rem;
+}
+
+.fun__adminMenHighlights >p, .fun__adminWomenHighlights>p {
+    font-size: 18px;
+    font-weight: 600;
+    padding: 1rem 1rem 1rem 0;
+    text-align: start;
+}
+
+.fun__adminAllHighlightsContainer { 
+    margin-top: 2rem;
+}
