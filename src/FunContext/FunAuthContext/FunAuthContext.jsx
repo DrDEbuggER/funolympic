@@ -55,7 +55,7 @@ export const FunAuthContextProvider = ({children}) => {
                 console.log("Login: User not verified");
             }else {
                 const userRef = query(collection(firestore, "users"), where("uuid", "==", auth.currentUser.uid))
-                GetCurrentUserType()
+                window.localStorage.setItem("login", "true")
                 onSnapshot(userRef, (snapshot) => {
                     let docId = '';
                     snapshot.forEach(doc => {
@@ -74,17 +74,25 @@ export const FunAuthContextProvider = ({children}) => {
     const funLogout = async () => {
         await auth.signOut().then((res)=> {
             console.log("res logout", res)
+            window.localStorage.setItem("login", "false")
             setLogout(true)
         }, (err)=> console.log('logout err: ', err))
     }
 
     const GetCurrentUserType = () => {
         if(auth.currentUser) {
+            console.log("console")
             const userQuery = query(collection(firestore, "users"), where("uuid", "==",  auth.currentUser.uid))
             onSnapshot(userQuery,(snap)=>{
                 // setUserType(snap.docs[0].data().userType)
                 setUserType(snap.docs[0].data().userType)
+                // snap.forEach((doc)=> {
+                //     setUserType(doc.data().userType)
+                //     console.log("docs")
+                // })
             })
+        } else {
+            // setUserType("none")
         }
     }
 

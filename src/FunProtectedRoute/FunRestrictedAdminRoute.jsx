@@ -10,12 +10,17 @@ export const FunRestrictedAdminRoute = () => {
     const {funUser, loading, GetCurrentUserType, userType} = FunUserAuth();
     useEffect(()=>{
         GetCurrentUserType()
+        console.log("localstorage", window.localStorage.getItem('login'))
     })
+    
     return (
-        loading || !userType ? <div>Loading...</div> :
-        funUser && !funUser.emailVerified ? <Navigate to="/verify"/>:
-        funUser && funUser.emailVerified && userType === "admin" ? <Outlet /> :
-        funUser && funUser.emailVerified? <Navigate to="/broadcast"/>:
-        <Navigate to="/login"/>
+        window.localStorage.getItem('login') && window.localStorage.getItem('login') === "true" ?
+            loading || !userType ? <div>Loading...</div> :
+            funUser && !funUser.emailVerified ? <Navigate to="/verify"/>:
+            funUser && funUser.emailVerified && userType === "admin" ? <Outlet /> :
+            funUser && funUser.emailVerified? <Navigate to="/broadcast"/>:
+            <Navigate to="/login"/>
+            :
+            <Navigate to="/login"/>
     )
 }
