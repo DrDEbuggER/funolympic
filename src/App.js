@@ -9,7 +9,7 @@ import { FunLandingPage } from './Container';
 import { FunBroadcast } from './Container';
 import { SignupComponent, LoginComponent, VerifyComponent } from './Components';
 import { FunAuthContextProvider } from './FunContext';
-import { FunProtectedRoute, FunRestrictedRoute } from './FunProtectedRoute';
+import { FunProtectedRoute, FunRestrictedAdminRoute, FunRestrictedRoute } from './FunProtectedRoute';
 import { FunRestrictVerificationRoute } from './FunProtectedRoute/FunRestrictVerificationRoute';
 import { FunAdminPanel } from './Container/FunAdminPanel/FunAdminPanel';
 
@@ -21,12 +21,15 @@ function App() {
           <Routes>
             <Route element={<FunProtectedRoute/>} >
               {/* For broadcast */}
-              <Route path="/broadcast" element={<FunBroadcast pageName="home"/>}/> 
+              <Route path="/broadcast" element={<FunBroadcast pageName="home"/>}/>
+              <Route path="/livegames" element={<FunBroadcast pageName="live"/>}/> 
               <Route path="/score" element={<FunBroadcast pageName="score"/>}/> 
               <Route path="/news" element={<FunBroadcast pageName="news"/>}/> 
               <Route path="/highlights" element={<FunBroadcast pageName="highlights"/>}/> 
               <Route path="/profile" element={<FunBroadcast pageName="profile"/>}/> 
-              <Route path="/broadcast/watch" element={<FunBroadcast pageName="watch"/>}/> 
+              <Route path="/logout" element={<FunBroadcast pageName="logout"/>}/>
+              <Route path="/broadcast/watch" element={<FunBroadcast pageName="watch"/>}/>
+              <Route path="/changepass" element={<FunBroadcast pageName="changepass"/>}/>  
             </Route>
             <Route element={<FunRestrictedRoute />}>
               {/* For Login Signup */}
@@ -39,7 +42,7 @@ function App() {
             </Route>
             <Route path="/" element={<FunLandingPage/>} />
             {/* Admin Route */}
-            <Route>
+            <Route element={<FunRestrictedAdminRoute />}>
               <Route path="/admin/dashboard" element={<FunAdminPanel pageName="dashboard"/>} />
               <Route path="/admin/users" element={<FunAdminPanel pageName="users"/>} />
               <Route path="/admin/highlights/upload" element={<FunAdminPanel pageName="uploadHighlights"/>} />

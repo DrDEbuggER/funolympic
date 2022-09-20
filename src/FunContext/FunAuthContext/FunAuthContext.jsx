@@ -8,6 +8,8 @@ import {
 } from "firebase/auth"
 import { auth, firestore } from "../../firebase";
 import { addDoc, collection, doc, onSnapshot, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
+import { useRef } from "react";
+
 // creating user auth context
 const FunUserAuthContext = createContext();
 
@@ -15,6 +17,9 @@ const FunUserAuthContext = createContext();
 export const FunAuthContextProvider = ({children}) => {
     const [funUser, setfunUser] = useState();
     const [loading, setLoading] = useState(true);
+    const [logout, setLogout] = useState(false);
+    const [userType, setUserType] = useState("")
+    // const userType = useRef()
     const funSignup = (fullName, userName, email, phone, country, pass) => {
         return createUserWithEmailAndPassword(auth, email, pass).then((funUserCred) => {
             console.log("fun User Cread:", funUserCred)
@@ -50,6 +55,7 @@ export const FunAuthContextProvider = ({children}) => {
                 console.log("Login: User not verified");
             }else {
                 const userRef = query(collection(firestore, "users"), where("uuid", "==", auth.currentUser.uid))
+                GetCurrentUserType()
                 onSnapshot(userRef, (snapshot) => {
                     let docId = '';
                     snapshot.forEach(doc => {
@@ -65,19 +71,35 @@ export const FunAuthContextProvider = ({children}) => {
         });
     }
 
+    const funLogout = async () => {
+        await auth.signOut().then((res)=> {
+            console.log("res logout", res)
+            setLogout(true)
+        }, (err)=> console.log('logout err: ', err))
+    }
+
+    const GetCurrentUserType = () => {
+        if(auth.currentUser) {
+            const userQuery = query(collection(firestore, "users"), where("uuid", "==",  auth.currentUser.uid))
+            onSnapshot(userQuery,(snap)=>{
+                // setUserType(snap.docs[0].data().userType)
+                setUserType(snap.docs[0].data().userType)
+            })
+        }
+    }
+
     useEffect(()=>{
         const unsubscribe = onAuthStateChanged(auth, (currfunUser) => {
             console.log("Users:", currfunUser)
             setLoading(false)
             setfunUser(currfunUser)
-            
         })
         return () => {
             unsubscribe();
         }
     },[])
     return (
-        <FunUserAuthContext.Provider value={{funSignup, funLogin, funUser, loading}}>
+        <FunUserAuthContext.Provider value={{funSignup, funLogin, funLogout, GetCurrentUserType, funUser, loading, logout, userType}}>
             {children}
         </FunUserAuthContext.Provider>
     )

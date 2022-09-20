@@ -25,7 +25,7 @@ export const FunNavBar = () => {
                         </div>
                     </div>
                     <div className='fun__navBarEnd'>
-                        <div className='fun__navItems'>
+                        <div className='fun__navEndItems'>
                             <div className='fun__liveBtn'>
                                 <FunButton 
                                     text={"Watch Live"}

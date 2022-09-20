@@ -109,7 +109,7 @@ export const AdminHighlightUpload = () => {
                             eventType: uploadVideoEvent,
                             category: uploadVideoCategory
                         }
-                        const gameRef = collection(firestore, `highlights/${uploadVideoCategory}/Games/`);
+                        const gameRef = collection(firestore, `highlights`);
                         addDoc(gameRef,tempGameData).then(res => {
                             CleanUpStates(100);
                         },(err)=> console.log(err))

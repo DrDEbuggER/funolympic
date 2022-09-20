@@ -6,10 +6,11 @@ import { FunVideoCardBox } from "../../CommonComponents"
 import "./AdminAllHighlights.css"
 export const AdminAllHighlights = () => {
     const [videoData, setVideoData] = useState([])
-    const menGamesRef = collection(firestore, `/highlights/men/Games`)
-    const womenGamesRef = collection(firestore, `/highlights/women/Games`)
+    const [womenData, setWomenData] = useState([])
+    // const womenGamesRef = collection(firestore, `/highlights`)
 
-    const QueryDocs = (queryRef, setData) => {
+    const QueryDocs = (setData, category) => {
+        const queryRef = query(collection(firestore, `/highlights`), where("category", "==", category))
         let vData = [];
         onSnapshot(queryRef, (snap)=> {
             snap.docs.forEach((doc)=> {
@@ -20,7 +21,8 @@ export const AdminAllHighlights = () => {
         
     }
     useEffect(()=>{
-        QueryDocs(menGamesRef, setVideoData)
+        QueryDocs(setVideoData, "men")
+        QueryDocs(setWomenData, "women")
     },[])
 
     const FilterDocs = async(keywords, documentPath, eventType) => {
@@ -48,7 +50,7 @@ export const AdminAllHighlights = () => {
     const HandleSearch = async(e) => {
         e.preventDefault();
         // FilterDocs(e.target.value, "/highlights/men/Games", "swimming")
-        FilterDocs(e.target.value, "/highlights/men/Games", "")
+        FilterDocs(e.target.value, "/highlights", "")
     }
 
     return (
@@ -74,7 +76,15 @@ export const AdminAllHighlights = () => {
                 <div className="fun__adminWomenHighlights">
                     <p>Women</p>
                     <div className="fun__adminHighlightVideos">
-                        <FunVideoCardBox thumbnail={`https://www.techsmith.com/blog/wp-content/uploads/2019/06/YouTube-Thumbnail-Sizes.png`}/>
+                        {
+                            womenData.map((vDat, idx) => {
+                                return <FunVideoCardBox key={idx}
+                                    thumbnail={`https://www.techsmith.com/blog/wp-content/uploads/2019/06/YouTube-Thumbnail-Sizes.png`}
+                                    vidTitle={vDat.videoTitle}
+                                    vidEvent={vDat.eventType}
+                                    />
+                            })
+                        }
                     </div>
                 </div>
             </div>

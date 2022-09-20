@@ -17,8 +17,9 @@ export const FunAdminContextProvider = ({children}) => {
 
     const FetchAllUsers = () => {
         const userQuery = query(collection(firestore, "users"))
-        const tempData = []
+        let tempData = []
         onSnapshot(userQuery, (snap) => {
+            tempData = []
             snap.docs.forEach((doc) => {
                 tempData.push(doc.data())
             })

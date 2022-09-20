@@ -1,7 +1,10 @@
 
-
+.fun__landscapeCardBoxWrapper {
+    margin-bottom: .5rem;
+}
 .fun__videoCardBoxWrapper {
     width: 250px;
+
 }
 
 .fun__vidThumbWrapper {
@@ -32,3 +35,56 @@
     /* text-align: justify; */
     font-size: 1rem;
 }
+
+
+/* landscape cardbox */
+.fun__landscapeCardBox {
+    display: flex;
+    background-color: ghostwhite;
+    height: 90px;
+    border-radius: .5rem;
+    background-color: ghostwhite;
+    border: 1px solid #e9e5e5;
+    box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -webkit-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -moz-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+}
+.fun__lcbImageWrapper {
+    padding: .5rem;
+}
+.fun__lcbImageWrapper > img {
+    width: 80px;
+    border-radius: .4rem;
+}
+
+.fun__lcbBrief {
+    width: 100%;
+    text-align: start;
+    padding: .5rem .5rem 1rem .5rem;
+}
+.fun__lcbTitleWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+.fun__lcbTitleWrapper >:first-child {
+    font-size: 14px;
+    color: rgb(77, 73, 73);
+    flex: 1;
+}
+.fun__lcbTitleWrapper >:last-child {
+    font-size: 12px;
+    font-weight: 600;
+    color: gray;
+}
+
+.fun__lcbBrief >:last-child {
+    font-size: 14px;
+    color: rgb(46, 44, 44);
+}
+
+
+
+
+
+
+

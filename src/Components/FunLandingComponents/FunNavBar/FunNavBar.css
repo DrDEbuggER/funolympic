@@ -77,14 +77,32 @@
 .fun__navItems {
     height: 100%;
 }
+
+.fun__navEndItems {
+    height: 100%;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
 .fun__liveProfileBtn {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+    flex-direction: column;
     align-items: center;
     align-content: center;
     height: 100%;
     margin-right: 3rem;
     cursor: pointer;
+    position: relative;
+}
+
+.fun__dropWrapper { 
+    position: absolute;
+    bottom: 0;
+    margin-top: 50rem;
+    z-index: 200;
+    height: 2rem;
+    padding-top: 1rem;
 }
 
 .fun__liveProfileBtn >:first-child {

@@ -1,0 +1,26 @@
+.fun__searchBarWrapper {
+    width: 100%;
+}
+.fun__searchBar {
+    display: flex;
+    border-radius: .5rem;
+    background-color: ghostwhite;
+    border: 1px solid #e9e5e5;
+    box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -webkit-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -moz-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+}
+.fun__searchBar >:first-child {
+    border: none;
+    outline: none;
+    padding: .5rem;
+    width: 100%;
+    border-radius: .5rem 0rem 0rem .5rem;
+}
+
+.fun__searchBar >:last-child {
+    padding: .2rem;
+    background-color: rgba(201, 189, 189, 0.425);
+    border-radius: 0 .5rem .5rem 0;
+    cursor: pointer;
+}

@@ -1,6 +1,6 @@
 
 
-import { DashboardRounded, GroupOutlined, VerifiedUserOutlined, VideoLibraryOutlined } from "@mui/icons-material"
+import { DashboardRounded, DriveFolderUploadOutlined, GroupOutlined, LiveTvOutlined, LogoutOutlined, ManageAccountsOutlined, SmartDisplayOutlined, VerifiedUserOutlined, VideoLibraryOutlined } from "@mui/icons-material"
 import { AdminCustomLink } from "./AdminCustomLink"
 import "./Sidebar.css"
 
@@ -18,14 +18,39 @@ export const AdminSidebar = () => {
                         <GroupOutlined className='icon'/>
                         <span>User List</span>
                     </AdminCustomLink>
+
                     <p className='fun__adminSidebarTitle'>Highlights</p>
                     <AdminCustomLink to="/admin/highlights/upload">
-                        <VideoLibraryOutlined className='icon'/>
+                        <DriveFolderUploadOutlined className='icon'/>
                         <span>Upload</span>
                     </AdminCustomLink>
                     <AdminCustomLink to="/admin/highlights/all">
                         <VideoLibraryOutlined className='icon'/>
                         <span>All Highlights</span>
+                    </AdminCustomLink>
+
+                    <p className='fun__adminSidebarTitle'>Live</p>
+                    <AdminCustomLink to="/admin/live/upload">
+                        <DriveFolderUploadOutlined className='icon'/>
+                        <span>Upload</span>
+                    </AdminCustomLink>
+                    <AdminCustomLink to="/admin/live/all">
+                        <SmartDisplayOutlined className='icon'/>
+                        <span>All Lives</span>
+                    </AdminCustomLink>
+
+                    <p className='fun__adminSidebarTitle'>More</p>
+                    <AdminCustomLink to="/broadcast">
+                        <LiveTvOutlined className='icon'/>
+                        <span>Broadcast</span>
+                    </AdminCustomLink>
+                    <AdminCustomLink to="/admin/profile">
+                        <ManageAccountsOutlined className='icon'/>
+                        <span>Profile</span>
+                    </AdminCustomLink>
+                    <AdminCustomLink to="/logout">
+                        <LogoutOutlined className='icon'/>
+                        <span>Logout</span>
                     </AdminCustomLink>
                 </ul>
             </div>

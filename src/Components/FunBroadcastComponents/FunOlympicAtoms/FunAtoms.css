@@ -1,0 +1,84 @@
+/* Cardbox */
+
+
+.fun__cardBoxWrapper {
+    width: 280px;
+    height: 350px;
+    background-color: ghostwhite;
+    border: 1px solid #e9e5e5;
+    box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -webkit-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -moz-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    border-radius: .5rem;
+}
+.fun__cardBox {
+    display: grid;
+    width: 280px;
+    height: 350px;
+    grid-template-rows: .5fr 1fr 2fr;
+    flex-direction: column;
+}
+.fun__cardHeader {
+    display: flex;
+    grid-row: 1/2;
+    padding: .8rem;
+}
+
+.fun__cardMid {
+    grid-row: 2/3;
+    padding: .8rem;
+    min-height: 130px;
+    display: flex;
+    flex-direction: column;
+}
+
+.fun__cardMid >:last-child {
+    font-size: 18px;
+    font-weight: 600;
+    color: rgb(48, 46, 46);
+}
+
+.fun__liveGameTitle {
+    overflow-y: auto;
+}
+.fun__cardBottom {
+    grid-row: 3/4;
+    place-self: self-end;
+}
+.fun__cardBottom >:first-child {
+    width: 100% !important;
+    height: 100%;
+    padding-top: .3rem;
+    border-radius: 2rem 0rem 2rem 0rem !important;
+}
+
+.fun__cardHeaderLive {
+    display: flex;
+    background-color: rgba(247, 52, 52, 0.596);
+    padding: 0rem .3rem;
+    border-radius: .3rem;
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.fun__cardHeaderLive >:last-child {
+    padding-top: .1rem;
+    padding-left: .1rem;
+}
+
+.fun__cardBrief {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    padding-left: .5rem;
+    font-size: 14px;
+    color: gray;
+}
+
+
+.fun__cardVidHeight {
+    height: 180px !important;
+}

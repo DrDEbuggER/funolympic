@@ -4,6 +4,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { KeyboardArrowDownOutlined } from '@mui/icons-material';
 import { useState } from 'react';
 import { FunDropDown } from '../../CommonComponents';
+import { Link } from 'react-router-dom';
 
 export const FunBroadcastNavBar = ({navColor, btnText, toPage, userName}) => {
     let funNavStyle = {
@@ -25,16 +26,16 @@ export const FunBroadcastNavBar = ({navColor, btnText, toPage, userName}) => {
                     <div className='fun__navBarMid'>
                         <div className='fun__navItems'>
                             <ul>
-                                <li><a href='/'>Home</a></li>
-                                <li><a href='/'>Live Games</a></li>
-                                <li><a href='/'>Highlights</a></li>
-                                <li><a href='/'>News</a></li>
-                                <li><a href='/'>Score</a></li>
+                                <li><Link to={`/broadcast`}>Home</Link></li>
+                                <li><Link to={`/livegames`}>Live Games</Link></li>
+                                <li><Link to={`/highlights`}>Highlights</Link></li>
+                                <li><Link to={`/news`}>News</Link></li>
+                                <li><Link to={`/score`}>Score</Link></li>
                             </ul>
                         </div>
                     </div>
                     <div className='fun__navBarEnd'>
-                        <div className='fun__navItems'>
+                        <div className='fun__navEndItems'>
                             <div className='fun__liveProfileBtn' onClick={HandleProfileDrop}>
                                 <div className='fun__profileBtn'>
                                     <AccountCircleIcon sx={{width: 35, height: 35, color: "white"}}/>
