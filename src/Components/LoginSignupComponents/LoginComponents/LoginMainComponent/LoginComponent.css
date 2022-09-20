@@ -1,20 +1,25 @@
-.fun__signupContainer {
+.fun__LoginContainer {
     width: 100%;
     padding: 250px 0 180px 0;
     background-color: #6A0DAD;
     z-index: 80;
     display: flex;
     justify-content: center;
+    height: 100vh;
 }
+
 
 .fun__formWrapper {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     width: 25rem;
+    height: 18rem;
     padding-top: 2rem;
     border: 2px solid rgb(189, 203, 216);
     border-radius: .5rem;
     background-color: whitesmoke;
+    align-items: center;
 }
 
 .fun__formInput {
@@ -41,4 +46,15 @@
     font-weight: 600;
     padding-bottom: .2rem;
     color: rgb(61, 61, 61);
+}
+
+.fun__forgotPassword {
+    padding: .2rem 0rem 1rem .5rem;
+    text-align: start;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.fun__loginButton {
+    padding-bottom: 2rem;
 }

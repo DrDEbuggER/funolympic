@@ -33,7 +33,6 @@ export const AdminAllHighlights = () => {
             console.log("docs", doc.data())
             fireDocuments.push(doc.data())
         })
-        console.log(fireDocuments.length)
         if(fireDocuments.length > 0) {
             tempData = fireDocuments.filter((doc)=>{
                 if (keywords === "") {
@@ -48,7 +47,8 @@ export const AdminAllHighlights = () => {
 
     const HandleSearch = async(e) => {
         e.preventDefault();
-        FilterDocs(e.target.value, "/highlights/men/Games", "swimming")
+        // FilterDocs(e.target.value, "/highlights/men/Games", "swimming")
+        FilterDocs(e.target.value, "/highlights/men/Games", "")
     }
 
     return (

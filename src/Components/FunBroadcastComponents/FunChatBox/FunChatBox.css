@@ -27,12 +27,15 @@
     line-height: 1.9rem;
 }
 
+.fun__chatBodyTop {
+    padding-bottom: .2rem;
+}
 .fun__chatBody {
     display: flex;
     flex-flow: column nowrap;
     overflow-y: auto;  
     background-color: #ebe9e9;
-    padding-bottom: 5px;
+    padding-bottom: .3rem;
     grid-row: 2/3;
     top: 0;
     bottom: 0;
@@ -47,6 +50,7 @@
     display: flex;
     justify-content: flex-end;
     padding-right: 10px;
+    padding-left: 1rem;
     
 
 }
@@ -55,7 +59,34 @@
     padding: 10px;
     border-radius: 5px;
     background-color: #ac5ac0;
+    /* background-color: rgb(145, 129, 233); */
     color: white;
+    display: flex;
+    flex-direction: column;
+    text-align: start;
+    margin-bottom: .2rem;
+}
+
+.fun__currentUser {
+    background-color: rgb(145, 129, 233);
+}
+
+
+.fun__messageProfile {
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+
+.fun__messageProfile > h3 {
+    font-size: 11px;
+    text-align: start;
+    padding-bottom: .2rem;
+}
+
+.fun__messageProfile >:first-child {
+    width: 1.1rem;
+    margin-right: .2rem;
 }
 
 .fun__chatBody >:first-child {

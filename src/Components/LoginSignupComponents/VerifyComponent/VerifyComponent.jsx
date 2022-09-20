@@ -1,7 +1,8 @@
 import { sendEmailVerification } from "firebase/auth"
+import { collection, doc, onSnapshot, query, setDoc, updateDoc, where } from "firebase/firestore"
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { auth } from "../../../firebase"
+import { auth, firestore } from "../../../firebase"
 import { FunButton } from "../../CommonComponents"
 import { FunBroadcastNavBar } from "../../FunLandingComponents"
 import "./VerifyComponent.css"
@@ -17,18 +18,22 @@ export const VerifyComponent = () => {
     }
 
     useEffect(()=> {
-        // let iv = 0;
         let interval = setInterval(async() => {
             if (auth.currentUser.emailVerified) {
-                clearInterval(interval);
-                funNavigate("/broadcast");
+                const userRef = query(collection(firestore, "users"), where("uuid", "==", auth.currentUser.uid))
+                onSnapshot(userRef, (snapshot) => {
+                    let docId = '';
+                    snapshot.forEach(doc => {
+                        docId = doc.id;
+                    })
+                    if (docId != '') {
+                        updateDoc(doc(firestore, `users/${docId}`), {status: "Verified", online:true}).then((res)=> {
+                            clearInterval(interval);
+                            funNavigate("/broadcast");
+                        })
+                    } 
+                })
             }
-            // if (iv > 300) {
-            //     // signout if user doesn't verify for 5 min
-            //     auth.signOut();
-            //     funNavigate("/");
-            // }
-            // iv+=2;
             await auth.currentUser.reload();
             }, 2000);
         return () => {

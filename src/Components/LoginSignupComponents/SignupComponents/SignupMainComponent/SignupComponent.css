@@ -1,20 +1,33 @@
 .fun__signupContainer {
     width: 100%;
-    padding: 250px 0 180px 0;
+    padding: 200px 0 180px 0;
     background-color: #6A0DAD;
     z-index: 80;
     display: flex;
     justify-content: center;
+    height: 100vh;
 }
 
-.fun__formWrapper {
+.fun__formSignupWrapper {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     width: 25rem;
+    height: fit-content;
     padding-top: 2rem;
     border: 2px solid rgb(189, 203, 216);
     border-radius: .5rem;
     background-color: whitesmoke;
+    align-items: center;
+    background-color: ghostwhite;
+    border: 1px solid #e9e5e5;
+    box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -webkit-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -moz-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+}
+
+.fun__signupLabel {
+    text-align: center;
 }
 
 .fun__formInput {
@@ -41,4 +54,8 @@
     font-weight: 600;
     padding-bottom: .2rem;
     color: rgb(61, 61, 61);
+}
+
+.fun__signupBtn {
+    padding: 1rem 0 2rem 0;
 }

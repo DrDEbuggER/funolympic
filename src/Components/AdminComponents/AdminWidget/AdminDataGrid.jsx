@@ -4,6 +4,7 @@ import { styled } from '@mui/material/styles';
 import LoopIcon from '@mui/icons-material/Loop';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import DoneIcon from '@mui/icons-material/Done';
+import BlockIcon from '@mui/icons-material/Block';
 import "./AdminWidget.css"
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     border: 0,
@@ -48,54 +49,24 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     }
 }));
   
-export default function AdminDataGrid() {
+export default function AdminDataGrid({usersData}) {
     const columns= [
     { field: 'id', 
         headerName: 'ID', 
         flex: 1,
         width: 90,
         align: "center",
-        headerAlign: 'center'
+        headerAlign: 'center',
+        renderCell: (index) => <p> {index.api.getRowIndex(index.row.uuid) + 1 } </p>
     },
     {
-      field: 'firstName',
-      headerName: 'First name',
+      field: 'userName',
+      headerName: 'Username',
       width: 150,
       flex: 1,
       editable: true,
       align: "center",
       headerAlign: 'center'
-    },
-    {
-      field: 'lastName',
-      headerName: 'Last name',
-      width: 150,
-      flex: 1,
-      editable: true,
-      align: "center",
-      headerAlign: 'center'
-    },
-    {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      flex: 1,
-      width: 110,
-      editable: true,
-      align: "center",
-      headerAlign: 'center'
-    },
-    {
-      field: 'fullName',
-      headerName: 'Full name',
-      description: 'This column has a value getter and is not sortable.',
-      flex: 2,
-      sortable: false,
-      align: "center",
-      headerAlign: 'center',
-      width: 160,
-      valueGetter: (params) =>
-        `${params.row.firstName || ''} ${params.row.lastName || ''}`,
     },
     {
       field: 'email',
@@ -108,6 +79,25 @@ export default function AdminDataGrid() {
       width: 160
     },
     {
+      field: 'phone',
+      headerName: 'Phone',
+      width: 150,
+      flex: 1,
+      editable: true,
+      align: "center",
+      headerAlign: 'center'
+    },
+    {
+      field: 'userType',
+      headerName: 'User Type',
+      type: 'string',
+      flex: 1,
+      width: 110,
+      editable: true,
+      align: "center",
+      headerAlign: 'center'
+    },
+    {
       field: 'country',
       headerName: 'Country',
       description: "Users country",
@@ -117,7 +107,6 @@ export default function AdminDataGrid() {
       headerAlign: 'center',
       width: 160,
       renderCell: (params) => {
-        console.log("params", params)
         return (
             params.row.country === "" ? 
                             <p>N/A</p>: 
@@ -136,7 +125,7 @@ export default function AdminDataGrid() {
         width: 160,
         renderCell: (params) => {
             return (
-                params.row.status == "Active" ? 
+                params.row.status == "Verified" ? 
                     <div className="cell_circle" style={{border: "1px solid #04f4bb"}}>
                         <DoneIcon htmlColor='#04f4bb'/>
                         <p style={{color:'#04f4bb'}}>{params.row.status}</p>
@@ -153,6 +142,23 @@ export default function AdminDataGrid() {
                     </div> : "N/A"
             )
         }
+    }, {
+      field: 'action',
+      headerName: 'Action',
+      flex: 1,
+      description: "Users status: Active, Banned or UnVerified",
+      sortable: true,
+      align: "center",
+      headerAlign: 'center',
+      width: 120,
+      renderCell: (params) => {
+          return(
+            <div className={`field__button ${params.row.status === "Banned" ? "banned" : "unbanned"}`}>
+              <BlockIcon />
+              <p>{params.row.status === "Banned"? "UnBan": "Ban"}</p>
+            </div>
+          )
+      }
     }
     ];
     
@@ -172,14 +178,11 @@ export default function AdminDataGrid() {
       <StyledDataGrid
         pageSize={5}
         rowsPerPageOptions={[5]}
-        components={{
-        //   Pagination: CustomPagination,
-        }}
-        rows={rows}
+        getRowId={(row)=> row.uuid}
+        rows={usersData}
         columns={columns}
       />
     </Box>
-
   );
 }
 

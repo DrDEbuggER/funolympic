@@ -68,3 +68,31 @@
     justify-content: center;
     border-radius: 2rem;
 }
+
+/* DataGrid */
+
+.field__button {
+    display: flex;
+    padding: .3rem .5rem;
+    border: 1px solid rgb(243, 117, 117);
+    border-radius:.5rem;
+    min-width: 100px;
+    cursor: pointer;
+    
+}
+    
+.field__button >:first-child {
+    padding-right: .2rem;
+    margin-right: .5rem;
+}
+
+.unbanned {
+    background-color: rgb(241, 87, 87);
+    color: white;
+}
+
+.banned {
+    border: 1px solid gray;
+    background-color: rgba(255, 0, 0, 0.274);
+    color: gray;
+}

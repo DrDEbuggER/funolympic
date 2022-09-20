@@ -1,15 +1,17 @@
 
 import { KeyboardArrowDownOutlined, PersonOutlined } from "@mui/icons-material"
+import { AdminFireDataContext } from "../../../FunContext"
 import { SummaryItem } from "../AdminAtoms"
 import { AdminLineCharts, AdminPieChart } from "../AdminCharts"
 import { AdminWidget } from "../AdminWidget"
 import "./AdminDashboard.css"
 export const AdminDashboard = () => {
-
-    const GenerateWidgetData = (xTitle, xIsMoney, xLink, Icon) => {
+    const {totalUserCount} = AdminFireDataContext();
+    const {liveCount} = AdminFireDataContext();
+    const GenerateWidgetData = (xTitle, xLiveCount, xLink, Icon) => {
         return {
             title: xTitle,
-            isMoney: xIsMoney,
+            liveCount: xLiveCount,
             link: xLink,
             icon:(<Icon className='fun__widgetIcon' style = {{color: 'crimson', backgroundColor: 'rgba(218,165,32,0.2)'}}/>)
         }
@@ -18,10 +20,10 @@ export const AdminDashboard = () => {
     return (
         <div className="admin__dashboardContainer">
             <div className="admin__upperComponents">
-                <AdminWidget widgetData={GenerateWidgetData("Users", false, "See all users", PersonOutlined)} />
-                <AdminWidget widgetData={GenerateWidgetData("Live Users", false, "See all users", PersonOutlined )} />
-                <AdminWidget widgetData={GenerateWidgetData("Live Games", false, "See all users", PersonOutlined)} />
-                <AdminWidget widgetData={GenerateWidgetData("Watch Hours", false, "See all users", PersonOutlined )} />
+                <AdminWidget widgetData={GenerateWidgetData("Users", totalUserCount, "See all users", PersonOutlined)} />
+                <AdminWidget widgetData={GenerateWidgetData("Live Users", liveCount, "See all users", PersonOutlined )} />
+                <AdminWidget widgetData={GenerateWidgetData("Live Games", 12, "See all users", PersonOutlined)} />
+                <AdminWidget widgetData={GenerateWidgetData("Watch Hours", 1000, "See all users", PersonOutlined )} />
             </div>
             <div className="admin__lowerGraphs">
                 <div className="admin__totalUsers">

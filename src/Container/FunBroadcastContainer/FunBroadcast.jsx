@@ -1,12 +1,28 @@
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
 import { FunBroadcastMain, FunBroadcastNavBar } from "../../Components"
+import { auth, firestore } from "../../firebase";
 
 import "./FunBroadcast.css";
 
 export const FunBroadcast = ({pageName}) => {
+    const [userName, setUserName] = useState()
+
+    const GetCurrentUser = () => {
+        const userQuery = query(collection(firestore, "users"), where("uuid", "==", auth.currentUser.uid))
+        onSnapshot(userQuery,(snap)=>{
+            setUserName(snap.docs[0].data().userName)
+        })
+    }
+
+    useEffect(()=>{
+        GetCurrentUser()
+    },[])
+
     return (
         <div className="fun__broadcastContainer">
             <div className="fun__broadcastNav">
-                <FunBroadcastNavBar navColor="#6A0DAD" btnText="Logout" toPage="/logout"/>
+                <FunBroadcastNavBar navColor="#6A0DAD" btnText="Logout" toPage="/logout" userName={userName}/>
             </div>
             <div className="fun__broadcastBody">
                 {   pageName === "home" ? <FunBroadcastMain /> :

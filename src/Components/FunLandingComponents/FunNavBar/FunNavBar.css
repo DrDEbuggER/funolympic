@@ -77,13 +77,46 @@
 .fun__navItems {
     height: 100%;
 }
-.fun__liveBtn {
+.fun__liveProfileBtn {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     align-content: center;
     height: 100%;
     margin-right: 3rem;
+    cursor: pointer;
+}
+
+.fun__liveProfileBtn >:first-child {
+    border: 2px solid whitesmoke;
+    border-radius:5rem;
+    margin-right: .5rem;
+}
+
+
+.fun__liveProfileBtn >:first-child:hover {
+    border: 2px solid greenyellow;
+}
+
+.fun__profileBtn > p {
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    padding: .3rem;
+}
+
+.fun__profileBtn {
+    display: flex;
+}
+
+.fun__profileBtn >:last-child {
+    padding-top: .3rem;
+    color: white;
+}
+
+.fun__profileBtn >:last-child:hover {
+    color: greenyellow !important;
 }
 
 

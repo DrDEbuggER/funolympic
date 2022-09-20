@@ -22,8 +22,11 @@ export const LoginComponent = () => {
     return (
         <>
             <FunAuthNavBar btnText="Signup" toPage="/signup"/>
-            <div className="fun__signupContainer">
+            <div className="fun__LoginContainer">
                 <div className="fun__formWrapper">
+                    <div className="fun__loginLabel">
+                        <h3>LOGIN</h3>
+                    </div>
                     <form className="fun__form" onSubmit={handleSubmit}>
                         <div className="fun__formInput">
                             <label>Email</label>
@@ -33,7 +36,13 @@ export const LoginComponent = () => {
                             <label>Password</label>
                             <input type="password" onChange={(e) => setPass(e.target.value)}></input>
                         </div>
-                        <FunButton text={"Login"} btnType="Submit"/>
+                        <div className="fun__forgotPassword">
+                            <a href="/reset">Forgot Password?</a>
+                        </div>
+                        <div className="fun__loginButton">
+                            <FunButton text={"Login"} btnType="Submit"/>
+                        </div>
+                        
                     </form>
                 </div>
             </div>
