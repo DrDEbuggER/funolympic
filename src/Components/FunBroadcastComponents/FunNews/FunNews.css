@@ -1,0 +1,13 @@
+
+
+.fun__newsPromo {
+    width: 100%;
+}
+
+.fun__newsPromo >:first-child {
+    width: 100%;
+}
+
+.fun__videoDescHead {
+    padding-bottom: .5rem;
+}

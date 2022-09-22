@@ -1,17 +1,20 @@
+
+
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { useRef } from 'react';
 import { useState } from 'react';
 import { FunLightButton, FunProgressBar, FunSelectComponent, FunVideoPlayer } from '../../CommonComponents';
-import "./AdminHighlightUpload.css"
+import "./AdminLiveUpload.css"
 import { fireStorage, firestore } from '../../../firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { v4 as uuid} from "uuid"
-export const AdminHighlightUpload = () => {
+export const AdminLiveUpload = () => {
     const [uploadFile, setUploadFile] = useState('');
     const [uploadPercentage, setUploadPercentage] = useState(0);
     const [uploadVideoTitle, setUploadVideoTitle] = useState('');
     const [uploadVideoDesc, setUploadVideoDesc] = useState('');
+    const [uploadStreamURL, setUploadStreamURL] = useState('');
     const [uploadVideoEvent, setUploadVideoEvent] = useState('none');
     const [uploadVideoCategory, setUploadVideoCategory] = useState('none');
     const uploadFileObject = useRef()
@@ -82,42 +85,26 @@ export const AdminHighlightUpload = () => {
 
     const UploadVideo = (e) => {
         e.preventDefault()
-        console.log("event", uploadVideoEvent)
-        console.log("cate", uploadVideoCategory)
-        if (uploadFileObject.current && 
+        if (uploadStreamURL && 
                 uploadVideoDesc && 
                 uploadVideoTitle && 
                 uploadVideoEvent && uploadVideoEvent !== "none" &&
                 uploadVideoCategory && uploadVideoCategory !== "none") {
-            console.log("upload File")
-            const fireStorageRef = ref(fireStorage, `/files/${uploadFileObject.current.name}`)
-            const fireUploadTask = uploadBytesResumable(fireStorageRef, uploadFileObject.current)
-            fireUploadTask.on("state_changed", (snapshot)=> {
-                const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
-                setUploadPercentage(prog === 100 ? 99: prog)
-                // console.log("prog", prog)
-            },
-            (err)=>console.log(err),
-            ()=>{
-                getDownloadURL(fireUploadTask.snapshot.ref)
-                    .then(url =>{
-                        console.log(url)
-                        let tempGameData ={
-                            videoID: uuid().split("-").at(-1),
-                            videoURL: url,
-                            uploadedAt: serverTimestamp(),
-                            videoTitle: uploadVideoTitle,
-                            videoDesc: uploadVideoDesc,
-                            eventType: uploadVideoEvent,
-                            category: uploadVideoCategory
-                        }
-                        const gameRef = collection(firestore, `highlights`);
-                        addDoc(gameRef,tempGameData).then(res => {
-                            CleanUpStates(100);
-                        },(err)=> console.log(err))
-                    })
+            
+                let tempGameData ={
+                    videoID: uuid().split("-").at(-1),
+                    videoURL: uploadStreamURL,
+                    uploadedAt: serverTimestamp(),
+                    videoTitle: uploadVideoTitle,
+                    videoDesc: uploadVideoDesc,
+                    eventType: uploadVideoEvent,
+                    category: uploadVideoCategory,
+                    thumbnail: "https://cdn.dmcl.biz/media/image/213212/o/Armand+Duplantis+GettyImages-1332111991.jpg"
                 }
-            )
+                const gameRef = collection(firestore, `livestream`);
+                addDoc(gameRef,tempGameData).then(res => {
+                    CleanUpStates(0);
+                },(err)=> console.log(err))
         } else {
             console.log("upload Fail")
         }
@@ -162,6 +149,10 @@ export const AdminHighlightUpload = () => {
                 <div className="vid__uploadLower">
                     <h3>Video Details</h3>
                     <form className="vid__uploadForm" onSubmit={UploadVideo}>
+                        <div className="vid__uploadInput">
+                            <label>Stream URL</label>
+                            <input className='vid__uploadTitle' value={uploadStreamURL} onChange={(e)=>setUploadStreamURL(e.target.value)}></input>
+                        </div>
                         <div className="vid__uploadInput">
                             <label>Title</label>
                             <input className='vid__uploadTitle' value={uploadVideoTitle} onChange={(e)=>setUploadVideoTitle(e.target.value)}></input>

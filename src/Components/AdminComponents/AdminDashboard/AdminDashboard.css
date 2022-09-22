@@ -30,7 +30,7 @@
     -webkit-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
     -moz-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
     display: grid;
-    grid-template-rows: 2fr 2fr;
+    grid-template-rows: 2fr 1fr;
     min-width: 280px;
 }
 

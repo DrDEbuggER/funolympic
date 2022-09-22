@@ -59,3 +59,22 @@
     border: 2px solid #bb94d6;
     background-color: lightblue;
 }
+
+.fun__adminMessageBox {
+    position: relative;
+    cursor: pointer;
+}
+
+.fun__adminMessageBox >:last-child {
+    position: absolute;
+    top: 0;
+    z-index: 400;
+    /* left: 0; */
+    margin-top: 30px;
+    margin-right: -4rem;
+    right: 0;
+}
+
+.hideMsgBox {
+    display: none;
+}

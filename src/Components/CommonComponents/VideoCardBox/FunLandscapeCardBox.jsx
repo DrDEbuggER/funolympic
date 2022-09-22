@@ -1,6 +1,6 @@
 
 import "./FunVideoCardBox.css"
-export const FunLandscapeCardBox = ({title, description, category, isVideo}) => {
+export const FunLandscapeCardBox = ({title, description, category, imageURL,isVideo, postID,  HandleClick}) => {
     const trimLongString = (longStr, len) => {
         if (longStr.length > len) {
             return longStr.substring(0, len) + "..."
@@ -9,9 +9,9 @@ export const FunLandscapeCardBox = ({title, description, category, isVideo}) => 
     }
     return (
         <div className="fun__landscapeCardBoxWrapper">
-            <div className="fun__landscapeCardBox">
+            <div className="fun__landscapeCardBox" onClick={()=> HandleClick(postID)}>
                 <div className="fun__lcbImageWrapper">
-                    <img src={`https://images.hindustantimes.com/img/2021/07/29/550x309/AFP_9H43LC_1627581815806_1627581834538.jpg`}/>
+                    <img src={imageURL}/>
                 </div>
                 <div className="fun__lcbBrief">
                     <div className="fun__lcbTitleWrapper">

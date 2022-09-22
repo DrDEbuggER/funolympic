@@ -1,7 +1,7 @@
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { FunVideoPlayer } from '../../CommonComponents';
 import "./FunAtoms.css"
-export const FunCardBox = ({watchType, isVideo}) => {
+export const FunCardBox = ({watchType, isVideo, videoTitle, eventType, category, thumbnail, videoID, HandleClick}) => {
     return (
         <div className="fun__cardBoxWrapper">
             <div className="fun__cardBox">
@@ -11,8 +11,8 @@ export const FunCardBox = ({watchType, isVideo}) => {
                         <p>Live</p>
                     </div>
                     <div className="fun__cardBrief">    
-                        <p>Swimming</p>
-                        <p>Men</p>
+                        <p>{eventType}</p>
+                        <p>{category}</p>
                     </div>
                 </div>
                 <div className="fun__cardMid">
@@ -20,7 +20,7 @@ export const FunCardBox = ({watchType, isVideo}) => {
                         {/* <p>Feb 21</p> */}
                     </div>
                     <div className="fun__liveGameTitle">
-                        <p>Swimming | Olympic Qualifier | ISA World Games | Huntington BeachSwimming | Olympic Qualifier </p>
+                        <p>{videoTitle}</p>
                     </div>
                 </div>
                 <div className="fun__cardBottom">
@@ -31,7 +31,7 @@ export const FunCardBox = ({watchType, isVideo}) => {
                                 // height="100%"
                             />
                         :
-                        <img src="https://images.unsplash.com/photo-1600965962102-9d260a71890d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"></img>
+                        <img src={thumbnail} onClick={()=>HandleClick(videoID)}></img>
                     }
                 </div>
             </div>

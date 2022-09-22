@@ -92,9 +92,15 @@
     padding-right: 3rem;
     width: 100%;
 }
+.fun__shareButtons {
+    padding-bottom: .6rem;
+}
+.fun__shareButtons >p {
+    font-size: 12px;
+    text-align: start;
+}
 
 @media (max-width: 1550px) {
-
     .fun__broadcastMainWrapper {
         /* padding: 0 7rem;  */
         grid-template-columns: 7rem 1.3fr 1fr 7rem;

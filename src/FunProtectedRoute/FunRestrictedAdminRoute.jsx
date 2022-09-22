@@ -1,9 +1,6 @@
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import { useRef } from "react";
-import { useState } from "react";
+
 import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { auth, firestore } from "../firebase";
 import { FunUserAuth } from "../FunContext"
 
 export const FunRestrictedAdminRoute = () => {

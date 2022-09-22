@@ -6,6 +6,8 @@ import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import DoneIcon from '@mui/icons-material/Done';
 import BlockIcon from '@mui/icons-material/Block';
 import "./AdminWidget.css"
+import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { firestore } from '../../../firebase';
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     border: 0,
     color:
@@ -50,6 +52,19 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 }));
   
 export default function AdminDataGrid({usersData}) {
+    const HandleBan = async(uuid) => {
+       const queryRef = query(collection(firestore, "users"), where("uuid", "==", uuid))
+       await getDocs(queryRef).then((snap)=>{
+        if(snap.docs.length > 0) {
+          const updateRef = doc(firestore, "users", snap.docs[0].id)
+          updateDoc(updateRef, {
+            status: "Banned"
+          })
+        }
+          
+       })
+    }
+
     const columns= [
     { field: 'id', 
         headerName: 'ID', 
@@ -153,7 +168,7 @@ export default function AdminDataGrid({usersData}) {
       width: 120,
       renderCell: (params) => {
           return(
-            <div className={`field__button ${params.row.status === "Banned" ? "banned" : "unbanned"}`}>
+            <div className={`field__button ${params.row.status === "Banned" ? "banned" : "unbanned"}`} onClick={()=>HandleBan(params.row.uuid)}>
               <BlockIcon />
               <p>{params.row.status === "Banned"? "UnBan": "Ban"}</p>
             </div>
@@ -162,17 +177,6 @@ export default function AdminDataGrid({usersData}) {
     }
     ];
     
-    const rows = [
-      { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35, country:"Nepal", status: 'Active' },
-      { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42, country:"", status: 'Active' },
-      { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45, country:"", status:'UnVerified' },
-      { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16, country:"", status:'Banned' },
-      { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null, country:"", status:'Active' },
-      { id: 6, lastName: 'Melisandre', firstName: null, age: 150, country:"", status:'Active' },
-      { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44, country:"", status:'Banned' },
-      { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36, country:"", status:'Active' },
-      { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65, country:"", status:'UnVerified' },
-    ];
   return (
     <Box sx={{ height: 400, width: '100%' }}>
       <StyledDataGrid

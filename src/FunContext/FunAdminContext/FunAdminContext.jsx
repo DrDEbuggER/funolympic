@@ -12,7 +12,7 @@ export const FunAdminContextProvider = ({children}) => {
     const [usersData, setUsersData] = useState()
     const [liveCount, setLiveCount] = useState(0)
     const [bannedCount, setBannedCount] = useState(0)
-    const [newUserCount, setNewUserCount] = useState(0)
+    const [newUserCount, setNewUserCount] = useState(2)
     const [totalUserCount, setTotalUserCount] = useState(0)
 
     const FetchAllUsers = () => {

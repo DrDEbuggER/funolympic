@@ -82,7 +82,9 @@
     color: rgb(46, 44, 44);
 }
 
-
+.fun__landscapeCardBox {
+    cursor: pointer;
+}
 
 
 

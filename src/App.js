@@ -7,7 +7,7 @@ import {
 
 import { FunLandingPage } from './Container';
 import { FunBroadcast } from './Container';
-import { SignupComponent, LoginComponent, VerifyComponent } from './Components';
+import { SignupComponent, LoginComponent, VerifyComponent, FunForgotPassword } from './Components';
 import { FunAuthContextProvider } from './FunContext';
 import { FunProtectedRoute, FunRestrictedAdminRoute, FunRestrictedRoute } from './FunProtectedRoute';
 import { FunRestrictVerificationRoute } from './FunProtectedRoute/FunRestrictVerificationRoute';
@@ -28,7 +28,9 @@ function App() {
               <Route path="/highlights" element={<FunBroadcast pageName="highlights"/>}/> 
               <Route path="/profile" element={<FunBroadcast pageName="profile"/>}/> 
               <Route path="/logout" element={<FunBroadcast pageName="logout"/>}/>
-              <Route path="/broadcast/watch" element={<FunBroadcast pageName="watch"/>}/>
+              <Route path="/broadcast/watch/:videoID" element={<FunBroadcast pageName="watch"/>}/>
+              <Route path="/highlights/watch/:postID" element={<FunBroadcast pageName="hWatch"/>}/>
+              <Route path="/news/post/:postID" element={<FunBroadcast pageName="hNews"/>}/>
               <Route path="/changepass" element={<FunBroadcast pageName="changepass"/>}/>  
             </Route>
             <Route element={<FunRestrictedRoute />}>
@@ -41,12 +43,14 @@ function App() {
               <Route path="/verify" element={<VerifyComponent/>} />
             </Route>
             <Route path="/" element={<FunLandingPage/>} />
+            <Route path="/reset" element={<FunLandingPage pageName={"reset"}/>} />
             {/* Admin Route */}
             <Route element={<FunRestrictedAdminRoute />}>
               <Route path="/admin/dashboard" element={<FunAdminPanel pageName="dashboard"/>} />
               <Route path="/admin/users" element={<FunAdminPanel pageName="users"/>} />
               <Route path="/admin/highlights/upload" element={<FunAdminPanel pageName="uploadHighlights"/>} />
               <Route path="/admin/highlights/all" element={<FunAdminPanel pageName="allHighlights"/>} />
+              <Route path="/admin/live/upload" element={<FunAdminPanel pageName="uploadLive"/>} />
             </Route>
           </Routes>
         </Router>

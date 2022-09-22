@@ -16,6 +16,7 @@
     padding: .5rem;
     width: 100%;
     border-radius: .5rem 0rem 0rem .5rem;
+    padding-left: 1rem;
 }
 
 .fun__searchBar >:last-child {

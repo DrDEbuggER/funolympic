@@ -12,6 +12,17 @@
     grid-gap: 5rem 2rem;
 }
 
+.fun__boradcastLiveHeader {
+    padding-top: 2rem;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.fun__boradcastLiveHeader >:first-child {
+    width: 30%;
+}
+
 @media (max-width: 1550px) {
     .fun__broadcastLiveMainWrapper {
         /* padding: 0 7rem;  */

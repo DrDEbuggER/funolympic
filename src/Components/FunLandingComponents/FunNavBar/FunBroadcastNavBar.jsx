@@ -2,18 +2,23 @@ import './FunNavBar.css';
 import Logo from "../../../assets/images/logo.png"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { KeyboardArrowDownOutlined } from '@mui/icons-material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FunDropDown } from '../../CommonComponents';
 import { Link } from 'react-router-dom';
+import { FunUserAuth } from '../../../FunContext';
 
 export const FunBroadcastNavBar = ({navColor, btnText, toPage, userName}) => {
     let funNavStyle = {
         backgroundColor: navColor
     }
+    const {GetCurrentUserType, userType} = FunUserAuth();
     const [showProfileDrop, setShowProfileDrop] = useState(false)
     const HandleProfileDrop = () => {
         setShowProfileDrop(!showProfileDrop)
     }
+    useEffect(()=> {
+        GetCurrentUserType()
+    },[])
     return (
         <div className='fun__navBar'>
             <div className="fun__navBarContainer" style={funNavStyle}>
@@ -45,7 +50,7 @@ export const FunBroadcastNavBar = ({navColor, btnText, toPage, userName}) => {
                                 {
                                 showProfileDrop ? 
                                     <div className='fun__dropWrapper'>
-                                        <FunDropDown />
+                                        <FunDropDown userType={userType}/>
                                     </div>
                                     :
                                     ""

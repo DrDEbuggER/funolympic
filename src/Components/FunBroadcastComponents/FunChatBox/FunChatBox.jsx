@@ -9,7 +9,7 @@ import SendIcon from '@mui/icons-material/Send';
 import "./FunChatBox.css";
 import { FunChatMessage } from "./FunChatMessage";
 import { useEffect } from "react";
-import { findByText } from "@testing-library/react";
+import Filter from 'bad-words'
 export const FunChatBox = ({game}) => {
     const [rmessage, setMessage] = useState("")
     const queryRef = collection(firestore, "livechat","Ju6NdmCCF23yOq8xSqbJ",game)
@@ -17,13 +17,23 @@ export const FunChatBox = ({game}) => {
     const [chatMessages, loading] = useCollectionData(chatQuery);
     const [userName, setUserName] = useState("")
     const fixScroll = useRef();
+    const filter = new Filter();
     const sendMessage = (e) => {
         e.preventDefault();
+        
         let tempMessage ={uid: auth.currentUser.uid, 
                             userName: userName,
                             message: rmessage,
                             createdAt: serverTimestamp()}
+        
         if(rmessage && userName) {
+            if (filter.isProfane(rmessage)) {
+                const colRef = collection(firestore, "BadActivity")
+                addDoc(colRef, {
+                    badTitle: "Inappropriate Comment",
+                    badMessage: `User @${userName} dropped inappropriate comment. "${rmessage}"`
+                })
+            }
             const messageRef = collection(firestore, "livechat","Ju6NdmCCF23yOq8xSqbJ", game);
             setMessage("");
             addDoc(messageRef,tempMessage).then(res => {
@@ -42,6 +52,7 @@ export const FunChatBox = ({game}) => {
 
 
     useEffect(()=> {
+        filter.addWords('tester', 'bad1')
         GetCurrentUser()
     })
 

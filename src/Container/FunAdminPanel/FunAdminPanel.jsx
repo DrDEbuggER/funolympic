@@ -1,10 +1,10 @@
 import { AdminAllHighlights, AdminDashboard, AdminHighlightUpload, AdminNavBar, UserListsMain } from "../../Components"
+import { AdminLiveUpload } from "../../Components/AdminComponents/AdminLiveUpload"
 import { AdminSidebar } from "../../Components/CommonComponents"
 import { FunAdminContextProvider } from "../../FunContext"
 import "./FunAdminPanel.css"
 
 export const FunAdminPanel = ({pageName}) => {
-    
     return (
         <FunAdminContextProvider>
             <div className="fun__adminContainer">
@@ -19,7 +19,7 @@ export const FunAdminPanel = ({pageName}) => {
                 </div>
                 <div className="fun__adminComponents">
                     <div className="fun__adminNavBar">
-                        <AdminNavBar />
+                        <AdminNavBar/>
                         <div className="fun__border"></div>
                     </div>
                     <div className="fun__adminDashContainer">
@@ -28,6 +28,7 @@ export const FunAdminPanel = ({pageName}) => {
                             pageName === "users" ? <UserListsMain /> :
                             pageName === "uploadHighlights" ? <AdminHighlightUpload />:
                             pageName === "allHighlights" ? <AdminAllHighlights />:
+                            pageName === "uploadLive" ? <AdminLiveUpload />:
                             pageName === "soon" ? <h1> Coming Soon...</h1>: ""
                         }
                     </div>

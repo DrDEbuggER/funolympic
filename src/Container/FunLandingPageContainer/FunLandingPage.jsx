@@ -1,9 +1,9 @@
 import { Navigate } from 'react-router-dom';
-import { FunNavBar, FunBodyContents } from '../../Components';
+import { FunNavBar, FunBodyContents, FunForgotPassword } from '../../Components';
 import { auth } from '../../firebase';
 import { FunUserAuth } from '../../FunContext';
 import './FunLandingPage.css';
-export function FunLandingPage(props) {
+export function FunLandingPage({pageName}) {
   const {funUser, loading} = FunUserAuth();
   const ReloadPage = () => {
     auth.signOut()
@@ -15,7 +15,16 @@ export function FunLandingPage(props) {
     funUser && funUser.emailVerified? <Navigate to="/broadcast" />:
     <div className="fun__landingPage">
         <FunNavBar />
-        <FunBodyContents />
+        {
+          pageName == "reset" ?
+            <div className='fun__resetPass'>
+              <FunForgotPassword />
+            </div>
+            
+          :
+          <FunBodyContents />
+        }
+        
     </div>
   );
 }
