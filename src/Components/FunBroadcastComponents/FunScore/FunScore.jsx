@@ -1,41 +1,63 @@
 
-
-import { EmailAuthProvider, reauthenticateWithCredential, sendPasswordResetEmail } from "firebase/auth"
-import { collection, onSnapshot, query, where } from "firebase/firestore"
-import { useEffect, useState } from "react"
-import { auth, firestore } from "../../../firebase"
-import { FunLightButton } from "../../CommonComponents"
+import { useState } from "react"
+import { FunSelectComponent } from "../../CommonComponents"
 import "./FunScore.css"
+import { FunScoreBoard } from "./FunScoreBoard"
 export const FunScore = () => {
     const [error, setError] = useState("")
-    const [email, setEmail] = useState("")
-    const [currentUser, setCurrentUser] = useState("")
- 
+    const AllEvents = [
+        {
+            optName: "Football",
+            optValue: "football"
+        },
+        {
+            optName: "Football",
+            optValue: "football"
+        },
+        {
+            optName: "Football",
+            optValue: "football"
+        },
+        {
+            optName: "Football",
+            optValue: "football"
+        },
+        {
+            optName: "Football",
+            optValue: "football"
+        },
+        {
+            optName: "Football",
+            optValue: "football"
+        },
+        {
+            optName: "Swimming",
+            optValue: "swimming"
+        }
+    ]
+    const AllCategories = [
+        {
+            optName: "Men",
+            optValue: "men"
+        },
+        {
+            optName: "Women",
+            optValue: "women"
+        }
+    ]
     return (
         <div className="fun__changePasswordWrapper">
-            <div className="fun__changePassword">
-                <form className="vid__uploadForm" >
-                    <h3>Game Scores</h3>
-                    <p>All Game Score Details.</p>
-                    <div className="fun__score">
-                        <div className="fun__scoreLeft">
-                            <h3>Brazil</h3>
-                            <div className="fun__scorePoint">
-                                <p>1</p>
-                            </div>
-                        </div>
-
-                        <div className="fun__scoreRight">
-                            <div className="fun__scorePoint">
-                                <p>1</p>
-                            </div>
-                            <h3>Spain</h3>
-                        <div/>
+            <div className="fun__changePassword fun__scoreBoard">
+                <form className="vid__uploadForm fun__scoreUploadForm" >
+                    <div className="fun__scoreSelectEvent">
+                        <FunSelectComponent label={`Events`} optData={AllEvents} />
+                        <FunSelectComponent label={`Category`} className={`vid__uploadCategory`} optData={AllCategories} />
                     </div>
-                    </div>
+                    <h3>Football</h3>
+                    <FunScoreBoard />
+                    
                     <div className="vid__sendReset">
                         <p>{error ? error : "" }</p>
-                        {/* <FunLightButton btnLabel={"Send Link"} /> */}
                     </div>
                 </form>
             </div>

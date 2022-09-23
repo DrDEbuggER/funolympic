@@ -20,14 +20,14 @@ export const FunChatBox = ({game}) => {
     const filter = new Filter();
     const sendMessage = (e) => {
         e.preventDefault();
-        
+        filter.addWords('tester', 'bad1')
         let tempMessage ={uid: auth.currentUser.uid, 
                             userName: userName,
                             message: rmessage,
                             createdAt: serverTimestamp()}
         
         if(rmessage && userName) {
-            console.log("top".filter.isProfane(rmessage))
+            console.log("top", filter.isProfane(rmessage))
             if (filter.isProfane(rmessage)) {
                 console.log("filter","isprofane")
                 const colRef = collection(firestore, "BadActivity")
@@ -54,7 +54,6 @@ export const FunChatBox = ({game}) => {
 
 
     useEffect(()=> {
-        filter.addWords('tester', 'bad1')
         GetCurrentUser()
     },[])
 

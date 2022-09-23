@@ -1,29 +1,32 @@
 .fun__score {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    margin: auto;
     align-items: center;
 }
 
 .fun__scoreRight {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     margin-right: .2rem;
+    margin-left: .2rem;
 }
 .fun__scoreLeft {
     display: flex;
     flex-direction: row;
-    margin-left: .2rem;
+    margin-right: .2rem;
+    justify-content: space-between;
 }
 
 .fun__scoreRight > h3 {
     align-self: center;
-    padding-right: 2rem;
+    padding-left: 1rem;
 }
 
 .fun__scoreLeft > h3 {
     align-self: center;
-    padding-left: 2rem;
+    padding-right: 1rem;
 }
 
 .fun__scorePoint {
@@ -34,4 +37,47 @@
 
 .fun__changePassword {
     width: 400px !important;
+}
+
+.fun__countryWrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+.fun__countryWrap >img {
+    width: 48px;
+    padding: 0 .6rem;
+}
+
+.fun__scoreUploadForm >p {
+    font-size: .8rem;
+    text-align: start;
+    padding: .5rem .5rem !important;
+}
+.fun__scoreUploadForm >h3 {
+    text-align: start;
+    padding: .5rem .5rem !important;
+}
+.fun__scoreSelectEvent {
+    display: flex;
+    padding: .5rem;
+}
+
+.fun__scoreBoard {
+    width: 450px !important;
+}
+
+.fun__resultWrapper {
+    display: grid;
+    grid-template-columns: 15rem 1fr 1fr 15rem;
+}
+
+.fun__scoreWrapper {
+    grid-column: 2/3;
+}
+
+.fun__fixtureWrapper {
+    grid-column: 3/4;
 }

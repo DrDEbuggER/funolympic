@@ -11,7 +11,7 @@ export const FunForgotPassword = () => {
     const onChangePost = (e) => {
         e.preventDefault()
         if (email) {
-            sendPasswordResetEmail(auth, "john.sherchan10@gmail.com").then((res)=>{
+            sendPasswordResetEmail(auth, email).then((res)=>{
                 setError("Reset Email Sent!!")
             }, (err)=> console.log(err))
         }

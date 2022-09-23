@@ -126,22 +126,23 @@ export const AdminLiveUpload = () => {
                                 <div className='vid__uploadInfo'>
                                     <div className="vid__uploadNotes">
                                         <h3>Browser file to Upload</h3>
-                                        <p>Select highlights video from the PC to upload.</p>
+                                        <p>Select image from the PC for thumbnail</p>
                                     </div>
                                 </div>
                             </div> :
                             <div className='vid__uploadUpperSec vid__uploadPlayer'> 
-                                <FunVideoPlayer width="100%"
+                                {/* <FunVideoPlayer width="100%"
                                                 height="100%" 
                                                 url={uploadURL.current}
-                                                />
+                                                /> */}
+                                <img src={uploadURL.current}/>
                             </div>
                     }
                     
                     <div className='vid__uploadInfoLower'>
                         <p>{uploadFile}</p>
                         <label className='vid__uploadFileInfo' htmlFor="uploadFileInfo" onChange={SelectHighlightVideo}>
-                            <input name="" type="file" id="uploadFileInfo" accept='video/*' hidden />
+                            <input name="" type="file" id="uploadFileInfo" accept='image/*' hidden />
                             Select File
                         </label>
                     </div> 

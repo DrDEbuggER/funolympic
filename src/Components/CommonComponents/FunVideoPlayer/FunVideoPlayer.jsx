@@ -13,30 +13,31 @@ export const FunVideoPlayer = ({url, type, width, height, control, isPlayable}) 
     const oldTime = useRef(0)
     
     const UpdateWatchCount = async(videoID, watchTime) => {
-        const queryRef =  query(collection(firestore, `watchCount`), where("videoID", "==", videoID))
-        const colRef = collection(firestore, `watchCount`)
-
-        await getDocs(queryRef).then((res)=>{
-            // converting to second
-            let newTime = watchTime - oldTime.current;
-            
-            // watchTimeInServer /= 60;
-            if(res.docs && res.docs[0]) {   
-                let watchTimeInServer = Math.round(res.docs[0].data().watchTime);
-                watchTimeInServer += newTime;
-                const docRef = doc(firestore, "watchCount", res.docs[0].id)
-                updateDoc(docRef, {
-                    watchTime: Math.round(watchTimeInServer)
-                }).then((res)=>{
-                }, (err)=>console.log(err))
-            }else {
-                addDoc(colRef, {
-                    videoID: videoID,
-                    watchTime: Math.round(watchTime)
-                })
-            }
-        })
-        oldTime.current = watchTime;
+        if(videoID) {
+            const queryRef =  query(collection(firestore, `watchCount`), where("videoID", "==", videoID))
+            const colRef = collection(firestore, `watchCount`)
+    
+            await getDocs(queryRef).then((res)=>{
+                // converting to second
+                let newTime = watchTime - oldTime.current;
+                // watchTimeInServer /= 60;
+                if(res.docs && res.docs[0]) {   
+                    let watchTimeInServer = Math.round(res.docs[0].data().watchTime);
+                    watchTimeInServer += newTime;
+                    const docRef = doc(firestore, "watchCount", res.docs[0].id)
+                    updateDoc(docRef, {
+                        watchTime: Math.round(watchTimeInServer)
+                    }).then((res)=>{
+                    }, (err)=>console.log(err))
+                }else {
+                    addDoc(colRef, {
+                        videoID: videoID,
+                        watchTime: Math.round(watchTime)
+                    })
+                }
+                oldTime.current = watchTime;
+            })
+        }
     }
     
 
