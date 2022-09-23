@@ -109,7 +109,8 @@ export const AdminHighlightUpload = () => {
                             videoTitle: uploadVideoTitle,
                             videoDesc: uploadVideoDesc,
                             eventType: uploadVideoEvent,
-                            category: uploadVideoCategory
+                            category: uploadVideoCategory,
+                            thumbnail: "https://cdn.dmcl.biz/media/image/213212/o/Armand+Duplantis+GettyImages-1332111991.jpg"
                         }
                         const gameRef = collection(firestore, `highlights`);
                         addDoc(gameRef,tempGameData).then(res => {

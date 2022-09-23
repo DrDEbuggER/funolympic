@@ -6,7 +6,7 @@ import ReactPlayer from 'react-player'
 import { useParams } from 'react-router-dom'
 import { firestore } from '../../../firebase'
 import "./FunVideoPlayer.css"
-export const FunVideoPlayer = ({url, type, width, height, control}) => {
+export const FunVideoPlayer = ({url, type, width, height, control, isPlayable}) => {
     const playerRef = useRef()
     // const [oldTime, setOldTime] = useState(0)
     const {videoID} = useParams()
@@ -57,6 +57,7 @@ export const FunVideoPlayer = ({url, type, width, height, control}) => {
               width={width}
               ref={playerRef}
               height={height}
+              playing={isPlayable}
               controls={control? control : false}
               onEnded={()=> oldTime.current = 0}
               onSeek={()=> oldTime.current = playerRef.current.getCurrentTime() }

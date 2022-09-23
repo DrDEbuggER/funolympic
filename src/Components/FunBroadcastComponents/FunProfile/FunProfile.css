@@ -1,0 +1,41 @@
+.fun__changePasswordWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 4rem;
+}
+.fun__changePassword {
+    width: 300px;
+    border-radius: .5rem;
+    background-color: ghostwhite;
+    border: 1px solid #e9e5e5;
+    box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -webkit-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+    -moz-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
+}
+
+.vid__uploadForm > p {
+    font-size: 12px;
+    text-align: center;
+    color: gray;
+    padding: 1rem .3rem;
+}
+
+.vid__sendReset {
+    display: flex;
+    justify-content: space-between;
+    padding: .5rem 0rem;
+}
+
+.vid__sendReset >:last-child {
+    border: none;
+    
+}
+
+.vid__sendReset >:first-child {
+    font-size: 14px;
+    font-weight: 600;
+    vertical-align: middle;
+    align-self: center;
+}
+

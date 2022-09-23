@@ -5,3 +5,5 @@ export * from "./FunLiveGames";
 export * from "./FunHighlights";
 export * from "./FunNews";
 export * from "./FunChangePassword";
+export * from "./FunProfile"
+export * from "./FunScore"

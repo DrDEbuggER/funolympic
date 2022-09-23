@@ -27,12 +27,14 @@ export const FunChatBox = ({game}) => {
                             createdAt: serverTimestamp()}
         
         if(rmessage && userName) {
+            console.log("top".filter.isProfane(rmessage))
             if (filter.isProfane(rmessage)) {
+                console.log("filter","isprofane")
                 const colRef = collection(firestore, "BadActivity")
                 addDoc(colRef, {
                     badTitle: "Inappropriate Comment",
                     badMessage: `User @${userName} dropped inappropriate comment. "${rmessage}"`
-                })
+                },(err)=>console.log("badmsg",err))
             }
             const messageRef = collection(firestore, "livechat","Ju6NdmCCF23yOq8xSqbJ", game);
             setMessage("");
@@ -54,7 +56,7 @@ export const FunChatBox = ({game}) => {
     useEffect(()=> {
         filter.addWords('tester', 'bad1')
         GetCurrentUser()
-    })
+    },[])
 
     return (
         <div className="fun__chatBoxContainer">

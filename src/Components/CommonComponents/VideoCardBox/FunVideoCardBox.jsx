@@ -1,4 +1,5 @@
-
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import "./FunVideoCardBox.css"
 export const FunVideoCardBox = ({thumbnail, vidTitle, vidEvent}) => {
     const trimLongString = (longStr) => {
@@ -16,7 +17,14 @@ export const FunVideoCardBox = ({thumbnail, vidTitle, vidEvent}) => {
                 <div className="fun__vidHighlightDesc">
                     <h3>{trimLongString(vidTitle)}</h3>
                     <p>{trimLongString(vidEvent)}</p>
-                    <p>1 views</p>
+                    <div className='fun__vidEditWrapper'>
+                        <p>1 views</p>
+                        <div className="fun__vidEdit">
+                            <EditIcon />
+                            <DeleteIcon />
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>

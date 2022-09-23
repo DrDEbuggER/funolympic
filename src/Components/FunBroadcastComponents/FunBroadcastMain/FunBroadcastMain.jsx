@@ -40,7 +40,7 @@ export const FunBroadcastMain = ({}) => {
             <div className="fun__broadcastMainWrapper">
                 <div className="fun__broadcastLiveWatch">
                     {console.log(liveVideoData)}
-                    <FunVideoPlayer width="100%" height="100%" url={liveVideoData && liveVideoData.videoURL? liveVideoData.videoURL : "https://www.youtube.com/watch?v=jzJW0gTYB9k"} />
+                    <FunVideoPlayer isPlayable={true} width="100%" height="100%" url={liveVideoData && liveVideoData.videoURL? liveVideoData.videoURL : "https://firebasestorage.googleapis.com/v0/b/bayjingfunolympic2022.appspot.com/o/files%2Fjohn_sherchan%20.mp4?alt=media&token=4416fd1e-f35d-474f-81ca-015a95c2fdbe"} />
                     <div className="fun__videoDesc">
                         <div className="fun__videoDescHead">
                             <h2> { liveVideoData && liveVideoData.videoTitle ? liveVideoData.videoTitle : "Japan VS Spain - Women's Bronze Medal Match - Football"} </h2>

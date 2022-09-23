@@ -1,6 +1,6 @@
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { FunBroadcastMain, FunBroadcastNavBar, FunChangePassword, FunHighlights, FunLiveGames, FunLogout, FunNews } from "../../Components"
+import { FunBroadcastMain, FunBroadcastNavBar, FunChangePassword, FunHighlights, FunLiveGames, FunLogout, FunNews, FunProfile, FunScore } from "../../Components"
 import { auth, firestore } from "../../firebase";
 
 import "./FunBroadcast.css";
@@ -27,10 +27,10 @@ export const FunBroadcast = ({pageName}) => {
             <div className="fun__broadcastBody">
                 {   pageName === "home" ? <FunBroadcastMain /> :
                     pageName === "live" ? <FunLiveGames /> :
-                    pageName === "score" ? <h1> Score </h1> :
+                    pageName === "score" ? <FunScore /> :
                     pageName === "news" ? <FunNews /> : 
                     pageName === "highlights" ? <FunHighlights />:
-                    pageName === "profile"? <h1>Profile</h1> :
+                    pageName === "profile"? <FunProfile /> :
                     pageName === "logout"? <FunLogout /> :
                     pageName === "watch" ? <FunBroadcastMain /> : 
                     pageName === "hWatch" ? <FunHighlights /> : 

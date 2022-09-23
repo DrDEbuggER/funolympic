@@ -11,7 +11,13 @@
     
     width: 100%;
 }
-
+.fun__vidEditWrapper {
+    display: flex;
+    justify-content: space-between;
+}
+.fun__vidEdit {
+    cursor: pointer;
+}
 .fun__videoCardBox {
     padding: .5rem;
     width: 100%;
