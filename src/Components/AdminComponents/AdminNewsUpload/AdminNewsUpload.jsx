@@ -3,19 +3,21 @@ import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
 import { FunLightButton, FunProgressBar, FunSelectComponent, FunVideoPlayer } from '../../CommonComponents';
-import "./AdminHighlightUpload.css"
+import "./AdminNewsUpload.css"
 import { fireStorage, firestore } from '../../../firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { addDoc, collection, doc, getDoc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import { v4 as uuid} from "uuid"
-export const AdminHighlightUpload = ({className, videoData}) => {
+export const AdminNewsUpload = ({className, videoData}) => {
     const [uploadFile, setUploadFile] = useState('');
     const [uploadPercentage, setUploadPercentage] = useState(0);
     const [uploadVideoTitle, setUploadVideoTitle] = useState('');
     const [uploadVideoDesc, setUploadVideoDesc] = useState('');
+    const [uploadStreamURL, setUploadStreamURL] = useState('');
     const [uploadVideoEvent, setUploadVideoEvent] = useState('none');
     const [uploadVideoCategory, setUploadVideoCategory] = useState('none');
-    const [videoURL, setVideoURL] = useState()
+    const [thumbnailURL, setThumbnailURL] = useState()
+    const [channel, setChannel] = useState("none")
     const uploadFileObject = useRef()
     const uploadURL = useRef();
     const params = useParams()
@@ -24,18 +26,18 @@ export const AdminHighlightUpload = ({className, videoData}) => {
     useEffect(()=>{
         console.log("params", params.videoID)
         if (params.videoID) {
-            const docQuery = query(collection(firestore,'/highlights'), where("videoID", "==", params.videoID))
+            const docQuery = query(collection(firestore,'/lives'), where("videoID", "==", params.videoID))
             getDocs(docQuery).then((snap)=>{
                 console.log("snap",snap.docs[0].data())
                 setUploadVideoTitle(snap.docs[0].data().videoTitle)
                 setUploadVideoDesc(snap.docs[0].data().videoDesc)
                 setUploadVideoEvent(snap.docs[0].data().eventType)
                 setUploadVideoCategory(snap.docs[0].data().category)
-                setVideoURL(snap.docs[0].data().videoURL)
+                setUploadStreamURL(snap.docs[0].data().videoURL)
+                setThumbnailURL(snap.docs[0].data().thumbnail)
             })
         } else {
-            if (videoURL) {
-                console.log("state cleaned")
+            if (uploadStreamURL) {
                 CleanUpStates(0)
             }
         }
@@ -53,6 +55,32 @@ export const AdminHighlightUpload = ({className, videoData}) => {
         {
             optName: "Swimming",
             optValue: "swimming"
+        }
+    ]
+    const Channels = [
+        {
+            optName: "None",
+            ovtValue: "none"
+        },
+        {
+            optName: "Sky Sport",
+            optValue: "skysport"
+        },
+        {
+            optName: "Dazn",
+            optValue: "dazn"
+        },
+        {
+            optName: "Star Sports Select 2",
+            optValue: "sss2"
+        },
+        {
+            optName: "Star Sports 2",
+            optValue: "ss2"
+        },
+        {
+            optName: "ESPN",
+            optValue: "espn"
         }
     ]
     const AllCategories = [
@@ -94,6 +122,10 @@ export const AdminHighlightUpload = ({className, videoData}) => {
         setUploadVideoCategory(e.target.value)
     }
 
+    const HandleChannelChange = (e) => {
+        setChannel(e.target.value)
+    }
+
     const CleanUpStates = (uploadPercentage) => {
         setUploadPercentage(uploadPercentage);
         setUploadVideoEvent("none");
@@ -101,7 +133,7 @@ export const AdminHighlightUpload = ({className, videoData}) => {
         setUploadVideoTitle("");
         setUploadVideoDesc("");
         setUploadFile("")
-        setVideoURL("")
+	    setUploadStreamURL("")
         uploadFileObject.current = ""
         uploadURL.current = ""
     }
@@ -115,22 +147,22 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                 uploadVideoTitle && 
                 uploadVideoEvent && uploadVideoEvent !== "none" &&
                 uploadVideoCategory && uploadVideoCategory !== "none") {
-            if (videoURL && params.videoID) {
+            if (uploadStreamURL && params.videoID) {
                 setUploadPercentage(0)
                 let tempGameData ={
                     videoID: params.videoID,
-                    videoURL: videoURL,
+                    videoURL: uploadStreamURL,
                     uploadedAt: serverTimestamp(),
                     videoTitle: uploadVideoTitle,
                     videoDesc: uploadVideoDesc,
                     eventType: uploadVideoEvent,
                     category: uploadVideoCategory,
-                    thumbnail: "https://cdn.dmcl.biz/media/image/213212/o/Armand+Duplantis+GettyImages-1332111991.jpg"
+                    thumbnail: thumbnailURL
                 }
-                const videoQuery = query(collection(firestore, "highlights"), where("videoID", "==", params.videoID))
+                const videoQuery = query(collection(firestore, "lives"), where("videoID", "==", params.videoID))
                 getDocs(videoQuery).then((snap)=>{
                     let docID = snap.docs[0].id
-                    const docRef = doc(firestore,`highlights`, docID)
+                    const docRef = doc(firestore,`lives`, docID)
                     updateDoc(docRef, tempGameData).then((res)=> {setUploadPercentage(100)},
                     (err)=>console.log("update err", err))
                 })
@@ -149,15 +181,15 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                         .then(url =>{
                             let tempGameData ={
                                 videoID: uuid().split("-").at(-1),
-                                videoURL: url,
+                                videoURL: uploadStreamURL,
                                 uploadedAt: serverTimestamp(),
                                 videoTitle: uploadVideoTitle,
                                 videoDesc: uploadVideoDesc,
                                 eventType: uploadVideoEvent,
                                 category: uploadVideoCategory,
-                                thumbnail: "https://cdn.dmcl.biz/media/image/213212/o/Armand+Duplantis+GettyImages-1332111991.jpg"
+                                thumbnail: url
                             }
-                            const gameRef = collection(firestore, `highlights`);
+                            const gameRef = collection(firestore, `lives`);
                             addDoc(gameRef,tempGameData).then(res => {
                                 CleanUpStates(100);
                             },(err)=> console.log(err))
@@ -170,14 +202,12 @@ export const AdminHighlightUpload = ({className, videoData}) => {
         }
     }
 
-
-
     return (
         <div className={`vid__uploadContainer ${className}`}>
             <div className="vid__uploadMain">
                 <div className="vid__uploadUpper">
                     {
-                        !videoURL ?
+                        !uploadStreamURL ?
                             !uploadFileObject.current ?
                                 <div className='vid__uploadUpperSec'>
                                     <div className='vid__roundKeyUpWrapper'>
@@ -188,44 +218,46 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                                     <div className='vid__uploadInfo'>
                                         <div className="vid__uploadNotes">
                                             <h3>Browser file to Upload</h3>
-                                            <p>Select highlights video from the PC to upload.</p>
+                                            <p>Select image from the PC for thumbnail</p>
                                         </div>
                                     </div>
                                 </div> :
                                 <div className='vid__uploadUpperSec vid__uploadPlayer'> 
-                                    <FunVideoPlayer width="100%"
-                                                    height="100%" 
-                                                    url={videoURL ? videoURL : uploadURL.current}
-                                                    />
+                                    <img src={uploadURL.current}/>
                                 </div>
                                 :
                                 <div className='vid__uploadUpperSec vid__uploadPlayer'> 
-                                    <FunVideoPlayer width="100%"
+                                    {/* <FunVideoPlayer width="100%"
                                                     height="100%" 
-                                                    url={videoURL ? videoURL : uploadURL.current}
-                                                    />
+                                                    url={uploadStreamURL ? uploadStreamURL : uploadURL.current}
+                                                    /> */}
+                                    <img src={thumbnailURL ? thumbnailURL : uploadURL.current} />
                                 </div>
                     }
-                    <div className={`vid__uploadInfoLower ${videoURL ? 'vid__fixBack' : ''}`}>
+                    <div className={`vid__uploadInfoLower ${uploadStreamURL ? 'vid__fixBack' : ''}`}>
                         <p>{uploadFile}</p>
                         {
-                            videoURL ? 
-                                <label className='vid__uploadFileInfo' htmlFor="uploadFileInfo" onClick={()=> funNav(`/admin/highlights/all`)}>
+                            uploadStreamURL ? 
+                                <label className='vid__uploadFileInfo' htmlFor="uploadFileInfo" onClick={()=> funNav(`/admin/live/all`)}>
                                     {/* <input name="" type="file" id="uploadFileInfo" accept='video/*' hidden /> */}
                                     Back
                                 </label>
                             :
                                 <label className='vid__uploadFileInfo' htmlFor="uploadFileInfo" onChange={SelectHighlightVideo}>
-                                    <input name="" type="file" id="uploadFileInfo" accept='video/*' hidden />
-                                    Select File
+                                    <input name="" type="file" id="uploadFileInfo" accept='image/*' hidden />
+                                    Select Image
                                 </label>
                         }
                         
                     </div> 
                 </div>
                 <div className="vid__uploadLower">
-                    <h3>Video Details</h3>
+                    <h3>Live Details</h3>
                     <form className="vid__uploadForm" onSubmit={UploadVideo}>
+				        <div className="vid__uploadInput">
+                            <label>Stream URL</label>
+                            <input className='vid__uploadTitle' value={uploadStreamURL} onChange={(e)=>setUploadStreamURL(e.target.value)} required></input>
+                        </div>
                         <div className="vid__uploadInput">
                             <label>Title</label>
                             <input className='vid__uploadTitle' onChange={(e)=>setUploadVideoTitle(e.target.value) } value={uploadVideoTitle} required></input>
@@ -237,13 +269,14 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                         <div className="vid__uploadParted">
                             <FunSelectComponent label={`Events`} optData={AllEvents}  handleOnChange={HandleEventChange} defaultValue={uploadVideoEvent}/>
                             <FunSelectComponent label={`Category`} className={`vid__uploadCategory`}  optData={AllCategories} handleOnChange={HandleCategoryChange} defaultValue={uploadVideoCategory}/>
+                            <FunSelectComponent label={`Broadcast Channels`} optData={Channels}  handleOnChange={HandleChannelChange} defaultValue={channel}/>
                         </div>
                         <div className='vid__uploadVideo'>
-                            <FunLightButton btnLabel={`${videoURL? 'Update':'Upload'}`} btnType={`submit`}/>
+                            <FunLightButton btnLabel={`${uploadStreamURL? 'Update':'Upload'}`} btnType={`submit`}/>
                         </div>
                         <div className='vid__progressBar'>
                             {
-                                uploadPercentage ? <FunProgressBar percentage={uploadPercentage} isUpdated={videoURL ? true : false}/> : "" 
+                                uploadPercentage ? <FunProgressBar percentage={uploadPercentage} isUpdated={uploadStreamURL ? true : false}/> : "" 
                             }
                         </div>
                     </form>

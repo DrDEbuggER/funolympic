@@ -141,6 +141,11 @@
     margin-top: .3rem;
 }
 
+.vid__fixBack {
+    place-self: flex-start !important;
+    padding-left: 2rem !important;
+}
+
 .vid__uploadInfo > p {
     padding: 1rem .5rem .5rem .5rem;
     color: #3f3b3b;

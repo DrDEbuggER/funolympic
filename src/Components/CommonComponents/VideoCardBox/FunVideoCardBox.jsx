@@ -1,7 +1,7 @@
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./FunVideoCardBox.css"
-export const FunVideoCardBox = ({thumbnail, vidTitle, vidEvent}) => {
+export const FunVideoCardBox = ({thumbnail, vidTitle, vidEvent, category, onEditClick, onDeleteClick, videoID}) => {
     const trimLongString = (longStr) => {
         if (longStr && longStr.length > 45) {
             return longStr.substring(0, 45) + "..."
@@ -16,15 +16,17 @@ export const FunVideoCardBox = ({thumbnail, vidTitle, vidEvent}) => {
                 </div>
                 <div className="fun__vidHighlightDesc">
                     <h3>{trimLongString(vidTitle)}</h3>
-                    <p>{trimLongString(vidEvent)}</p>
+                    <p className='fun__vidEventPara'>{`${trimLongString(vidEvent)} | ${category}`}</p>
                     <div className='fun__vidEditWrapper'>
-                        <p>1 views</p>
                         <div className="fun__vidEdit">
-                            <EditIcon />
-                            <DeleteIcon />
+                            <div onClick={()=>onEditClick(videoID)}>
+                                <EditIcon className='fun__vidIcon'/>
+                            </div>
+                            <div onClick={onDeleteClick}>
+                                <DeleteIcon className='fun__vidIcon'/>
+                            </div>
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </div>

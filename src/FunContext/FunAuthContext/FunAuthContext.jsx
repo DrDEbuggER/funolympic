@@ -19,6 +19,7 @@ export const FunAuthContextProvider = ({children}) => {
     const [loading, setLoading] = useState(true);
     const [logout, setLogout] = useState(false);
     const [userType, setUserType] = useState("")
+    const [error, setError] = useState("")
     // const userType = useRef()
     const funSignup = (fullName, userName, email, phone, country, pass) => {
         return createUserWithEmailAndPassword(auth, email, pass).then((funUserCred) => {
@@ -68,6 +69,8 @@ export const FunAuthContextProvider = ({children}) => {
                     } 
                 })
             }
+        },(err)=>{
+            setError(`Login Error: ${err.code.split("/")[1]}`)
         });
     }
 
@@ -107,7 +110,7 @@ export const FunAuthContextProvider = ({children}) => {
         }
     },[])
     return (
-        <FunUserAuthContext.Provider value={{funSignup, funLogin, funLogout, GetCurrentUserType, funUser, loading, logout, userType}}>
+        <FunUserAuthContext.Provider value={{funSignup, funLogin, funLogout, GetCurrentUserType, funUser, loading, logout, userType, error}}>
             {children}
         </FunUserAuthContext.Provider>
     )

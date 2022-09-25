@@ -13,11 +13,13 @@
 }
 .fun__vidEditWrapper {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
 }
 .fun__vidEdit {
+    display: flex;
     cursor: pointer;
 }
+
 .fun__videoCardBox {
     padding: .5rem;
     width: 100%;
@@ -32,6 +34,10 @@
     -moz-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
 }
 
+.fun__vidIcon:hover {
+    color: rgb(177, 134, 221);
+}
+
 .fun__videoCardBox img {
     width: 100%;
     height: 150px;
@@ -41,7 +47,6 @@
     /* text-align: justify; */
     font-size: 1rem;
 }
-
 
 /* landscape cardbox */
 .fun__landscapeCardBox {

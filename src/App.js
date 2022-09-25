@@ -50,7 +50,11 @@ function App() {
               <Route path="/admin/users" element={<FunAdminPanel pageName="users"/>} />
               <Route path="/admin/highlights/upload" element={<FunAdminPanel pageName="uploadHighlights"/>} />
               <Route path="/admin/highlights/all" element={<FunAdminPanel pageName="allHighlights"/>} />
+              <Route path="/admin/highlights/update/:videoID" element={<FunAdminPanel pageName="uploadHighlights"/>} />
               <Route path="/admin/live/upload" element={<FunAdminPanel pageName="uploadLive"/>} />
+              <Route path="/admin/live/all" element={<FunAdminPanel pageName="allLives"/>} />
+              <Route path="/admin/live/update/:videoID" element={<FunAdminPanel pageName="uploadLive"/>} />
+              <Route path="/admin/news/post" element={<FunAdminPanel pageName="newsPost"/>} />
             </Route>
           </Routes>
         </Router>

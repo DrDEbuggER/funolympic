@@ -1,11 +1,11 @@
 .fun__signupContainer {
     width: 100%;
-    padding: 200px 0 180px 0;
+    padding: 200px 0 200px 0;
     background-color: #6A0DAD;
     z-index: 80;
     display: flex;
     justify-content: center;
-    height: 100vh;
+    height: 100%;
 }
 
 .fun__formSignupWrapper {
@@ -58,4 +58,11 @@
 
 .fun__signupBtn {
     padding: 1rem 0 2rem 0;
+}
+
+.fun__errMsgWrapper {
+    width: 20rem;
+    /* text-align: start; */
+    padding: .5rem 0rem .5rem .7rem;
+    
 }

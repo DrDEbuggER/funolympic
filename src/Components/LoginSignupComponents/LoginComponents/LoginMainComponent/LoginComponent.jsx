@@ -1,12 +1,12 @@
 import { useState } from "react"
 import { FunUserAuth } from "../../../../FunContext"
-import { FunButton } from "../../../CommonComponents"
+import { ErrorMessage, FunButton } from "../../../CommonComponents"
 import { FunAuthNavBar } from "../../../FunLandingComponents"
 import "./LoginComponent.css"
 export const LoginComponent = () => {
     const [email, setEmail] = useState();
     const [pass, setPass] = useState();
-    const {funLogin} = FunUserAuth();
+    const {funLogin, error} = FunUserAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -38,6 +38,11 @@ export const LoginComponent = () => {
                         </div>
                         <div className="fun__forgotPassword">
                             <a href="/reset">Forgot Password?</a>
+                        </div>
+                        <div className="fun__errMsgWrapper">
+                            {
+                                error ? <ErrorMessage err={error}/>: ""
+                            }
                         </div>
                         <div className="fun__loginButton">
                             <FunButton text={"Login"} btnType="Submit"/>

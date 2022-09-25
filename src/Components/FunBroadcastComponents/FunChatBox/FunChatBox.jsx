@@ -20,11 +20,8 @@ export const FunChatBox = ({game}) => {
     const filter = new Filter();
     const sendMessage = (e) => {
         e.preventDefault();
-        filter.addWords('tester', 'bad1')
-        let tempMessage ={uid: auth.currentUser.uid, 
-                            userName: userName,
-                            message: rmessage,
-                            createdAt: serverTimestamp()}
+        filter.addWords('shit', 'stupid')
+        
         
         if(rmessage && userName) {
             console.log("top", filter.isProfane(rmessage))
@@ -36,6 +33,10 @@ export const FunChatBox = ({game}) => {
                     badMessage: `User @${userName} dropped inappropriate comment. "${rmessage}"`
                 },(err)=>console.log("badmsg",err))
             }
+            let tempMessage ={uid: auth.currentUser.uid, 
+                userName: userName,
+                message: filter.clean(rmessage),
+                createdAt: serverTimestamp()}
             const messageRef = collection(firestore, "livechat","Ju6NdmCCF23yOq8xSqbJ", game);
             setMessage("");
             addDoc(messageRef,tempMessage).then(res => {

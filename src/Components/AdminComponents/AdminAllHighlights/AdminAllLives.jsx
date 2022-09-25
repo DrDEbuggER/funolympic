@@ -5,7 +5,7 @@ import { firestore } from "../../../firebase"
 import { FunVideoCardBox } from "../../CommonComponents"
 
 import "./AdminAllHighlights.css"
-export const AdminAllHighlights = ({docPath}) => {
+export const AdminAllLives = ({docPath}) => {
     const [videoData, setVideoData] = useState([])
     // const womenGamesRef = collection(firestore, `/highlights`)
     const funNavigate = useNavigate()
@@ -54,7 +54,7 @@ export const AdminAllHighlights = ({docPath}) => {
     }
 
     const HandleEdit = (videoID) => {
-        funNavigate(`/admin/${docPath}/update/${videoID}`)
+        funNavigate(`/admin/live/update/${videoID}`)
     }
 
     const HandleDelete = () => {
@@ -68,7 +68,7 @@ export const AdminAllHighlights = ({docPath}) => {
             </div>
             <div className="fun__adminAllHighlights">
                 <div className="fun__adminMenHighlights">
-                    <p>All Highlights</p>
+                    <p>All Lives</p>
                     <div className="fun__adminHighlightVideos">
                         {
                             videoData.map((vDat, idx) => {

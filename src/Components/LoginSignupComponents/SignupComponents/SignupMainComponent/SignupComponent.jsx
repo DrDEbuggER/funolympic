@@ -1,16 +1,24 @@
-import { useState } from "react"
+import { async } from "@firebase/util"
+import { collection, getDocs, query, where } from "firebase/firestore"
+import { useRef, useState } from "react"
+import { firestore } from "../../../../firebase"
 import { FunUserAuth } from "../../../../FunContext"
-import { FunButton } from "../../../CommonComponents"
+import { ErrorMessage, FunButton } from "../../../CommonComponents"
 import { FunAuthNavBar } from "../../../FunLandingComponents"
 import "./SignupComponent.css"
 export const SignupComponent = () => {
     const [email, setEmail] = useState();
     const [pass, setPass] = useState();
+    const [confirmPass, setConfirmPass] = useState();
     const [userName, setUserName] = useState();
     const [fullName, setFullName] = useState();
     const [phone, setPhone] = useState();
     const [country, setCountry] = useState();
+    // const [userExist, setUserExist] = useState(false)
+    const isUserExist = useRef(false)
+    const [errMsg, setErrMsg] = useState();
     const {funSignup} = FunUserAuth();
+   
 
     const isEmpty = (value) => {
         if(value == "") {
@@ -18,6 +26,33 @@ export const SignupComponent = () => {
         } else {
             return false;
         }
+    }
+
+
+    const isUniqueUsername = async(userName) => {
+        const userRef = query(collection(firestore, "users"), where("userName", "==", userName))
+        await getDocs(userRef).then((snap)=> {
+            console.log(snap)
+            if (snap.docs.length > 0) {
+                isUserExist.current = true
+            } else {
+                isUserExist.current = false
+            } 
+        })
+        return isUserExist.current
+    }
+    const isValidUserLength = (userName) => {
+        if(userName.length > 12) {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    function checkPassword(str)
+    {
+        var re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        return re.test(str);
     }
 
     const handleSubmit = async (e) => {
@@ -29,8 +64,32 @@ export const SignupComponent = () => {
                 !isEmpty(email) &&
                 !isEmpty(phone) &&
                 !isEmpty(country) &&
-                !isEmpty(pass)){
-                    await funSignup(fullName, userName,email, phone, country, pass);
+                !isEmpty(pass) &&
+                !isEmpty(confirmPass))
+                {
+                    // validation
+                    if (!isValidUserLength(userName)) {
+                        setErrMsg("Username musn't be greater than 12 characters")
+                        return
+                    }
+                    isUniqueUsername(userName).then((res)=> {
+                        if(res) {
+                            setErrMsg("Username already taken")
+                            return
+                        }   
+                        if (!checkPassword(pass)) {
+                            setErrMsg("Password must be atlest 8 characters and also include atleast 1 special character, 1 Capital Letter, 1 Small Letter, and 1 numeric value")
+                            return
+                        }  
+                        if (pass !== confirmPass) {
+                            setErrMsg("Confirm Password do not match!!")
+                            return
+                        }
+                        funSignup(fullName, userName,email, phone, country, pass);
+                    })
+                    
+                    
+                    
             } else {
                 console.log("please check all the fileds before you register!!")
             }
@@ -64,7 +123,7 @@ export const SignupComponent = () => {
                         </div>
                         <div className="fun__formInput">
                             <label>Phone</label>
-                            <input type="text" onChange={(e)=> setPhone(e.target.value)} required></input>
+                            <input type="number" onChange={(e)=> setPhone(e.target.value)} required></input>
                         </div>
                         <div className="fun__formInput">
                             <label>Country</label>
@@ -73,6 +132,13 @@ export const SignupComponent = () => {
                         <div className="fun__formInput">
                             <label>Password</label>
                             <input type="password" onChange={(e) => setPass(e.target.value)} required></input>
+                        </div>
+                        <div className="fun__formInput">
+                            <label>Confirm Password</label>
+                            <input type="password" onChange={(e) => setConfirmPass(e.target.value)} required></input>
+                        </div>
+                        <div className="fun__errMsgWrapper">
+                            <ErrorMessage err={errMsg}/>
                         </div>
                         <div className="fun__signupBtn">
                             <FunButton text={"Sign up"} btnType="Submit"/>
