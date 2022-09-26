@@ -21,13 +21,13 @@ export const VerifyComponent = () => {
         let interval = setInterval(async() => {
             if (auth.currentUser.emailVerified) {
                 const userRef = query(collection(firestore, "users"), where("uuid", "==", auth.currentUser.uid))
-                onSnapshot(userRef, (snapshot) => {
+                onSnapshot(userRef, async(snapshot) => {
                     let docId = '';
                     snapshot.forEach(doc => {
                         docId = doc.id;
                     })
                     if (docId != '') {
-                        updateDoc(doc(firestore, `users/${docId}`), {status: "Verified", online:true}).then((res)=> {
+                        await updateDoc(doc(firestore, `users/${docId}`), {status: "Verified", online:true}).then((res)=> {
                             clearInterval(interval);
                             funNavigate("/broadcast");
                         })

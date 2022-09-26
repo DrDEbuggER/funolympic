@@ -1,4 +1,4 @@
-import { AdminAllHighlights, AdminAllLives, AdminDashboard, AdminHighlightUpload, AdminNavBar, AdminNewsUpload, UserListsMain } from "../../Components"
+import { AdminAllHighlights, AdminAllLives, AdminAllNews, AdminDashboard, AdminHighlightUpload, AdminNavBar, AdminNewsUpload, FunProfile, UserListsMain } from "../../Components"
 import { AdminLiveUpload } from "../../Components/AdminComponents/AdminLiveUpload"
 import { AdminSidebar } from "../../Components/CommonComponents"
 import { FunAdminContextProvider } from "../../FunContext"
@@ -31,6 +31,8 @@ export const FunAdminPanel = ({pageName}) => {
                             pageName === "allLives" ? <AdminAllLives docPath={'lives'}/>:
                             pageName === "uploadLive" ? <AdminLiveUpload />:
                             pageName === "newsPost" ? <AdminNewsUpload />:
+                            pageName === "allNews" ? <AdminAllNews docPath={'news'}/>:
+                            pageName === "adminProfile" ? <FunProfile isDashBoard={true} userType={`Admin`}/>:
                             pageName === "soon" ? <h1> Coming Soon...</h1>: ""                            
                         }
                     </div>

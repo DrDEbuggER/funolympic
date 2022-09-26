@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { useEffect } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { FunUserAuth } from "../FunContext"
@@ -7,8 +8,7 @@ export const FunRestrictedAdminRoute = () => {
     const {funUser, loading, GetCurrentUserType, userType} = FunUserAuth();
     useEffect(()=>{
         GetCurrentUserType()
-        console.log("localstorage", window.localStorage.getItem('login'))
-    })
+    },[loading])
     
     return (
         window.localStorage.getItem('login') && window.localStorage.getItem('login') === "true" ?

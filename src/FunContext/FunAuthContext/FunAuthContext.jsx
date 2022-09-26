@@ -7,8 +7,7 @@ import {
     sendEmailVerification
 } from "firebase/auth"
 import { auth, firestore } from "../../firebase";
-import { addDoc, collection, doc, onSnapshot, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
-import { useRef } from "react";
+import { addDoc, collection, doc, getDocs, onSnapshot, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
 
 // creating user auth context
 const FunUserAuthContext = createContext();
@@ -20,9 +19,10 @@ export const FunAuthContextProvider = ({children}) => {
     const [logout, setLogout] = useState(false);
     const [userType, setUserType] = useState("")
     const [error, setError] = useState("")
+    const [banned,setBanned] = useState()
     // const userType = useRef()
-    const funSignup = (fullName, userName, email, phone, country, pass) => {
-        return createUserWithEmailAndPassword(auth, email, pass).then((funUserCred) => {
+    const funSignup = async(fullName, userName, email, phone, country, pass) => {
+        return createUserWithEmailAndPassword(auth, email, pass).then(async(funUserCred) => {
             console.log("fun User Cread:", funUserCred)
             let userObject = {
                 fullName: fullName,
@@ -32,12 +32,13 @@ export const FunAuthContextProvider = ({children}) => {
                 country: country,
                 status: "UnVerified",
                 userType: "user",
+                banned: false,
                 createdAt: serverTimestamp(),
                 uuid: auth.currentUser.uid
             }
             // Add user data to firestore db
             const userRef = collection(firestore, `users`);
-            addDoc(userRef, userObject).then((res) => {
+            await addDoc(userRef, userObject).then((res) => {
                 // added docs
             }, (err)=> console.log('user store err', err))
 
@@ -50,21 +51,19 @@ export const FunAuthContextProvider = ({children}) => {
         });
     }
 
-    const funLogin = (email, pass) => {
-        return signInWithEmailAndPassword(auth, email, pass).then((funUser) => {
+    const funLogin = async(email, pass) => {
+        return signInWithEmailAndPassword(auth, email, pass).then(async(funUser) => {
             if (!funUser.user.emailVerified) {
                 console.log("Login: User not verified");
-            }else {
+            }  else  {
                 const userRef = query(collection(firestore, "users"), where("uuid", "==", auth.currentUser.uid))
                 window.localStorage.setItem("login", "true")
-                onSnapshot(userRef, (snapshot) => {
-                    let docId = '';
-                    snapshot.forEach(doc => {
-                        docId = doc.id;
-                    })
-                    if (docId != '') {
-                        updateDoc(doc(firestore, `users/${docId}`), {status: "Verified", online:true}).then((res)=> {
-                            // Update Success
+                
+                await getDocs(userRef).then(async (snapshot) => {
+                    // if (snapshot.docs[0].)
+                    if (snapshot.docs[0].id != '') {
+                        await updateDoc(doc(firestore, `users/${snapshot.docs[0].id}`), {status: "Verified", online:true}).then((res)=> {
+                            console.log("verified login", snapshot.docs[0].id)
                         })
                     } 
                 })
@@ -75,24 +74,20 @@ export const FunAuthContextProvider = ({children}) => {
     }
 
     const funLogout = async () => {
+        console.log("logout...")
         await auth.signOut().then((res)=> {
-            console.log("res logout", res)
             window.localStorage.setItem("login", "false")
             setLogout(true)
         }, (err)=> console.log('logout err: ', err))
+        
     }
 
     const GetCurrentUserType = () => {
         if(auth.currentUser) {
-            console.log("console")
             const userQuery = query(collection(firestore, "users"), where("uuid", "==",  auth.currentUser.uid))
             onSnapshot(userQuery,(snap)=>{
-                // setUserType(snap.docs[0].data().userType)
                 setUserType(snap.docs[0].data().userType)
-                // snap.forEach((doc)=> {
-                //     setUserType(doc.data().userType)
-                //     console.log("docs")
-                // })
+                setBanned(snap.docs[0].data().banned)
             })
         } else {
             // setUserType("none")
@@ -110,7 +105,7 @@ export const FunAuthContextProvider = ({children}) => {
         }
     },[])
     return (
-        <FunUserAuthContext.Provider value={{funSignup, funLogin, funLogout, GetCurrentUserType, funUser, loading, logout, userType, error}}>
+        <FunUserAuthContext.Provider value={{funSignup, funLogin, funLogout, GetCurrentUserType, funUser, loading, logout, userType, error,banned}}>
             {children}
         </FunUserAuthContext.Provider>
     )

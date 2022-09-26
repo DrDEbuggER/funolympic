@@ -10,7 +10,7 @@ import { AdminWidget } from "../AdminWidget"
 import "./AdminDashboard.css"
 export const AdminDashboard = () => {
     const {totalUserCount} = AdminFireDataContext();
-    const {liveCount, bannedCount} = AdminFireDataContext();
+    const {liveCount, bannedCount, liveGames} = AdminFireDataContext();
     const [watchHour, setWatchHour] = useState(0)
     // const watchHour = useRef(0);
 
@@ -69,7 +69,7 @@ export const AdminDashboard = () => {
             <div className="admin__upperComponents">
                 <AdminWidget widgetData={GenerateWidgetData("Users", totalUserCount, "See all users", PersonOutlined)} />
                 <AdminWidget widgetData={GenerateWidgetData("Live Users", liveCount, "See all users", PersonOutlined )} />
-                <AdminWidget widgetData={GenerateWidgetData("Live Games", 2, "See all users", PersonOutlined)} />
+                <AdminWidget widgetData={GenerateWidgetData("Live Games", liveGames, "See all users", PersonOutlined)} />
                 <AdminWidget widgetData={GenerateWidgetData("Watch Hours", watchHour, "See all users", PersonOutlined )} />
             </div>
             <div className="admin__lowerGraphs">

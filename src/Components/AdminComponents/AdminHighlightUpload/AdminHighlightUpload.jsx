@@ -10,35 +10,42 @@ import { addDoc, collection, doc, getDoc, getDocs, query, serverTimestamp, updat
 import { v4 as uuid} from "uuid"
 export const AdminHighlightUpload = ({className, videoData}) => {
     const [uploadFile, setUploadFile] = useState('');
+    const [uploadThumb, setUploadThumb] = useState('');
     const [uploadPercentage, setUploadPercentage] = useState(0);
     const [uploadVideoTitle, setUploadVideoTitle] = useState('');
     const [uploadVideoDesc, setUploadVideoDesc] = useState('');
+    const [thumbURL, setThumbURL] = useState('')
     const [uploadVideoEvent, setUploadVideoEvent] = useState('none');
     const [uploadVideoCategory, setUploadVideoCategory] = useState('none');
     const [videoURL, setVideoURL] = useState()
     const uploadFileObject = useRef()
+    const uploadThumbObject = useRef()
+    const updatedThumbURL = useRef("")
     const uploadURL = useRef();
     const params = useParams()
     const funNav = useNavigate()
 
     useEffect(()=>{
-        console.log("params", params.videoID)
-        if (params.videoID) {
-            const docQuery = query(collection(firestore,'/highlights'), where("videoID", "==", params.videoID))
-            getDocs(docQuery).then((snap)=>{
-                console.log("snap",snap.docs[0].data())
-                setUploadVideoTitle(snap.docs[0].data().videoTitle)
-                setUploadVideoDesc(snap.docs[0].data().videoDesc)
-                setUploadVideoEvent(snap.docs[0].data().eventType)
-                setUploadVideoCategory(snap.docs[0].data().category)
-                setVideoURL(snap.docs[0].data().videoURL)
-            })
-        } else {
-            if (videoURL) {
-                console.log("state cleaned")
-                CleanUpStates(0)
+        const InitData = async() => {
+            if (params.videoID) {
+                const docQuery = query(collection(firestore,'/highlights'), where("videoID", "==", params.videoID))
+                await getDocs(docQuery).then((snap)=>{
+                    console.log("snap",snap.docs[0].data())
+                    setUploadVideoTitle(snap.docs[0].data().videoTitle)
+                    setUploadVideoDesc(snap.docs[0].data().videoDesc)
+                    setUploadVideoEvent(snap.docs[0].data().eventType)
+                    setUploadVideoCategory(snap.docs[0].data().category)
+                    setThumbURL(snap.docs[0].data().thumbnail)
+                    setVideoURL(snap.docs[0].data().videoURL)
+                })
+            } else {
+                if (videoURL) {
+                    console.log("state cleaned")
+                    CleanUpStates(0)
+                }
             }
         }
+        InitData()
     },[params.videoID])
 
     const AllEvents = [
@@ -53,6 +60,22 @@ export const AdminHighlightUpload = ({className, videoData}) => {
         {
             optName: "Swimming",
             optValue: "swimming"
+        },
+        {
+            optName: "Archery",
+            optValue: "archery"
+        },
+        {
+            optName: "Basketball",
+            optValue: "basketball"
+        },
+        {
+            optName: "Sprinting",
+            optValue: "sprinting"
+        },
+        {
+            optName: "Weightlifting",
+            optValue: "weightlifting"
         }
     ]
     const AllCategories = [
@@ -86,6 +109,20 @@ export const AdminHighlightUpload = ({className, videoData}) => {
         }
     }
 
+    const SelectThumbnail = (e) => {
+        console.log(e)
+        if (e.target.files.length > 0) {
+            setUploadThumb(e.target.files[0].name)
+            setUploadPercentage(0)
+            uploadThumbObject.current = e.target.files[0]
+        } else {
+            console.log("cleared")
+            setUploadFile("")
+            setUploadPercentage(0)
+            uploadThumbObject.current = ""
+        }
+    }
+
     const HandleEventChange = (e) => {
         setUploadVideoEvent(e.target.value)
     }
@@ -101,12 +138,15 @@ export const AdminHighlightUpload = ({className, videoData}) => {
         setUploadVideoTitle("");
         setUploadVideoDesc("");
         setUploadFile("")
+        setUploadThumb("")
         setVideoURL("")
+        setThumbURL("")
         uploadFileObject.current = ""
+        uploadThumbObject.current = ""
         uploadURL.current = ""
     }
 
-    const UploadVideo = (e) => {
+    const UploadVideo = async(e) => {
         e.preventDefault()
         console.log("event", uploadVideoEvent)
         console.log("cate", uploadVideoCategory)
@@ -116,24 +156,65 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                 uploadVideoEvent && uploadVideoEvent !== "none" &&
                 uploadVideoCategory && uploadVideoCategory !== "none") {
             if (videoURL && params.videoID) {
-                setUploadPercentage(0)
-                let tempGameData ={
-                    videoID: params.videoID,
-                    videoURL: videoURL,
-                    uploadedAt: serverTimestamp(),
-                    videoTitle: uploadVideoTitle,
-                    videoDesc: uploadVideoDesc,
-                    eventType: uploadVideoEvent,
-                    category: uploadVideoCategory,
-                    thumbnail: "https://cdn.dmcl.biz/media/image/213212/o/Armand+Duplantis+GettyImages-1332111991.jpg"
+                console.log("current",uploadThumbObject.current)
+                if (uploadThumbObject.current) {
+                    const fireStorageRef = ref(fireStorage, `/files/${uploadThumbObject.current.name}`)
+                    const fireUploadTask = uploadBytesResumable(fireStorageRef, uploadThumbObject.current)
+                    fireUploadTask.on("state_changed", (snapshot)=> {
+                        const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+                        setUploadPercentage(prog === 100 ? 99: prog)
+                        // console.log("prog", prog)
+                    },
+                    (err)=>console.log(err),
+                    ()=>{
+                        getDownloadURL(fireUploadTask.snapshot.ref)
+                            .then(async (url) =>{
+                                let tempGameData ={
+                                    videoID: params.videoID,
+                                    videoURL: videoURL,
+                                    uploadedAt: serverTimestamp(),
+                                    videoTitle: uploadVideoTitle,
+                                    videoDesc: uploadVideoDesc,
+                                    eventType: uploadVideoEvent,
+                                    category: uploadVideoCategory,
+                                    thumbnail: url
+                                }
+                                const videoQuery = query(collection(firestore, "highlights"), where("videoID", "==", params.videoID))
+                                await getDocs(videoQuery).then(async(snap)=>{
+                                    let docID = snap.docs[0].id
+                                    const docRef = doc(firestore,`highlights`, docID)
+                                    await updateDoc(docRef, tempGameData).then((res)=> {
+                                        setUploadPercentage(100)
+                                        setThumbURL(url)
+                                    },
+                                    (err)=>console.log("update err", err))
+                                })
+                             }
+                            )
+                        }
+                    )
+                } else if(thumbURL) {
+                    setUploadPercentage(0)
+                    let tempGameData ={
+                        videoID: params.videoID,
+                        videoURL: videoURL,
+                        uploadedAt: serverTimestamp(),
+                        videoTitle: uploadVideoTitle,
+                        videoDesc: uploadVideoDesc,
+                        eventType: uploadVideoEvent,
+                        category: uploadVideoCategory,
+                        thumbnail: thumbURL
+                    }
+                    const videoQuery = query(collection(firestore, "highlights"), where("videoID", "==", params.videoID))
+                    await getDocs(videoQuery).then(async(snap)=>{
+                        let docID = snap.docs[0].id
+                        const docRef = doc(firestore,`highlights`, docID)
+                        await updateDoc(docRef, tempGameData).then((res)=> {setUploadPercentage(100)},
+                        (err)=>console.log("update err", err))
+                    })
+                } else {
+                    console.log("thumbnail not found");
                 }
-                const videoQuery = query(collection(firestore, "highlights"), where("videoID", "==", params.videoID))
-                getDocs(videoQuery).then((snap)=>{
-                    let docID = snap.docs[0].id
-                    const docRef = doc(firestore,`highlights`, docID)
-                    updateDoc(docRef, tempGameData).then((res)=> {setUploadPercentage(100)},
-                    (err)=>console.log("update err", err))
-                })
             }else {
                 if (!uploadFileObject.current ) return;
                 const fireStorageRef = ref(fireStorage, `/files/${uploadFileObject.current.name}`)
@@ -147,20 +228,30 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                 ()=>{
                     getDownloadURL(fireUploadTask.snapshot.ref)
                         .then(url =>{
-                            let tempGameData ={
-                                videoID: uuid().split("-").at(-1),
-                                videoURL: url,
-                                uploadedAt: serverTimestamp(),
-                                videoTitle: uploadVideoTitle,
-                                videoDesc: uploadVideoDesc,
-                                eventType: uploadVideoEvent,
-                                category: uploadVideoCategory,
-                                thumbnail: "https://cdn.dmcl.biz/media/image/213212/o/Armand+Duplantis+GettyImages-1332111991.jpg"
-                            }
-                            const gameRef = collection(firestore, `highlights`);
-                            addDoc(gameRef,tempGameData).then(res => {
-                                CleanUpStates(100);
-                            },(err)=> console.log(err))
+                            const fireThumbStorageRef = ref(fireStorage, `/thumb/${uploadThumbObject.current.name}`)
+                            const fireThumbUploadTask = uploadBytesResumable(fireThumbStorageRef, uploadThumbObject.current)
+                            fireThumbUploadTask.on("state_changed", (snapshot) =>{
+                            }, (err)=> console.log("thumb err", err),
+                            ()=>{
+                                getDownloadURL(fireThumbUploadTask.snapshot.ref)
+                                .then(async(thumbURL) => {
+                                    let tempGameData ={
+                                        videoID: uuid().split("-").at(-1),
+                                        videoURL: url,
+                                        uploadedAt: serverTimestamp(),
+                                        videoTitle: uploadVideoTitle,
+                                        videoDesc: uploadVideoDesc,
+                                        eventType: uploadVideoEvent,
+                                        category: uploadVideoCategory,
+                                        thumbnail: thumbURL
+                                    }
+                                    const gameRef = collection(firestore, `highlights`);
+                                    await addDoc(gameRef,tempGameData).then(res => {
+                                        CleanUpStates(100);
+                                    },(err)=> console.log(err))
+                                })
+                            })
+                            
                         })
                     }
                 )
@@ -196,6 +287,8 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                                     <FunVideoPlayer width="100%"
                                                     height="100%" 
                                                     url={videoURL ? videoURL : uploadURL.current}
+                                                    // thumb={thumbURL}
+                                                    control={true}
                                                     />
                                 </div>
                                 :
@@ -203,6 +296,8 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                                     <FunVideoPlayer width="100%"
                                                     height="100%" 
                                                     url={videoURL ? videoURL : uploadURL.current}
+                                                    control={true}
+                                                    // thumb={thumbURL}
                                                     />
                                 </div>
                     }
@@ -238,6 +333,14 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                             <FunSelectComponent label={`Events`} optData={AllEvents}  handleOnChange={HandleEventChange} defaultValue={uploadVideoEvent}/>
                             <FunSelectComponent label={`Category`} className={`vid__uploadCategory`}  optData={AllCategories} handleOnChange={HandleCategoryChange} defaultValue={uploadVideoCategory}/>
                         </div>
+                        <div className='vid__uploadThumbnail'>
+                            <label className='vid__uploadFileInfo vid__uploadInfoFix' htmlFor="uploadThumbInfo" onChange={SelectThumbnail}>
+                                        <input name="" type="file" id="uploadThumbInfo" accept='image/*' hidden />
+                                        Select Thumbnail
+                            </label>
+                            <p>{uploadThumb}</p>
+                        </div>
+                        
                         <div className='vid__uploadVideo'>
                             <FunLightButton btnLabel={`${videoURL? 'Update':'Upload'}`} btnType={`submit`}/>
                         </div>

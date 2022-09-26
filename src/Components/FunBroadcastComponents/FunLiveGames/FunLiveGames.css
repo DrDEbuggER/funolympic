@@ -6,7 +6,10 @@
 
 .fun__broadcastLiveMainWrapper {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    /* grid-template-columns: repeat(4, 1fr);
+     */
+    grid-template-columns: repeat(auto-fit, 280px);
+    justify-content: center;
     padding: 0rem 15rem;
     padding-top: 2rem;
     grid-gap: 5rem 2rem;

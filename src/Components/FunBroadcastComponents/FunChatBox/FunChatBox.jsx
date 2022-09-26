@@ -18,7 +18,7 @@ export const FunChatBox = ({game}) => {
     const [userName, setUserName] = useState("")
     const fixScroll = useRef();
     const filter = new Filter();
-    const sendMessage = (e) => {
+    const sendMessage = async(e) => {
         e.preventDefault();
         filter.addWords('shit', 'stupid')
         
@@ -28,7 +28,7 @@ export const FunChatBox = ({game}) => {
             if (filter.isProfane(rmessage)) {
                 console.log("filter","isprofane")
                 const colRef = collection(firestore, "BadActivity")
-                addDoc(colRef, {
+                await addDoc(colRef, {
                     badTitle: "Inappropriate Comment",
                     badMessage: `User @${userName} dropped inappropriate comment. "${rmessage}"`
                 },(err)=>console.log("badmsg",err))
@@ -39,7 +39,7 @@ export const FunChatBox = ({game}) => {
                 createdAt: serverTimestamp()}
             const messageRef = collection(firestore, "livechat","Ju6NdmCCF23yOq8xSqbJ", game);
             setMessage("");
-            addDoc(messageRef,tempMessage).then(res => {
+            await addDoc(messageRef,tempMessage).then(res => {
                 // console.log("sent res",res);
             })
         }

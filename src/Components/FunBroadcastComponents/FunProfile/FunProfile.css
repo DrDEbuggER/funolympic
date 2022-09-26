@@ -39,3 +39,22 @@
     align-self: center;
 }
 
+.fun__userStatus {
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 1rem;
+    color: #494545;
+    font-weight: 600;
+}
+.fun__userStatus >:last-child {
+    margin-left: .5rem;
+    font-size: 14px;
+    text-align: center;
+    place-self: center;
+    color: green;
+}
+
+.fun__userStat {
+    display: flex;
+    justify-content: space-between;
+}

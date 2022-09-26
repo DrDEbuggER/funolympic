@@ -16,6 +16,7 @@
 .fun__messageDropDown {
     width: 18rem !important;
     height: 18rem !important;
+    overflow-y: auto;
     
 }
 .fun__messageDropDown >h1 {
@@ -37,7 +38,7 @@
     -moz-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
 }
 .messageDropDown {
-    overflow-y: auto;
+    /* overflow-y: auto; */
 }
 .message__items > h3 {
     font-size: 14px;

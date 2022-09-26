@@ -10,3 +10,70 @@
     border-radius: 1rem;
     overflow: hidden;
 }
+
+.fun__hoverVideoPlayerWrapper >:first-child{
+    width: 90px;
+}
+
+
+.fun__customControls {
+    background-color: rgba(0, 0, 0, 0.432);
+    /* background-color: black; */
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    transition: all 0.3s ease-in 0s;
+    border-radius: 0rem 0rem .8rem .8rem;
+}
+
+.fun__customControls >:first-child{
+    width: 100%;
+    height: 3px;
+    background-color: red;
+}
+
+.fun__customControls >:last-child {
+    place-self: start;
+    display: flex;
+    padding: .5rem;
+}
+
+.fun__customLiveButton >:first-child {
+    margin-right: .5rem;
+    cursor: pointer;
+}
+
+.fun__customLiveLabel {
+    display: flex;
+    justify-content: center;
+    cursor: default;
+}
+
+.fun__customLiveLabel>:first-child {
+    margin-right: .3rem;
+}
+
+.fun__customLiveLabel >p {
+    color: white;
+    font-size: 14px;
+}
+
+.show__controls {
+    transition: all 0.3s ease-in 0s;
+    display: block;
+}
+
+.hide__controls {
+    transition: all 0.3s ease-in 0s;
+    display: none;
+}
+
+.fun__customFullScreen {
+    /* align-self: flex-end; */
+    margin-left: auto;
+    cursor: pointer;
+    padding-right: .5rem;
+}

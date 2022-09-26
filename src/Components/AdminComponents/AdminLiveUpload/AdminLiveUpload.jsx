@@ -24,23 +24,25 @@ export const AdminLiveUpload = ({className, videoData}) => {
     const funNav = useNavigate()
 
     useEffect(()=>{
-        console.log("params", params.videoID)
-        if (params.videoID) {
-            const docQuery = query(collection(firestore,'/lives'), where("videoID", "==", params.videoID))
-            getDocs(docQuery).then((snap)=>{
-                console.log("snap",snap.docs[0].data())
-                setUploadVideoTitle(snap.docs[0].data().videoTitle)
-                setUploadVideoDesc(snap.docs[0].data().videoDesc)
-                setUploadVideoEvent(snap.docs[0].data().eventType)
-                setUploadVideoCategory(snap.docs[0].data().category)
-                setUploadStreamURL(snap.docs[0].data().videoURL)
-                setThumbnailURL(snap.docs[0].data().thumbnail)
-            })
-        } else {
-            if (uploadStreamURL) {
-                CleanUpStates(0)
+        const InitData = async() => {
+            if (params.videoID) {
+                const docQuery = query(collection(firestore,'/lives'), where("videoID", "==", params.videoID))
+                await getDocs(docQuery).then((snap)=>{
+                    console.log("snap",snap.docs[0].data())
+                    setUploadVideoTitle(snap.docs[0].data().videoTitle)
+                    setUploadVideoDesc(snap.docs[0].data().videoDesc)
+                    setUploadVideoEvent(snap.docs[0].data().eventType)
+                    setUploadVideoCategory(snap.docs[0].data().category)
+                    setUploadStreamURL(snap.docs[0].data().videoURL)
+                    setThumbnailURL(snap.docs[0].data().thumbnail)
+                })
+            } else {
+                if (uploadStreamURL) {
+                    CleanUpStates(0)
+                }
             }
         }
+        InitData()
     },[params.videoID])
 
     const AllEvents = [
@@ -55,6 +57,22 @@ export const AdminLiveUpload = ({className, videoData}) => {
         {
             optName: "Swimming",
             optValue: "swimming"
+        },
+        {
+            optName: "Archery",
+            optValue: "archery"
+        },
+        {
+            optName: "Basketball",
+            optValue: "basketball"
+        },
+        {
+            optName: "Sprinting",
+            optValue: "sprinting"
+        },
+        {
+            optName: "Weightlifting",
+            optValue: "weightlifting"
         }
     ]
     const Channels = [
@@ -138,7 +156,7 @@ export const AdminLiveUpload = ({className, videoData}) => {
         uploadURL.current = ""
     }
 
-    const UploadVideo = (e) => {
+    const UploadVideo = async(e) => {
         e.preventDefault()
         console.log("event", uploadVideoEvent)
         console.log("cate", uploadVideoCategory)
@@ -160,10 +178,10 @@ export const AdminLiveUpload = ({className, videoData}) => {
                     thumbnail: thumbnailURL
                 }
                 const videoQuery = query(collection(firestore, "lives"), where("videoID", "==", params.videoID))
-                getDocs(videoQuery).then((snap)=>{
+                await getDocs(videoQuery).then(async(snap)=>{
                     let docID = snap.docs[0].id
                     const docRef = doc(firestore,`lives`, docID)
-                    updateDoc(docRef, tempGameData).then((res)=> {setUploadPercentage(100)},
+                    await updateDoc(docRef, tempGameData).then((res)=> {setUploadPercentage(100)},
                     (err)=>console.log("update err", err))
                 })
             }else {
@@ -178,7 +196,7 @@ export const AdminLiveUpload = ({className, videoData}) => {
                 (err)=>console.log(err),
                 ()=>{
                     getDownloadURL(fireUploadTask.snapshot.ref)
-                        .then(url =>{
+                        .then(async(url) =>{
                             let tempGameData ={
                                 videoID: uuid().split("-").at(-1),
                                 videoURL: uploadStreamURL,
@@ -190,7 +208,7 @@ export const AdminLiveUpload = ({className, videoData}) => {
                                 thumbnail: url
                             }
                             const gameRef = collection(firestore, `lives`);
-                            addDoc(gameRef,tempGameData).then(res => {
+                            await addDoc(gameRef,tempGameData).then(res => {
                                 CleanUpStates(100);
                             },(err)=> console.log(err))
                         })
@@ -207,7 +225,7 @@ export const AdminLiveUpload = ({className, videoData}) => {
             <div className="vid__uploadMain">
                 <div className="vid__uploadUpper">
                     {
-                        !uploadStreamURL ?
+                        !params.videoID ?
                             !uploadFileObject.current ?
                                 <div className='vid__uploadUpperSec'>
                                     <div className='vid__roundKeyUpWrapper'>
@@ -234,10 +252,10 @@ export const AdminLiveUpload = ({className, videoData}) => {
                                     <img src={thumbnailURL ? thumbnailURL : uploadURL.current} />
                                 </div>
                     }
-                    <div className={`vid__uploadInfoLower ${uploadStreamURL ? 'vid__fixBack' : ''}`}>
+                    <div className={`vid__uploadInfoLower ${params.videoID ? 'vid__fixBack' : ''}`}>
                         <p>{uploadFile}</p>
                         {
-                            uploadStreamURL ? 
+                            params.videoID ? 
                                 <label className='vid__uploadFileInfo' htmlFor="uploadFileInfo" onClick={()=> funNav(`/admin/live/all`)}>
                                     {/* <input name="" type="file" id="uploadFileInfo" accept='video/*' hidden /> */}
                                     Back
@@ -272,11 +290,11 @@ export const AdminLiveUpload = ({className, videoData}) => {
                             <FunSelectComponent label={`Broadcast Channels`} optData={Channels}  handleOnChange={HandleChannelChange} defaultValue={channel}/>
                         </div>
                         <div className='vid__uploadVideo'>
-                            <FunLightButton btnLabel={`${uploadStreamURL? 'Update':'Upload'}`} btnType={`submit`}/>
+                            <FunLightButton btnLabel={`${params.videoID? 'Update':'Upload'}`} btnType={`submit`}/>
                         </div>
                         <div className='vid__progressBar'>
                             {
-                                uploadPercentage ? <FunProgressBar percentage={uploadPercentage} isUpdated={uploadStreamURL ? true : false}/> : "" 
+                                uploadPercentage ? <FunProgressBar percentage={uploadPercentage} isUpdated={params.videoID ? true : false}/> : "" 
                             }
                         </div>
                     </form>

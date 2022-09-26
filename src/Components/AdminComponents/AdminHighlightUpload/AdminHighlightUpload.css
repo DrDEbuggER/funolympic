@@ -151,3 +151,24 @@
     color: #3f3b3b;
     font-weight: 600;
 }
+
+.vid__uploadInfoFix {
+    margin-left: 0 !important;
+}
+
+.vid__uploadThumbnail {
+    display: flex;
+    padding-top: .5rem;
+}
+.vid__uploadThumbnail >:first-child {
+    width: 10rem;
+    text-align: center;
+    font-size: 12px;
+    color: white;
+    margin-right: .5rem;
+} 
+.vid__uploadThumbnail >:last-child {
+    font-size: 14px;
+    text-align: justify;
+    place-self: center;
+}

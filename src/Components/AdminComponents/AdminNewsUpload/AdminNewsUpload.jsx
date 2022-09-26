@@ -11,11 +11,11 @@ import { v4 as uuid} from "uuid"
 export const AdminNewsUpload = ({className, videoData}) => {
     const [uploadFile, setUploadFile] = useState('');
     const [uploadPercentage, setUploadPercentage] = useState(0);
-    const [uploadVideoTitle, setUploadVideoTitle] = useState('');
-    const [uploadVideoDesc, setUploadVideoDesc] = useState('');
-    const [uploadStreamURL, setUploadStreamURL] = useState('');
-    const [uploadVideoEvent, setUploadVideoEvent] = useState('none');
-    const [uploadVideoCategory, setUploadVideoCategory] = useState('none');
+    const [uploadNewsTitle, setUploadNewsTitle] = useState('');
+    const [uploadNewsDesc, setUploadNewsDesc] = useState('');
+    const [authorName, setAuthorName] = useState('');
+    const [uploadNewsEvent, setUploadNewsEvent] = useState('none');
+    const [uploadNewsCategory, setUploadNewsCategory] = useState('none');
     const [thumbnailURL, setThumbnailURL] = useState()
     const [channel, setChannel] = useState("none")
     const uploadFileObject = useRef()
@@ -24,24 +24,26 @@ export const AdminNewsUpload = ({className, videoData}) => {
     const funNav = useNavigate()
 
     useEffect(()=>{
-        console.log("params", params.videoID)
-        if (params.videoID) {
-            const docQuery = query(collection(firestore,'/lives'), where("videoID", "==", params.videoID))
-            getDocs(docQuery).then((snap)=>{
-                console.log("snap",snap.docs[0].data())
-                setUploadVideoTitle(snap.docs[0].data().videoTitle)
-                setUploadVideoDesc(snap.docs[0].data().videoDesc)
-                setUploadVideoEvent(snap.docs[0].data().eventType)
-                setUploadVideoCategory(snap.docs[0].data().category)
-                setUploadStreamURL(snap.docs[0].data().videoURL)
-                setThumbnailURL(snap.docs[0].data().thumbnail)
-            })
-        } else {
-            if (uploadStreamURL) {
-                CleanUpStates(0)
+        const InitData = async()=>{
+            if (params.postID) {
+                const docQuery = query(collection(firestore,'/news'), where("postID", "==", params.postID))
+                await getDocs(docQuery).then((snap)=>{
+                    console.log("snap",snap.docs[0].data())
+                    setUploadNewsTitle(snap.docs[0].data().newsTitle)
+                    setUploadNewsDesc(snap.docs[0].data().newsDesc)
+                    setUploadNewsEvent(snap.docs[0].data().eventType)
+                    setUploadNewsCategory(snap.docs[0].data().category)
+                    setAuthorName(snap.docs[0].data().authorName)
+                    setThumbnailURL(snap.docs[0].data().thumbnail)
+                })
+            } else {
+                if (authorName) {
+                    CleanUpStates(0)
+                }
             }
         }
-    },[params.videoID])
+        InitData()
+    },[params.postID])
 
     const AllEvents = [
         {
@@ -55,6 +57,22 @@ export const AdminNewsUpload = ({className, videoData}) => {
         {
             optName: "Swimming",
             optValue: "swimming"
+        },
+        {
+            optName: "Archery",
+            optValue: "archery"
+        },
+        {
+            optName: "Basketball",
+            optValue: "basketball"
+        },
+        {
+            optName: "Sprinting",
+            optValue: "sprinting"
+        },
+        {
+            optName: "Weightlifting",
+            optValue: "weightlifting"
         }
     ]
     const Channels = [
@@ -115,55 +133,52 @@ export const AdminNewsUpload = ({className, videoData}) => {
     }
 
     const HandleEventChange = (e) => {
-        setUploadVideoEvent(e.target.value)
+        setUploadNewsEvent(e.target.value)
     }
     
     const HandleCategoryChange = (e) => {
-        setUploadVideoCategory(e.target.value)
-    }
-
-    const HandleChannelChange = (e) => {
-        setChannel(e.target.value)
+        setUploadNewsCategory(e.target.value)
     }
 
     const CleanUpStates = (uploadPercentage) => {
         setUploadPercentage(uploadPercentage);
-        setUploadVideoEvent("none");
-        setUploadVideoCategory("none");
-        setUploadVideoTitle("");
-        setUploadVideoDesc("");
+        setUploadNewsEvent("none");
+        setUploadNewsCategory("none");
+        setUploadNewsTitle("");
+        setUploadNewsDesc("");
         setUploadFile("")
-	    setUploadStreamURL("")
+	    setAuthorName("")
         uploadFileObject.current = ""
         uploadURL.current = ""
     }
 
-    const UploadVideo = (e) => {
+    // Update and upload the post
+    const UploadNews = async(e) => {
         e.preventDefault()
-        console.log("event", uploadVideoEvent)
-        console.log("cate", uploadVideoCategory)
+        console.log("event", uploadNewsEvent)
+        console.log("cate", uploadNewsCategory)
         if (
-                uploadVideoDesc && 
-                uploadVideoTitle && 
-                uploadVideoEvent && uploadVideoEvent !== "none" &&
-                uploadVideoCategory && uploadVideoCategory !== "none") {
-            if (uploadStreamURL && params.videoID) {
+                uploadNewsDesc && 
+                uploadNewsTitle && 
+                uploadNewsEvent && uploadNewsEvent !== "none" &&
+                uploadNewsCategory && uploadNewsCategory !== "none") {
+            if (authorName && params.postID) {
                 setUploadPercentage(0)
                 let tempGameData ={
-                    videoID: params.videoID,
-                    videoURL: uploadStreamURL,
+                    postID: params.postID,
+                    authorName: authorName,
                     uploadedAt: serverTimestamp(),
-                    videoTitle: uploadVideoTitle,
-                    videoDesc: uploadVideoDesc,
-                    eventType: uploadVideoEvent,
-                    category: uploadVideoCategory,
+                    newsTitle: uploadNewsTitle,
+                    newsDesc: uploadNewsDesc,
+                    eventType: uploadNewsEvent,
+                    category: uploadNewsCategory,
                     thumbnail: thumbnailURL
                 }
-                const videoQuery = query(collection(firestore, "lives"), where("videoID", "==", params.videoID))
-                getDocs(videoQuery).then((snap)=>{
+                const videoQuery = query(collection(firestore, "news"), where("postID", "==", params.postID))
+                await getDocs(videoQuery).then(async(snap)=>{
                     let docID = snap.docs[0].id
-                    const docRef = doc(firestore,`lives`, docID)
-                    updateDoc(docRef, tempGameData).then((res)=> {setUploadPercentage(100)},
+                    const docRef = doc(firestore,`news`, docID)
+                    await updateDoc(docRef, tempGameData).then((res)=> {setUploadPercentage(100)},
                     (err)=>console.log("update err", err))
                 })
             }else {
@@ -178,19 +193,19 @@ export const AdminNewsUpload = ({className, videoData}) => {
                 (err)=>console.log(err),
                 ()=>{
                     getDownloadURL(fireUploadTask.snapshot.ref)
-                        .then(url =>{
+                        .then(async(url) =>{
                             let tempGameData ={
-                                videoID: uuid().split("-").at(-1),
-                                videoURL: uploadStreamURL,
+                                postID: uuid().split("-").at(-1),
+                                authorName: authorName,
                                 uploadedAt: serverTimestamp(),
-                                videoTitle: uploadVideoTitle,
-                                videoDesc: uploadVideoDesc,
-                                eventType: uploadVideoEvent,
-                                category: uploadVideoCategory,
+                                newsTitle: uploadNewsTitle,
+                                newsDesc: uploadNewsDesc,
+                                eventType: uploadNewsEvent,
+                                category: uploadNewsCategory,
                                 thumbnail: url
                             }
-                            const gameRef = collection(firestore, `lives`);
-                            addDoc(gameRef,tempGameData).then(res => {
+                            const gameRef = collection(firestore, `news`);
+                            await addDoc(gameRef,tempGameData).then(res => {
                                 CleanUpStates(100);
                             },(err)=> console.log(err))
                         })
@@ -207,7 +222,7 @@ export const AdminNewsUpload = ({className, videoData}) => {
             <div className="vid__uploadMain">
                 <div className="vid__uploadUpper">
                     {
-                        !uploadStreamURL ?
+                        !params.postID ?
                             !uploadFileObject.current ?
                                 <div className='vid__uploadUpperSec'>
                                     <div className='vid__roundKeyUpWrapper'>
@@ -229,16 +244,16 @@ export const AdminNewsUpload = ({className, videoData}) => {
                                 <div className='vid__uploadUpperSec vid__uploadPlayer'> 
                                     {/* <FunVideoPlayer width="100%"
                                                     height="100%" 
-                                                    url={uploadStreamURL ? uploadStreamURL : uploadURL.current}
+                                                    url={authorName ? authorName : uploadURL.current}
                                                     /> */}
                                     <img src={thumbnailURL ? thumbnailURL : uploadURL.current} />
                                 </div>
                     }
-                    <div className={`vid__uploadInfoLower ${uploadStreamURL ? 'vid__fixBack' : ''}`}>
+                    <div className={`vid__uploadInfoLower ${params.postID ? 'vid__fixBack' : ''}`}>
                         <p>{uploadFile}</p>
                         {
-                            uploadStreamURL ? 
-                                <label className='vid__uploadFileInfo' htmlFor="uploadFileInfo" onClick={()=> funNav(`/admin/live/all`)}>
+                            params.postID ? 
+                                <label className='vid__uploadFileInfo' htmlFor="uploadFileInfo" onClick={()=> funNav(`/admin/news/all`)}>
                                     {/* <input name="" type="file" id="uploadFileInfo" accept='video/*' hidden /> */}
                                     Back
                                 </label>
@@ -252,31 +267,30 @@ export const AdminNewsUpload = ({className, videoData}) => {
                     </div> 
                 </div>
                 <div className="vid__uploadLower">
-                    <h3>Live Details</h3>
-                    <form className="vid__uploadForm" onSubmit={UploadVideo}>
-				        <div className="vid__uploadInput">
-                            <label>Stream URL</label>
-                            <input className='vid__uploadTitle' value={uploadStreamURL} onChange={(e)=>setUploadStreamURL(e.target.value)} required></input>
+                    <h3>News Post</h3>
+                    <form className="vid__uploadForm" onSubmit={UploadNews}>
+                        <div className="vid__uploadInput">
+                            <label>News Title</label>
+                            <input className='vid__uploadTitle' onChange={(e)=>setUploadNewsTitle(e.target.value) } value={uploadNewsTitle} required></input>
                         </div>
                         <div className="vid__uploadInput">
-                            <label>Title</label>
-                            <input className='vid__uploadTitle' onChange={(e)=>setUploadVideoTitle(e.target.value) } value={uploadVideoTitle} required></input>
+                            <label>News Content</label>
+                            <textarea className='vid__uploadDesc'  rows={6} onChange={(e)=>setUploadNewsDesc(e.target.value)} value={uploadNewsDesc} required></textarea>
                         </div>
                         <div className="vid__uploadInput">
-                            <label>Description</label>
-                            <textarea className='vid__uploadDesc'  rows={6} onChange={(e)=>setUploadVideoDesc(e.target.value)} value={uploadVideoDesc} required></textarea>
+                            <label>Author</label>
+                            <input className='vid__uploadTitle' value={authorName} onChange={(e)=>setAuthorName(e.target.value)} required></input>
                         </div>
                         <div className="vid__uploadParted">
-                            <FunSelectComponent label={`Events`} optData={AllEvents}  handleOnChange={HandleEventChange} defaultValue={uploadVideoEvent}/>
-                            <FunSelectComponent label={`Category`} className={`vid__uploadCategory`}  optData={AllCategories} handleOnChange={HandleCategoryChange} defaultValue={uploadVideoCategory}/>
-                            <FunSelectComponent label={`Broadcast Channels`} optData={Channels}  handleOnChange={HandleChannelChange} defaultValue={channel}/>
+                            <FunSelectComponent label={`Events`} optData={AllEvents}  handleOnChange={HandleEventChange} defaultValue={uploadNewsEvent}/>
+                            <FunSelectComponent label={`Category`} className={`vid__uploadCategory`}  optData={AllCategories} handleOnChange={HandleCategoryChange} defaultValue={uploadNewsCategory}/>
                         </div>
-                        <div className='vid__uploadVideo'>
-                            <FunLightButton btnLabel={`${uploadStreamURL? 'Update':'Upload'}`} btnType={`submit`}/>
+                        <div className='vid__uploadNews'>
+                            <FunLightButton btnLabel={`${params.postID? 'Update':'Post'}`} btnType={`submit`}/>
                         </div>
                         <div className='vid__progressBar'>
                             {
-                                uploadPercentage ? <FunProgressBar percentage={uploadPercentage} isUpdated={uploadStreamURL ? true : false}/> : "" 
+                                uploadPercentage ? <FunProgressBar percentage={uploadPercentage} isUpdated={params.postID ? true : false}/> : "" 
                             }
                         </div>
                     </form>

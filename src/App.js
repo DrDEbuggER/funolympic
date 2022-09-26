@@ -9,7 +9,7 @@ import { FunLandingPage } from './Container';
 import { FunBroadcast } from './Container';
 import { SignupComponent, LoginComponent, VerifyComponent, FunForgotPassword } from './Components';
 import { FunAuthContextProvider } from './FunContext';
-import { FunProtectedRoute, FunRestrictedAdminRoute, FunRestrictedRoute } from './FunProtectedRoute';
+import { FunBannedRoute, FunProtectedRoute, FunRestrictedAdminRoute, FunRestrictedRoute } from './FunProtectedRoute';
 import { FunRestrictVerificationRoute } from './FunProtectedRoute/FunRestrictVerificationRoute';
 import { FunAdminPanel } from './Container/FunAdminPanel/FunAdminPanel';
 
@@ -41,9 +41,14 @@ function App() {
             <Route element={<FunRestrictVerificationRoute />}>
               {/* For Verification: seperate restricted route to fix unlimited useEffect call issue */}
               <Route path="/verify" element={<VerifyComponent/>} />
+              
+            </Route>
+            <Route element={<FunBannedRoute />}>
+              <Route path="/banned" element={<FunBroadcast pageName="banned"/>}/>   
             </Route>
             <Route path="/" element={<FunLandingPage/>} />
             <Route path="/reset" element={<FunLandingPage pageName={"reset"}/>} />
+            
             {/* Admin Route */}
             <Route element={<FunRestrictedAdminRoute />}>
               <Route path="/admin/dashboard" element={<FunAdminPanel pageName="dashboard"/>} />
@@ -55,6 +60,9 @@ function App() {
               <Route path="/admin/live/all" element={<FunAdminPanel pageName="allLives"/>} />
               <Route path="/admin/live/update/:videoID" element={<FunAdminPanel pageName="uploadLive"/>} />
               <Route path="/admin/news/post" element={<FunAdminPanel pageName="newsPost"/>} />
+              <Route path="/admin/news/all" element={<FunAdminPanel pageName="allNews"/>} />
+              <Route path="/admin/news/update/:postID" element={<FunAdminPanel pageName="newsPost"/>} />
+              <Route path="/admin/profile" element={<FunAdminPanel pageName="adminProfile"/>} />
             </Route>
           </Routes>
         </Router>

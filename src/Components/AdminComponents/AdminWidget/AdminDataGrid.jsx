@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { styled } from '@mui/material/styles';
 import LoopIcon from '@mui/icons-material/Loop';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
@@ -54,12 +54,19 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 export default function AdminDataGrid({usersData}) {
     const HandleBan = async(uuid) => {
        const queryRef = query(collection(firestore, "users"), where("uuid", "==", uuid))
-       await getDocs(queryRef).then((snap)=>{
+       await getDocs(queryRef).then(async(snap)=>{
         if(snap.docs.length > 0) {
           const updateRef = doc(firestore, "users", snap.docs[0].id)
-          updateDoc(updateRef, {
-            status: "Banned"
-          })
+          if(snap.docs[0].data().banned && snap.docs[0].data().banned === true) {
+            await updateDoc(updateRef, {
+              banned: false
+            })
+          } else {
+            await updateDoc(updateRef, {
+              banned: true
+            })
+          }
+          
         }
           
        })
@@ -139,18 +146,26 @@ export default function AdminDataGrid({usersData}) {
         headerAlign: 'center',
         width: 160,
         renderCell: (params) => {
+          console.log(params)
             return (
-                params.row.status == "Verified" ? 
+                params.row.status === "Verified" ? 
+                  params.row.banned && params.row.banned === true ?
+                    <div className="cell_circle" style={{border: "1px solid #F0541E"}}>
+                      <ReportProblemIcon htmlColor='#F0541E'/>
+                      <p style={{color:'#F0541E'}}>{"Banned"}</p>
+                    </div>
+                  :
                     <div className="cell_circle" style={{border: "1px solid #04f4bb"}}>
                         <DoneIcon htmlColor='#04f4bb'/>
                         <p style={{color:'#04f4bb'}}>{params.row.status}</p>
                     </div>:
-                params.row.status === "Banned" ? 
+                params.row.status === "UnVerified" ? 
+                  params.row.banned && params.row.banned === true ?
                     <div className="cell_circle" style={{border: "1px solid #F0541E"}}>
                         <ReportProblemIcon htmlColor='#F0541E'/>
-                        <p style={{color:'#F0541E'}}>{params.row.status}</p>
-                    </div>:
-                params.row.status === "UnVerified" ? 
+                        <p style={{color:'#F0541E'}}>{"Banned"}</p>
+                    </div>
+                    :
                     <div className="cell_circle" style={{border: "1px solid #f5ac00"}}>
                         <LoopIcon htmlColor='#f5ac00'/>
                         <p style={{color:'#f5ac00'}}>{params.row.status}</p>
@@ -168,9 +183,9 @@ export default function AdminDataGrid({usersData}) {
       width: 120,
       renderCell: (params) => {
           return(
-            <div className={`field__button ${params.row.status === "Banned" ? "banned" : "unbanned"}`} onClick={()=>HandleBan(params.row.uuid)}>
+            <div className={`field__button ${params.row.banned && params.row.banned === true ? "banned" : "unbanned"}`} onClick={()=>HandleBan(params.row.uuid)}>
               <BlockIcon />
-              <p>{params.row.status === "Banned"? "UnBan": "Ban"}</p>
+              <p>{params.row.banned && params.row.banned === true ? "UnBan": "Ban"}</p>
             </div>
           )
       }
@@ -185,6 +200,7 @@ export default function AdminDataGrid({usersData}) {
         getRowId={(row)=> row.uuid}
         rows={usersData}
         columns={columns}
+        components={{Toolbar: GridToolbar}}
       />
     </Box>
   );

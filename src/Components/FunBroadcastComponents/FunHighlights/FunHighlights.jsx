@@ -9,15 +9,18 @@ import ads from "../../../assets/images/ads.svg"
 import ShareIcon from '@mui/icons-material/Share';
 import { ThumbDownAlt, ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
 import { useEffect } from "react";
-import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
+import { collection, getDocs, limitToLast, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { useState } from "react";
 import { firestore } from "../../../firebase";
 import { useNavigate, useParams } from "react-router-dom";
+import { FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton } from "react-share";
 export const FunHighlights = () => {
     const [highlightData, setHighlightData] = useState()
     const [singleHighlightData, setSingleHighlightData] = useState()
     const funNavigate = useNavigate()
     const {postID} = useParams()
+
+    // query all highlight video
     const QueryDocs = (setData, category) => {
         const queryRef = category == "none" ? query(collection(firestore, `/highlights`)) : query(collection(firestore, `/highlights`), where("category", "==", category))
         let vData = [];
@@ -30,8 +33,19 @@ export const FunHighlights = () => {
         
     }
 
+    // Query Latest video
+    const QueryLatestVideo = async(setData, category) => {
+        const queryRef = category == "none" ? query(collection(firestore, `/highlights`), orderBy("uploadedAt","asc"), limitToLast(1)) : query(collection(firestore, `/highlights`), where("category", "==", category))
+        await getDocs(queryRef).then((snap)=>{
+            setData(snap.docs[0].data())
+            // console.log("snap", snap)
+        })
+        
+    }
+
+    // query video by id
     const QueryByPostID = (setData, postID) => {
-        const queryRef =  query(collection(firestore, `/highlights`), where("highlightID", "==", postID))
+        const queryRef =  query(collection(firestore, `/highlights`), where("videoID", "==", postID))
         onSnapshot(queryRef, (snap)=> {
             setData(snap.docs[0].data())
         })
@@ -40,8 +54,11 @@ export const FunHighlights = () => {
     useEffect(()=>{
         if(postID) {
             QueryByPostID(setSingleHighlightData, postID)
+        } else {
+            QueryLatestVideo(setSingleHighlightData, "none")
         }
         QueryDocs(setHighlightData, "none")
+        
     },[postID])
 
     const FilterDocs = async(keywords, documentPath, eventType) => {
@@ -82,31 +99,41 @@ export const FunHighlights = () => {
         <div className="fun__highlightsMain">
             <div className="fun__highlightsMainWrapper">
                 <div className="fun__highlightsLiveWatch">
-                    <FunVideoPlayer width="100%" height="100%" url={singleHighlightData && singleHighlightData.videoURL? singleHighlightData.videoURL: `https://www.youtube.com/watch?v=jzJW0gTYB9k`}/>
+                    <FunVideoPlayer width="100%" height="100%" url={singleHighlightData && singleHighlightData.videoURL? singleHighlightData.videoURL: ``} control={true} isPlayable={true}/>
                     <div className="fun__videoDesc">
                         <div className="fun__videoDescHead">
-                            <h2> {singleHighlightData && singleHighlightData.videoTitle ? singleHighlightData.videoTitle: "Usain Bolt Wins FunOlympics 100m Gold! Bayjing 2022 | FunOlympic Games"} </h2>
+                            <h2> {singleHighlightData && singleHighlightData.videoTitle ? singleHighlightData.videoTitle: ""} </h2>
                             <div className="fun__videoStatus">
                                 <div className="fun__videoViews">
-                                    <p>{`12 views - ${singleHighlightData && singleHighlightData.eventType ? singleHighlightData.eventType: "Football"} Live`}</p>
+                                    <p>{`- ${singleHighlightData && singleHighlightData.eventType ? singleHighlightData.eventType.toUpperCase(): ""} Highlight`}</p>
                                 </div>
                                 <div className="fun__videoButtons">
                                     <div className="fun__miniButtons">
                                     <IconButton color="primary" aria-label="upload picture" component="label">
                                         <ThumbUpOffAlt />
                                     </IconButton>
-                                        <p>10</p>
+                                        <p>{singleHighlightData ?1:''}</p>
                                     </div>
                                     <div className="fun__miniButtons">
                                         <IconButton color="primary" aria-label="upload picture" component="label">
                                             <ThumbDownOffAlt />
                                         </IconButton>
-                                        <p>2</p>
+                                        <p>{singleHighlightData ?0:''}</p>
                                     </div>
                                     <div className="fun__miniButtons">
-                                        <IconButton color="primary" aria-label="upload picture" component="label">
+                                        {/* <IconButton color="primary" aria-label="upload picture" component="label">
                                             <ShareIcon />
-                                        </IconButton>
+                                        </IconButton> */}
+                                        
+                                        <div className="fun__shareButtons">
+                                            <p>Share</p>
+                                            <FacebookShareButton url={window.location.href}>
+                                                <FacebookIcon size={20} />
+                                            </FacebookShareButton>
+                                            <TwitterShareButton url={window.location.href}>
+                                                <TwitterIcon size={20} />
+                                            </TwitterShareButton>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -115,7 +142,7 @@ export const FunHighlights = () => {
                     <div className="fun__highlightVideoDetails">
                         {
                             singleHighlightData && singleHighlightData.videoDesc ? singleHighlightData.videoDesc: 
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ullamcorper a lacus vestibulum sed arcu non odio. Eu nisl nunc mi ipsum faucibus vitae aliquet. Dui id ornare arcu odio ut sem nulla pharetra diam. Donec ac odio tempor orci. Neque convallis a cras semper auctor neque vitae tempus. Urna molestie at elementum eu facilisis sed. Proin sagittis nisl rhoncus mattis rhoncus urna neque viverra justo. Amet justo donec enim diam. Interdum posuere lorem ipsum dolor sit amet consectetur. Maecenas volutpat blandit aliquam etiam erat velit. Id porta nibh venenatis cras sed felis eget velit aliquet. Commodo quis imperdiet massa tincidunt nunc pulvinar sapien. Luctus accumsan tortor posuere ac ut consequat semper.</p>
+                                <p></p>
                         }
                         
                     </div>
@@ -127,11 +154,12 @@ export const FunHighlights = () => {
                         highlightData && highlightData.map((vDat, idx) => {
                                 return <FunLandscapeCardBox key={idx}
                                     imageURL={vDat.thumbnail}
+                                    // videoURL={vDat.videoURL}
                                     title={vDat.videoTitle}
                                     category={vDat.category}
                                     description={vDat.videoDesc}
                                     HandleClick={HandlePostClick}
-                                    postID = {vDat.highlightID}
+                                    postID = {vDat.videoID}
                                     />
                             })
                         }

@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { FunUserAuth } from "../../../../FunContext"
 import { ErrorMessage, FunButton } from "../../../CommonComponents"
 import { FunAuthNavBar } from "../../../FunLandingComponents"
@@ -7,12 +8,13 @@ export const LoginComponent = () => {
     const [email, setEmail] = useState();
     const [pass, setPass] = useState();
     const {funLogin, error} = FunUserAuth();
-
+    const funNavigate = useNavigate()
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log("clicked submit button");
         try {
             await funLogin(email, pass);
+            funNavigate("/broadcast")
         }catch(e) {
             console.log(e.message)
         }
@@ -47,7 +49,6 @@ export const LoginComponent = () => {
                         <div className="fun__loginButton">
                             <FunButton text={"Login"} btnType="Submit"/>
                         </div>
-                        
                     </form>
                 </div>
             </div>

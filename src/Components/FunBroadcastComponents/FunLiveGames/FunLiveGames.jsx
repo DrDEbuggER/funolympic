@@ -11,7 +11,7 @@ export const FunLiveGames = () => {
     const funNavigate = useNavigate()
     const [liveVideoData, setLiveVideoData] = useState()
     const QueryDocs = (setData, category) => {
-        const queryRef = category == "none" ? query(collection(firestore, `/livestream`)) : query(collection(firestore, `/highlights`), where("category", "==", category))
+        const queryRef = category == "none" ? query(collection(firestore, `/lives`)) : query(collection(firestore, `/highlights`), where("category", "==", category))
         let vData = [];
         onSnapshot(queryRef, (snap)=> {
             snap.docs.forEach((doc)=> {
@@ -47,7 +47,7 @@ export const FunLiveGames = () => {
     const HandleSearch = async(e) => {
         e.preventDefault();
         // FilterDocs(e.target.value, "/highlights/men/Games", "swimming")
-        FilterDocs(e.target.value, "/livestream", "")
+        FilterDocs(e.target.value, "/lives", "")
     }
 
     const HandleCardClick = (videoID) => {

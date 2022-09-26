@@ -47,8 +47,8 @@
     place-self: self-end;
 }
 .fun__cardBottom >:first-child {
-    width: 100% !important;
-    height: 200px;
+    width: 280px !important;
+    height: 190px;
     padding-top: .3rem;
     border-radius: 2rem 0rem 2rem 0rem !important;
     cursor: pointer;

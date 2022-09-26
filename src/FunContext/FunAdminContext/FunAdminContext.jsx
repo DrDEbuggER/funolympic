@@ -14,6 +14,7 @@ export const FunAdminContextProvider = ({children}) => {
     const [bannedCount, setBannedCount] = useState(0)
     const [newUserCount, setNewUserCount] = useState(2)
     const [totalUserCount, setTotalUserCount] = useState(0)
+    const [liveGames, setLiveGames] = useState(0)
 
     const FetchAllUsers = () => {
         const userQuery = query(collection(firestore, "users"))
@@ -28,6 +29,14 @@ export const FunAdminContextProvider = ({children}) => {
         })
     }
 
+    const CountLiveGames = () => {
+        const userQuery = query(collection(firestore, "lives"))
+        let tempData = []
+        onSnapshot(userQuery, (snap) => {
+            setLiveGames(snap.docs.length)
+        })
+    }
+
     const CalculateCount = (field, keyword, setCount) => {
         const userQuery = query(collection(firestore, "users"), where(field, "==", keyword))
         onSnapshot(userQuery, (snap) => {
@@ -39,12 +48,13 @@ export const FunAdminContextProvider = ({children}) => {
 
     useEffect (()=> {
         FetchAllUsers()
+        CountLiveGames()
         CalculateCount("online", true, setLiveCount)
-        CalculateCount("status", "Banned", setBannedCount)
+        CalculateCount("banned", true, setBannedCount)
     },[])
 
     return (
-        <AdminDataContext.Provider value={{liveCount, totalUserCount, newUserCount, bannedCount, usersData}}>
+        <AdminDataContext.Provider value={{liveCount, totalUserCount, newUserCount, bannedCount, usersData, liveGames}}>
             {children}
         </AdminDataContext.Provider>
     )

@@ -1,6 +1,6 @@
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { FunBroadcastMain, FunBroadcastNavBar, FunChangePassword, FunHighlights, FunLiveGames, FunLogout, FunNews, FunProfile, FunResultsMain, FunScore } from "../../Components"
+import { BannedComponent, FunBroadcastMain, FunBroadcastNavBar, FunChangePassword, FunHighlights, FunLiveGames, FunLogout, FunNews, FunProfile, FunResultsMain, FunScore } from "../../Components"
 import { auth, firestore } from "../../firebase";
 
 import "./FunBroadcast.css";
@@ -30,12 +30,13 @@ export const FunBroadcast = ({pageName}) => {
                     pageName === "score" ? <FunResultsMain /> :
                     pageName === "news" ? <FunNews /> : 
                     pageName === "highlights" ? <FunHighlights />:
-                    pageName === "profile"? <FunProfile /> :
+                    pageName === "profile"? <FunProfile userType={`User`} isDashBoard={false}/> :
                     pageName === "logout"? <FunLogout /> :
                     pageName === "watch" ? <FunBroadcastMain /> : 
                     pageName === "hWatch" ? <FunHighlights /> : 
                     pageName === "hNews" ? <FunNews /> : 
                     pageName === "changepass" ? <FunChangePassword />:
+                    pageName === "banned" ? <BannedComponent />:
                     <h1> Page Not found </h1>
                 }
             </div>

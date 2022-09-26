@@ -46,7 +46,7 @@ export const AdminSidebar = () => {
                     </AdminCustomLink>
                     <AdminCustomLink to="/admin/news/all">
                         <SmartDisplayOutlined className='icon'/>
-                        <span>All Lives</span>
+                        <span>All News</span>
                     </AdminCustomLink>
 
                     <p className='fun__adminSidebarTitle'>Others</p>
