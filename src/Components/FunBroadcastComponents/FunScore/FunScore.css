@@ -3,6 +3,7 @@
     flex-direction: row;
     margin: auto;
     align-items: center;
+    padding-right: 6rem;
 }
 
 .fun__scoreRight {
@@ -80,4 +81,54 @@
 
 .fun__fixtureWrapper {
     grid-column: 3/4;
+}
+
+.fun__landingScoreWrapper {
+    display: flex;
+    padding: 2rem;
+
+}
+
+.fun__landingScoreBoard {
+    width: 100% !important;
+    min-width: 550px;
+}
+
+.fun__landScoreSection {
+    padding: 2.5rem 15rem;
+}
+
+
+.fun__gameBrief {
+    text-align: start;
+    padding-left: 1rem;
+}
+
+
+@media (max-width: 1550px) {
+    .fun__landScoreSection {
+        padding: 2rem 7rem;
+    }
+    
+}
+
+@media (max-width: 1380px) {
+    .fun__landScoreSection {
+        padding: 2rem 5rem;
+    }
+}
+
+
+@media (max-width: 1080px) {
+    .fun__landScoreSection {
+        padding: 2rem 2rem;
+    }
+}
+
+/* mobile view */
+
+@media (max-width: 855px) {
+    .fun__landScoreSection {
+        padding: 2rem 2rem;
+    }
 }

@@ -1,10 +1,11 @@
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./FunVideoCardBox.css"
-export const FunVideoCardBox = ({thumbnail, vidTitle, vidEvent, category, onEditClick, onDeleteClick, videoID}) => {
-    const trimLongString = (longStr) => {
-        if (longStr && longStr.length > 45) {
-            return longStr.substring(0, 45) + "..."
+import { PlayCircleOutlined } from '@mui/icons-material';
+export const FunVideoCardBox = ({thumbnail, vidTitle, newsDesc, vidEvent, category, onEditClick, onDeleteClick, videoID, isLanding, isVideo}) => {
+    const trimLongString = (longStr, len) => {
+        if (longStr && longStr.length > len) {
+            return longStr.substring(0, len) + "..."
         }
         return longStr
     }
@@ -13,20 +14,32 @@ export const FunVideoCardBox = ({thumbnail, vidTitle, vidEvent, category, onEdit
             <div className="fun__videoCardBox">
                 <div className="fun__vidThumbWrapper">
                     <img src={thumbnail}></img>
+                    {
+                        isVideo ? 
+                            <div className='fun__vidOverlay'>
+                                <PlayCircleOutlined sx={{width: 100, height: 100, color:"#e4dcdce5"}}/>
+                            </div>
+                            : ""
+                    }
+                    
                 </div>
                 <div className="fun__vidHighlightDesc">
-                    <h3>{trimLongString(vidTitle)}</h3>
-                    <p className='fun__vidEventPara'>{`${trimLongString(vidEvent)} | ${category}`}</p>
-                    <div className='fun__vidEditWrapper'>
-                        <div className="fun__vidEdit">
-                            <div onClick={()=>onEditClick(videoID)}>
-                                <EditIcon className='fun__vidIcon'/>
+                    <h3>{trimLongString(vidTitle, 45)}</h3>
+                    <p className='fun__vidEventPara'>{`${trimLongString(vidEvent, 45)} | ${category}`}</p>
+                    {
+                        isLanding == undefined ?
+                            <div className='fun__vidEditWrapper'>
+                                <div className="fun__vidEdit">
+                                    <div onClick={()=>onEditClick(videoID)}>
+                                        <EditIcon className='fun__vidIcon'/>
+                                    </div>
+                                    <div onClick={onDeleteClick}>
+                                        <DeleteIcon className='fun__vidIcon'/>
+                                    </div>
+                                </div>
                             </div>
-                            <div onClick={onDeleteClick}>
-                                <DeleteIcon className='fun__vidIcon'/>
-                            </div>
-                        </div>
-                    </div>
+                            : <p className='fun__landingNewsDesc'>{newsDesc ? trimLongString(newsDesc, 55) : ""}</p>
+                    }
                 </div>
             </div>
         </div>

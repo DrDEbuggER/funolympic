@@ -141,7 +141,7 @@ export const FunHighlights = () => {
                     </div>
                     <div className="fun__highlightVideoDetails">
                         {
-                            singleHighlightData && singleHighlightData.videoDesc ? singleHighlightData.videoDesc: 
+                            singleHighlightData && singleHighlightData.videoDesc ? <p>{singleHighlightData.videoDesc}</p>: 
                                 <p></p>
                         }
                         

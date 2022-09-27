@@ -4,11 +4,12 @@
 }
 .fun__videoCardBoxWrapper {
     width: 250px;
+    cursor: pointer;
 
 }
 
 .fun__vidThumbWrapper {
-    
+    position: relative;
     width: 100%;
 }
 .fun__vidEditWrapper {
@@ -23,10 +24,11 @@
 .fun__videoCardBox {
     padding: .5rem;
     width: 100%;
-    height: 260px;
+    /* height: 260px; */
     border: 1px solid gray;
     border-radius: .5rem;
     text-align: start;
+    padding-bottom: 1.5rem;
     background-color: ghostwhite;
     border: 1px solid #e9e5e5;
     box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
@@ -98,6 +100,40 @@
 }
 
 
+.fun__landingNewsDesc {
+    font-size: 14px;
+    padding-top: .5rem;
+    color: rgb(26, 24, 24);
+}
 
 
+.fun__vidOverlay {
+    background-color: rgba(0, 0, 0, 0.205);
+    width: 100%;
+    height: 150px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    place-items: center;
+    cursor: pointer;
+    /* color: #e4dcdce5; */
+}
+
+
+.fun__vidOverlay >:first-child {
+    width: 90px;
+    height: 90px;
+    transition: 0.3s ease-in all 0s;
+}
+
+
+.fun__vidOverlay >:first-child:hover{
+    width: 100px;
+    height: 100px;
+    transition: 0.3s ease-in all 0s;
+}
 

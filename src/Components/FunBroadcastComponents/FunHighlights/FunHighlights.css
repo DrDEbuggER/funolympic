@@ -1,14 +1,15 @@
 .fun__highlightsMain {
     width: 100%;
-    height: 100%;
+    /* height: 100vh; */
 }
 
 .fun__highlightsMainWrapper {
     display: grid;
     grid-template-columns: 15rem 1.9fr 1fr 15rem;
     padding-top: 2rem;
-    height: 100%;
-    background-color: #c9b2d191;
+    background-color: #c9b2d191
+    /* height: 100vh; */
+    /* background-color: #c9b2d191; */
 }
 
 
@@ -27,6 +28,10 @@
     padding-left: 1rem;
 }
 
+.fun__highlightVideoDetails >:first-child {
+    padding: .5rem;
+    border-top: 1px solid gray;
+}
 
 .fun__videoDesc {
     width: 100%;

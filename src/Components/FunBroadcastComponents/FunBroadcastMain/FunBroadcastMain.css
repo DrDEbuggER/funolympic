@@ -84,6 +84,11 @@
     min-width: 550px;
 }
 
+.fun__videoDetails >:first-child {
+    padding-top: .5rem;
+    border-top: 1px solid gray;
+}
+
 .fun__advertisement {
     grid-column: 3/4;
 }

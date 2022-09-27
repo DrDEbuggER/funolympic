@@ -99,7 +99,7 @@ export const FunBroadcastMain = ({}) => {
             <div className="fun__videoLowerDesc">
                 <div className="fun__videoDetails">
                     { 
-                        liveVideoData && liveVideoData.videoDesc ? liveVideoData.videoDesc:
+                        liveVideoData && liveVideoData.videoDesc ? <p>{liveVideoData.videoDesc}</p>:
                             <p></p>
                     }
                 </div>

@@ -11,3 +11,11 @@
 .fun__videoDescHead {
     padding-bottom: .5rem;
 }
+
+.fun__highlightNewsDetails {
+    grid-column: 2/3;
+    padding-right: 2rem;
+    /* padding-left: 1.5rem; */
+    min-width: 550px;
+    text-align: justify;
+}

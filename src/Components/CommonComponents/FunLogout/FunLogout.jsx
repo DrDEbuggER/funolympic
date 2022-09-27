@@ -7,18 +7,8 @@ import { FunUserAuth } from "../../../FunContext";
 
 export const FunLogout = () => {
     const {funLogout} = FunUserAuth();
-    const {logout} = FunUserAuth();
-
-    // console.log("why logout")
-        // const userRef = query(collection(firestore, "users"), where("uuid", "==", auth.currentUser.uid))
-        // await getDocs(userRef).then(async (snap) => {
-        //     await updateDoc(doc(firestore, `users/${snap.docs[0].id}`), {online:false}).then(async(res)=> {
-                
-        //     })
-        // })
 
     useEffect(()=>{
-        console.log("funlogout hit")
         const CleanUpStatus = async() => {
             const userRef = query(collection(firestore, "users"), where("uuid", "==", auth.currentUser.uid))
             await getDocs(userRef).then(async (snap) => {
@@ -31,11 +21,18 @@ export const FunLogout = () => {
             await funLogout()
         }
         CleanUpStatus()
-        Logout()
-        
+        const logoutInterval = setInterval(()=>{
+           Logout()
+        },2000)
+        return ()=>clearInterval(logoutInterval)
     },[])
     return (
-        <div>
+        <div className="fun__changePasswordWrapper">
+        <div className="fun__changePassword">
+            <form className="vid__uploadForm" >
+                <p>Logging out...</p>
+            </form>
         </div>
+    </div>
     )
 }

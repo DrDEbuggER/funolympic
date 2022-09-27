@@ -27,7 +27,7 @@ export const FunDropDown = ({userType}) => {
                 </div>
                 <div className="profile__items">
                     <LogoutIcon />
-                    <Link to={`/logout`}>Logout</Link>
+                    <Link to={`/signout`}>Logout</Link>
                 </div>
             </div>
         </div>

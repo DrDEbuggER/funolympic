@@ -19,6 +19,11 @@ function App() {
       <FunAuthContextProvider>
         <Router>
           <Routes>
+            <Route element={<FunBannedRoute />}>
+              <Route path="/banned" element={<FunBroadcast pageName="banned"/>}/>   
+              <Route path="/logout" element={<FunBroadcast pageName="logout"/>}/>
+            </Route>
+
             <Route element={<FunProtectedRoute/>} >
               {/* For broadcast */}
               <Route path="/broadcast" element={<FunBroadcast pageName="home"/>}/>
@@ -27,7 +32,7 @@ function App() {
               <Route path="/news" element={<FunBroadcast pageName="news"/>}/> 
               <Route path="/highlights" element={<FunBroadcast pageName="highlights"/>}/> 
               <Route path="/profile" element={<FunBroadcast pageName="profile"/>}/> 
-              <Route path="/logout" element={<FunBroadcast pageName="logout"/>}/>
+              <Route path="/signout" element={<FunBroadcast pageName="logout"/>}/>
               <Route path="/broadcast/watch/:videoID" element={<FunBroadcast pageName="watch"/>}/>
               <Route path="/highlights/watch/:postID" element={<FunBroadcast pageName="hWatch"/>}/>
               <Route path="/news/post/:postID" element={<FunBroadcast pageName="hNews"/>}/>
@@ -43,9 +48,7 @@ function App() {
               <Route path="/verify" element={<VerifyComponent/>} />
               
             </Route>
-            <Route element={<FunBannedRoute />}>
-              <Route path="/banned" element={<FunBroadcast pageName="banned"/>}/>   
-            </Route>
+           
             <Route path="/" element={<FunLandingPage/>} />
             <Route path="/reset" element={<FunLandingPage pageName={"reset"}/>} />
             
