@@ -64,7 +64,7 @@ export const FunLiveGames = () => {
     return (
         <div className="fun__broadcastLiveMain">
             <div className="fun__boradcastLiveHeader">
-                <FunSearchBar placeholder={"Search Games"} handleSearch={HandleSearch}/>
+                <FunSearchBar placeholder={"Search Games"} handleSearch={HandleSearch} />
             </div>
             <div className="fun__broadcastLiveMainWrapper">
                 {

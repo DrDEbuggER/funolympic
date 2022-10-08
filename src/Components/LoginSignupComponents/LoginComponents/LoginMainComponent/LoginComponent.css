@@ -15,7 +15,7 @@
     justify-content: center;
     width: 25rem;
     height: 18rem;
-    padding-top: 2rem;
+    padding: 2rem 2rem 0rem 2rem;
     border: 2px solid rgb(189, 203, 216);
     border-radius: .5rem;
     background-color: whitesmoke;

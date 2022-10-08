@@ -48,13 +48,7 @@ export const AdminSidebar = () => {
                         <SmartDisplayOutlined className='icon'/>
                         <span>All News</span>
                     </AdminCustomLink>
-
-                    <p className='fun__adminSidebarTitle'>Others</p>
-                    <AdminCustomLink to="/admin/fixtures/add">
-                        <DriveFolderUploadOutlined className='icon'/>
-                        <span>Fixtures</span>
-                    </AdminCustomLink>
-
+                    
                     <p className='fun__adminSidebarTitle'>More</p>
                     <AdminCustomLink to="/broadcast">
                         <LiveTvOutlined className='icon'/>

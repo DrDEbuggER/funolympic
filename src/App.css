@@ -1,5 +1,7 @@
 .App__container {
   text-align: center;
+  min-height: 100vh;
+  background-color: #6A0DAD;
 }
 
 

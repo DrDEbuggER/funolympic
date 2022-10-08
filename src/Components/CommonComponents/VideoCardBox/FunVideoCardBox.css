@@ -24,7 +24,7 @@
 .fun__videoCardBox {
     padding: .5rem;
     width: 100%;
-    /* height: 260px; */
+    height: 260px;
     border: 1px solid gray;
     border-radius: .5rem;
     text-align: start;

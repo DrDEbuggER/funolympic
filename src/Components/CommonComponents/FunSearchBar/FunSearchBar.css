@@ -1,11 +1,18 @@
 .fun__searchBarWrapper {
     width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.fun__searchBarWidth {
+    width: 100% !important;
 }
 .fun__searchBar {
     display: flex;
     border-radius: .5rem;
     background-color: ghostwhite;
     border: 1px solid #e9e5e5;
+    width: 30%;
     box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
     -webkit-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
     -moz-box-shadow: 5px 5px 12px 0px rgba(168,102,146,0.18);
@@ -24,4 +31,8 @@
     background-color: rgba(201, 189, 189, 0.425);
     border-radius: 0 .5rem .5rem 0;
     cursor: pointer;
+}
+
+.fix__searchWidth {
+    width: 100% !important;
 }

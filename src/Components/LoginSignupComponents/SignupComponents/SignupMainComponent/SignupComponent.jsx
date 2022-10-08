@@ -17,7 +17,7 @@ export const SignupComponent = () => {
     // const [userExist, setUserExist] = useState(false)
     const isUserExist = useRef(false)
     const [errMsg, setErrMsg] = useState();
-    const {funSignup} = FunUserAuth();
+    const {funSignup,error} = FunUserAuth();
    
 
     const isEmpty = (value) => {
@@ -67,6 +67,7 @@ export const SignupComponent = () => {
                 !isEmpty(pass) &&
                 !isEmpty(confirmPass))
                 {
+                    setErrMsg("")
                     // validation
                     if (!isValidUserLength(userName)) {
                         setErrMsg("Username musn't be greater than 12 characters")
@@ -87,8 +88,6 @@ export const SignupComponent = () => {
                         }
                         funSignup(fullName, userName,email, phone, country, pass);
                     })
-                    
-                    
                     
             } else {
                 console.log("please check all the fileds before you register!!")
@@ -138,7 +137,10 @@ export const SignupComponent = () => {
                             <input type="password" onChange={(e) => setConfirmPass(e.target.value)} required></input>
                         </div>
                         <div className="fun__errMsgWrapper">
-                            <ErrorMessage err={errMsg}/>
+                            {
+                                errMsg ? <ErrorMessage err={errMsg}/>
+                                    : <ErrorMessage err={error}/>
+                            }
                         </div>
                         <div className="fun__signupBtn">
                             <FunButton text={"Sign up"} btnType="Submit"/>

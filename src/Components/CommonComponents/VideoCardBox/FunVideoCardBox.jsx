@@ -24,7 +24,7 @@ export const FunVideoCardBox = ({thumbnail, vidTitle, newsDesc, vidEvent, catego
                     
                 </div>
                 <div className="fun__vidHighlightDesc">
-                    <h3>{trimLongString(vidTitle, 45)}</h3>
+                    <h3>{trimLongString(vidTitle, 40)}</h3>
                     <p className='fun__vidEventPara'>{`${trimLongString(vidEvent, 45)} | ${category}`}</p>
                     {
                         isLanding == undefined ?
@@ -33,12 +33,13 @@ export const FunVideoCardBox = ({thumbnail, vidTitle, newsDesc, vidEvent, catego
                                     <div onClick={()=>onEditClick(videoID)}>
                                         <EditIcon className='fun__vidIcon'/>
                                     </div>
-                                    <div onClick={onDeleteClick}>
+                                    <div onClick={()=> onDeleteClick(videoID)}>
                                         <DeleteIcon className='fun__vidIcon'/>
                                     </div>
                                 </div>
                             </div>
-                            : <p className='fun__landingNewsDesc'>{newsDesc ? trimLongString(newsDesc, 55) : ""}</p>
+                        : 
+                        <p className='fun__landingNewsDesc'>{newsDesc ? trimLongString(newsDesc, 55) : ""}</p>
                     }
                 </div>
             </div>

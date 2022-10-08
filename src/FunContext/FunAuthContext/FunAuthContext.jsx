@@ -23,7 +23,7 @@ export const FunAuthContextProvider = ({children}) => {
     // const userType = useRef()
     const funSignup = async(fullName, userName, email, phone, country, pass) => {
         return createUserWithEmailAndPassword(auth, email, pass).then(async(funUserCred) => {
-            console.log("fun User Cread:", funUserCred)
+            setError("")
             let userObject = {
                 fullName: fullName,
                 userName: userName,
@@ -48,11 +48,14 @@ export const FunAuthContextProvider = ({children}) => {
                     //Navigate
                 })
             }
+        },(err)=>{
+            setError(`Login Error: ${err.code.split("/")[1]}`)
         });
     }
 
     const funLogin = async(email, pass) => {
         return signInWithEmailAndPassword(auth, email, pass).then(async(funUser) => {
+            setError("")
             if (!funUser.user.emailVerified) {
                 console.log("Login: User not verified");
             }  else  {

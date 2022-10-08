@@ -11,15 +11,20 @@ import {
 import "./FunBroadcastMain.css"
 import ads from "../../../assets/images/ads.svg"
 import ShareIcon from '@mui/icons-material/Share';
-import { ThumbDownAlt, ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
+import { ThumbDown, ThumbDownAlt, ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
 import { useEffect } from "react";
-import { collection, getDocs, limitToLast, onSnapshot, orderBy, query, where } from "firebase/firestore";
-import { firestore } from "../../../firebase";
+import { addDoc, collection, deleteDoc, doc, getDocs, limitToLast, onSnapshot, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { auth, firestore } from "../../../firebase";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { async } from "@firebase/util";
 export const FunBroadcastMain = ({}) => {
 
     const [liveVideoData, setLiveVideoData] = useState()
+    const [totalLike, setTotalLike] = useState(0)
+    const [hasLiked, setHasLiked] = useState(false)
+    const [totalDisLike, setTotalDislike] = useState(0)
+    const [hasDisliked, setHasDisliked] = useState(false)
     const QueryDocs = (setData, videoID) => {
         const queryRef =  query(collection(firestore, `/lives`), where("videoID", "==", videoID))
         onSnapshot(queryRef, (snap)=> {
@@ -36,21 +41,165 @@ export const FunBroadcastMain = ({}) => {
         })
     }
 
+    
+    const UserHasLiked = async(vidID) => {
+        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        await getDocs(likerRef).then(async(snap)=> {
+            if (snap.docs.length <= 0) {
+                setHasLiked(false)
+            }else {
+                setHasLiked(true)
+            }
+        })
+    }
+
+    const UserHasDisliked = async(vidID) => {
+        const likerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        await getDocs(likerRef).then(async(snap)=> {
+            if (snap.docs.length <= 0) {
+                setHasDisliked(false)
+            }else {
+                setHasDisliked(true)
+            }
+        })
+    }
+
+    const CalcTotalLike = async(vidID) => {
+        const likeRef = query(collection(firestore, "lives"), where("videoID", "==", vidID));
+        await getDocs(likeRef).then(async(snap)=> {
+            setTotalLike(snap.docs[0].data().likeCount)
+        })
+    }
+
+    const CalcTotalDisLike = async(vidID) => {
+        const likeRef = query(collection(firestore, "lives"), where("videoID", "==", vidID));
+        await getDocs(likeRef).then(async(snap)=> {
+            setTotalDislike(snap.docs[0].data().dislikeCount)
+        })
+    }
+
+    const FunUpdateLikes = async(vidID) => {
+        const likeRef = query(collection(firestore, "lives"), where("videoID", "==", vidID));
+        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        const dislikerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        if (!hasLiked) {
+            setHasLiked(true)
+            await getDocs(likeRef).then(async(snap)=> {
+                if (snap.docs.length <= 0) {
+                    return
+                }
+                let tempLikeCount = snap.docs[0].data().likeCount + 1;
+                let tempDislikeCount = snap.docs[0].data().dislikeCount;
+                if (tempDislikeCount <= 0) {
+                    tempDislikeCount = 0
+                }else {
+                    if (hasDisliked) {
+                        tempDislikeCount -= 1;
+                        await getDocs(dislikerRef).then(async(snap)=> {
+                            await deleteDoc(doc(firestore, `dislikers`, snap.docs[0].id)).then(async(res)=>{
+                                await getDocs(likeRef).then(async(snap)=>{
+                                    setTotalDislike(snap.docs[0].data().dislikeCount)
+                                    setHasDisliked(false)
+                                })
+                            })
+                        })
+                    }
+                }
+                await updateDoc(doc(firestore, "lives", snap.docs[0].id), {"likeCount": tempLikeCount, "dislikeCount": tempDislikeCount}).then(async(res)=>{
+                    await getDocs(likerRef).then(async(snap)=> {
+                        if (snap.docs.length <= 0) {
+                            await addDoc(collection(firestore, `likers`), {
+                                "vidID": vidID,
+                                "uid": auth.currentUser.uid
+                            }).then(async(res)=>{
+                                await getDocs(likeRef).then(async(snap)=>{
+                                    setTotalLike(snap.docs[0].data().likeCount)
+                                    setTotalDislike(snap.docs[0].data().dislikeCount)
+                                    setHasDisliked(false)
+                                    setHasLiked(true)
+                                })
+                            })
+                        }else {
+                            await getDocs(likeRef).then(async(snap)=>{
+                                setTotalLike(snap.docs[0].data().likeCount)
+                            })
+                        }
+                    })
+                })
+            })
+        } 
+    }
+
+    const FunUpdateDislikes = async(vidID) => {
+        const likeRef = query(collection(firestore, "lives"), where("videoID", "==", vidID));
+        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        const dislikerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        if (!hasDisliked) {
+            await getDocs(likeRef).then(async(snap)=> {
+                if (snap.docs.length <= 0) {
+                    return
+                }
+                let tempLikeCount = snap.docs[0].data().likeCount;
+                let tempDislikeCount = snap.docs[0].data().dislikeCount + 1;
+                if (tempLikeCount <= 0) {
+                    tempLikeCount = 0
+                }else {
+                    if (hasLiked) {
+                        tempLikeCount -= 1;
+                        await getDocs(likerRef).then(async(snap)=> {
+                            await deleteDoc(doc(firestore, `likers`, snap.docs[0].id)).then(async(res)=>{
+                                await getDocs(likeRef).then(async(snap)=>{
+                                    setTotalLike(snap.docs[0].data().likeCount)
+                                    setHasLiked(false)
+                                })
+                            })
+                        })
+                    }
+                }
+                await updateDoc(doc(firestore, "lives", snap.docs[0].id), {"likeCount": tempLikeCount, "dislikeCount": tempDislikeCount}).then(async(res)=>{
+                    await getDocs(dislikerRef).then(async(snap)=> {
+                        if (snap.docs.length <= 0) {
+                            await addDoc(collection(firestore, `dislikers`), {
+                                "vidID": vidID,
+                                "uid": auth.currentUser.uid
+                            }).then(async(res)=>{
+                                await getDocs(likeRef).then(async(snap)=>{
+                                    setTotalLike(snap.docs[0].data().likeCount)
+                                    setTotalDislike(snap.docs[0].data().dislikeCount)
+                                    setHasLiked(false)
+                                    setHasDisliked(true)
+                                })
+                            })
+                        }else {
+                            await getDocs(likeRef).then(async(snap)=>{
+                                setTotalLike(snap.docs[0].data().likeCount)
+                            })
+                        }
+                    })
+                })
+            })
+        } 
+    }
+
     const {videoID} = useParams()
     useEffect (()=> {
         console.log("videourlid", videoID)
         if (videoID) {
             QueryDocs(setLiveVideoData, videoID)
+            UserHasLiked(videoID)
+            CalcTotalLike(videoID)
+            CalcTotalDisLike(videoID)
+            UserHasDisliked(videoID)
         } else {
             QueryLatestLiveVideo(setLiveVideoData, "none")
         }
     },[])
 
+
     return (
         <div className="fun__broadcastMain">
             <div className="fun__broadcastMainWrapper">
                 <div className="fun__broadcastLiveWatch">
-                    {console.log(liveVideoData)}
                     <FunVideoPlayer isPlayable={true} width="100%" height="100%" isLive={true} thumb={`https://wallpapercave.com/wp/wp7442159.png`} url={liveVideoData && liveVideoData.videoURL? liveVideoData.videoURL : ""} />
                     <div className="fun__videoDesc">
                         <div className="fun__videoDescHead">
@@ -61,22 +210,32 @@ export const FunBroadcastMain = ({}) => {
                                 </div>
                                 <div className="fun__videoButtons">
                                     <div className="fun__miniButtons">
-                                    <IconButton color="primary" aria-label="upload picture" component="label">
-                                        <ThumbUpOffAlt />
-                                    </IconButton>
-                                        <p>1</p>
+                                        {
+                                            hasLiked ? 
+                                                <IconButton color="primary">
+                                                    <ThumbUpIcon />
+                                                </IconButton>
+                                                :
+                                                <IconButton color="primary" onClick={()=> FunUpdateLikes(videoID)}>
+                                                    <ThumbUpOffAlt />
+                                                </IconButton>
+                                        }
+                                        <p>{totalLike}</p>
                                     </div>
                                     <div className="fun__miniButtons">
-                                        <IconButton color="primary" aria-label="upload picture" component="label">
-                                            <ThumbDownOffAlt />
-                                        </IconButton>
-                                        <p>0</p>
+                                        {
+                                            hasDisliked ? 
+                                                <IconButton color="primary">
+                                                    <ThumbDown />
+                                                </IconButton>
+                                                :
+                                                <IconButton color="primary" onClick={()=> FunUpdateDislikes(videoID)}>
+                                                    <ThumbDownOffAlt />
+                                                </IconButton>
+                                        }
+                                        <p>{totalDisLike}</p>
                                     </div>
                                     <div className="fun__miniButtons">
-                                        {/* <IconButton color="primary" aria-label="upload picture" component="label">
-                                            <ShareIcon />
-                                        </IconButton> */}
-                                        
                                         <div className="fun__shareButtons">
                                             <p>Share</p>
                                             <FacebookShareButton url={window.location.href}>

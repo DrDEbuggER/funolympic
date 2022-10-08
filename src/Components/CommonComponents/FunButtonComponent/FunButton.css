@@ -20,7 +20,7 @@
 }
 
 
-/* FUn Light Button */
+/* Fun Light Button */
 .fun__lightButton {
     padding: .5rem 2rem;
     cursor: pointer;
@@ -33,6 +33,7 @@
     background-color: #d8b6e9;
     color: #ffffff;
     font-weight: 600;
+    border: 2px solid white;
     transition: all 0.3s ease-in 0s;
 }
 

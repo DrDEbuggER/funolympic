@@ -19,10 +19,7 @@ function App() {
       <FunAuthContextProvider>
         <Router>
           <Routes>
-            <Route element={<FunBannedRoute />}>
-              <Route path="/banned" element={<FunBroadcast pageName="banned"/>}/>   
-              <Route path="/logout" element={<FunBroadcast pageName="logout"/>}/>
-            </Route>
+            
 
             <Route element={<FunProtectedRoute/>} >
               {/* For broadcast */}
@@ -34,7 +31,7 @@ function App() {
               <Route path="/profile" element={<FunBroadcast pageName="profile"/>}/> 
               <Route path="/signout" element={<FunBroadcast pageName="logout"/>}/>
               <Route path="/broadcast/watch/:videoID" element={<FunBroadcast pageName="watch"/>}/>
-              <Route path="/highlights/watch/:postID" element={<FunBroadcast pageName="hWatch"/>}/>
+              <Route path="/highlights/watch/:videoID" element={<FunBroadcast pageName="hWatch"/>}/>
               <Route path="/news/post/:postID" element={<FunBroadcast pageName="hNews"/>}/>
               <Route path="/changepass" element={<FunBroadcast pageName="changepass"/>}/>  
             </Route>
@@ -42,6 +39,10 @@ function App() {
               {/* For Login Signup */}
               <Route path="/signup" element={<SignupComponent/>} />    
               <Route path="/login" element={<LoginComponent/>} />   
+            </Route>
+            <Route element={<FunBannedRoute />}>
+              <Route path="/banned" element={<FunBroadcast pageName="banned"/>}/>   
+              <Route path="/logout" element={<FunBroadcast pageName="logout"/>}/>
             </Route>
             <Route element={<FunRestrictVerificationRoute />}>
               {/* For Verification: seperate restricted route to fix unlimited useEffect call issue */}

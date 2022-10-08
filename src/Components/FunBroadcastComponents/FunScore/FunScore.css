@@ -83,6 +83,24 @@
     grid-column: 3/4;
 }
 
+.vid__upcomingHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.vid__upcomingHeader >:last-child {
+    font-size: 12px;
+    color: rgb(99, 90, 90);
+    font-weight: bold;
+}
+
+.fun__scoreBoard >p {
+    font-size: 16px;
+    font-weight: 900;
+    padding-top: .5rem;
+    color: rgb(65, 58, 58);
+}
+
 .fun__landingScoreWrapper {
     display: flex;
     padding: 2rem;
@@ -105,6 +123,18 @@
 }
 
 
+.fun__fixtureGame >p {
+    text-align: start;
+    padding: 0rem 0rem 0rem 0.5rem;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgb(90, 81, 81);
+}
+
+.fun__fixtureGame >:last-child {
+    padding: 0.5rem 0rem !important;
+}
+
 @media (max-width: 1550px) {
     .fun__landScoreSection {
         padding: 2rem 7rem;
@@ -124,8 +154,6 @@
         padding: 2rem 2rem;
     }
 }
-
-/* mobile view */
 
 @media (max-width: 855px) {
     .fun__landScoreSection {

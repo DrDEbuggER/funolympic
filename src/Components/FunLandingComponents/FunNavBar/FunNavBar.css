@@ -105,6 +105,10 @@
     padding-top: 1rem;
 }
 
+.disable__click {
+    pointer-events: none;
+}
+
 .fun__liveProfileBtn >:first-child {
     border: 2px solid whitesmoke;
     border-radius:5rem;

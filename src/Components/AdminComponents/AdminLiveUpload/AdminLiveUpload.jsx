@@ -205,7 +205,9 @@ export const AdminLiveUpload = ({className, videoData}) => {
                                 videoDesc: uploadVideoDesc,
                                 eventType: uploadVideoEvent,
                                 category: uploadVideoCategory,
-                                thumbnail: url
+                                thumbnail: url,
+                                likeCount: 0,
+                                dislikeCount: 0
                             }
                             const gameRef = collection(firestore, `lives`);
                             await addDoc(gameRef,tempGameData).then(res => {

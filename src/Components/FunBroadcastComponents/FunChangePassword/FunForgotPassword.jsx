@@ -13,7 +13,7 @@ export const FunForgotPassword = () => {
         if (email) {
             sendPasswordResetEmail(auth, email).then((res)=>{
                 setError("Reset Email Sent!!")
-            }, (err)=> console.log(err))
+            }, (err)=> setError(`${err.code.split("/")[1]}`))
         }
     }
     

@@ -6,12 +6,13 @@ import { useEffect, useState } from 'react';
 import { FunDropDown } from '../../CommonComponents';
 import { Link } from 'react-router-dom';
 import { FunUserAuth } from '../../../FunContext';
+import { auth } from '../../../firebase';
 
 export const FunBroadcastNavBar = ({navColor, btnText, toPage, userName}) => {
     let funNavStyle = {
         backgroundColor: navColor
     }
-    const {GetCurrentUserType, userType} = FunUserAuth();
+    const {GetCurrentUserType, userType, banned} = FunUserAuth();
     const [showProfileDrop, setShowProfileDrop] = useState(false)
     const HandleProfileDrop = () => {
         setShowProfileDrop(!showProfileDrop)
@@ -28,8 +29,8 @@ export const FunBroadcastNavBar = ({navColor, btnText, toPage, userName}) => {
                             <img src={Logo}/>
                         </div>
                     </div>
-                    <div className='fun__navBarMid'>
-                        <div className='fun__navItems'>
+                    <div className={`fun__navBarMid ${!auth.currentUser.emailVerified ? 'disable__click':``}`}>
+                        <div className={`fun__navItems ${banned ? 'disable__click':''}`}>
                             <ul>
                                 <li><Link to={`/broadcast`}>Home</Link></li>
                                 <li><Link to={`/livegames`}>Live Games</Link></li>

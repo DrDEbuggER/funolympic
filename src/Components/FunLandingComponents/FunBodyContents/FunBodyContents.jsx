@@ -45,13 +45,7 @@ export function FunBodyContents() {
                         </div>
                     </div>
                     <div className="fun__bodyHomePromo">
-                        {/* <FunVideoPlayer url="https://youtu.be/Rwk5PdpTxSU" 
-                        type="promo" 
-                        width="100%"
-                        height="100%"
-                        control= {false}
-                        /> */}
-                        <FunVideoPlayer url="https://firebasestorage.googleapis.com/v0/b/bayjingfunolympic2022.appspot.com/o/files%2Fjohn_sherchan%20.mp4?alt=media&token=29e605ab-f063-46e4-80c8-4d163487ff95" 
+                        <FunVideoPlayer url="https://firebasestorage.googleapis.com/v0/b/bayjingfunolympic2022.appspot.com/o/promo%2Fpromo.mp4?alt=media&token=af179aa5-16e6-424a-9c21-f50981c19c1b" 
                         type="promo" 
                         width="100%"
                         height="100%"
@@ -161,7 +155,12 @@ export function FunBodyContents() {
             </section>
             <section className="fun__bodyContactUs" id="contact">
                 <div className='fun__bodyContactBrief'>
-                    <p>hello</p>
+                    <h1> Any Queries?</h1>
+                    <p>Feel free to contact us here.</p>
+                    <br />
+                    <br />
+                    <br />
+                    <p>Also, you can contact us at: 977981234567</p>
                 </div>
                 <div className='fun__bodySpare'>
                     <img src='https://cdn.punchng.com/wp-content/uploads/2018/08/02121857/track-race.png' />
@@ -170,7 +169,7 @@ export function FunBodyContents() {
                 <div className="fun__contactWrapper">
                     <div className="fun__fixContactWidth">
                         <form className="fun__contactForm">
-                            <h3>Contact US</h3>
+                            <h3>Contact</h3>
                             <div className="vid__uploadInput">
                                 <label>FullName</label>
                                 <input className='vid__uploadTitle' type={`text`} onChange={(e)=>setFullName(e.target.value)} value={fullName} required></input>

@@ -1,13 +1,15 @@
-import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore"
+import { collection, deleteDoc, doc, getDocs, onSnapshot, query, where } from "firebase/firestore"
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { firestore } from "../../../firebase"
-import { FunVideoCardBox } from "../../CommonComponents"
+import { BackDrop, FunDelete, FunSearchBar, FunVideoCardBox } from "../../CommonComponents"
 
 import "./AdminAllHighlights.css"
 export const AdminAllNews = ({docPath}) => {
     const [newsData, setNewsData] = useState([])
-    // const womenGamesRef = collection(firestore, `/highlights`)
+    const [postID, showPostID] = useState('')
+    const [showBackDrop, setShowBackDrop] = useState(false)
+
     const funNavigate = useNavigate()
     const QueryDocs = (setData, category) => {
         const queryRef = category ? query(collection(firestore, `${docPath}`), where("category", "==", category))
@@ -59,14 +61,50 @@ export const AdminAllNews = ({docPath}) => {
         funNavigate(`/admin/news/update/${postID}`)
     }
 
-    const HandleDelete = () => {
+    const HandleDeleteClick = async(delID) => {
+        console.log("doc", delID)
+        if(delID) {
+            const delFix = query(collection(firestore, "news"), where("postID", "==", delID))
+            await getDocs(delFix).then(async(snap)=> {
+                if (snap.docs.length > 0) {
+                    await deleteDoc(doc(firestore, "news", snap.docs[0].id)).then((res)=>{
+                        QueryDocs(setNewsData, "")
+                        setShowBackDrop(false)
+                    })
+                }
+            })
+        }
+    }
 
+    const CancelBtnClick = () => {
+        setShowBackDrop(false)
+    }
+
+    const HandleBackDrop = () => {
+        setShowBackDrop(false)
+    }
+
+    const HandleDelete = async(postID) => {
+        if(postID) {
+            showPostID(postID)
+            setShowBackDrop(true)
+        }
     }
 
     return (
         <div className="fun__adminAllHighlightsContainer">
+            <BackDrop show={showBackDrop} 
+                children={ 
+                    <FunDelete 
+                        cancelBtnClick={CancelBtnClick}
+                        deleteBtnClick={HandleDeleteClick}
+                        deleteID={postID}
+                    />
+                    }
+                handleClick={HandleBackDrop} 
+                />
             <div className="fun__highlightSearch">
-                <input type={"search"} onChange={HandleSearch}/>
+                <FunSearchBar placeholder={"Search News"} handleSearch={HandleSearch}/>
             </div>
             <div className="fun__adminAllHighlights">
                 <div className="fun__adminMenHighlights">

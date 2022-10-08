@@ -1,7 +1,6 @@
 .fun__verifyContainer {
     width: 100%;
     padding: 250px 0 180px 0;
-    background-color: #6A0DAD;
     z-index: 80;
     display: flex;
     justify-content: center;
@@ -41,4 +40,8 @@
     font-weight: 600;
     padding-bottom: .2rem;
     color: rgb(61, 61, 61);
+}
+
+.fun__form > h1, .fun__form > p {
+    padding-bottom: 1rem;
 }

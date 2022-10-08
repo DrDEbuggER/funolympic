@@ -144,7 +144,7 @@ export const FunNews = () => {
                     </div>
                 </div>
                 <div className="fun__highlightsVideoBox">
-                    <FunSearchBar handleSearch={HandleSearch}/>
+                    <FunSearchBar placeholder={`Search News`} handleSearch={HandleSearch} className={`fix__searchWidth`}/>
                     <div className="fun__highlightList">
                         {
                         newsData && newsData.map((nDat, idx) => {

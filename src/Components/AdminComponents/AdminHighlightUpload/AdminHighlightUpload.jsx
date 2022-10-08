@@ -178,6 +178,7 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                                     eventType: uploadVideoEvent,
                                     category: uploadVideoCategory,
                                     thumbnail: url
+                                    
                                 }
                                 const videoQuery = query(collection(firestore, "highlights"), where("videoID", "==", params.videoID))
                                 await getDocs(videoQuery).then(async(snap)=>{
@@ -243,7 +244,9 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                                         videoDesc: uploadVideoDesc,
                                         eventType: uploadVideoEvent,
                                         category: uploadVideoCategory,
-                                        thumbnail: thumbURL
+                                        thumbnail: thumbURL,
+                                        likeCount: 0,
+                                        dislikeCount: 0
                                     }
                                     const gameRef = collection(firestore, `highlights`);
                                     await addDoc(gameRef,tempGameData).then(res => {

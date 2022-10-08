@@ -20,7 +20,6 @@ export function FunLandingPage({pageName}) {
             <div className='fun__resetPass'>
               <FunForgotPassword />
             </div>
-            
           :
           <FunBodyContents />
         }

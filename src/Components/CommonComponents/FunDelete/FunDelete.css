@@ -1,0 +1,36 @@
+.fun__deleteWrapper {
+    z-index: 7000;
+}
+
+.fun__deleteCard {
+    padding: 3rem 3rem 1rem 3rem;
+    border: 1px solid gray;
+    background-color: #d0ade6;
+    text-align: start;
+    border-radius: .3rem;
+}
+
+.fun__deleteCard >h3 {
+    font-size: 16px;
+    padding: 0rem 1rem;
+    color: #14161a;
+}
+
+.fun__deleteCard >p {
+    font-size: 12px;
+    padding: 0rem 1rem;
+    color: rgb(72, 80, 88);
+}
+
+.fun__deleteCard >:last-child {
+    padding-top: 2rem;
+}
+
+.fun__deleteBtn {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.fun__deleteBtn >:first-child {
+    margin-right: 1rem;
+}

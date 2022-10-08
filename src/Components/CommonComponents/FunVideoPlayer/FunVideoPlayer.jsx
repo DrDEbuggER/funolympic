@@ -19,7 +19,6 @@ export const FunVideoPlayer = ({url, type, isLive, width, height, control, isPla
     const [isFullScreen, setIsFullScreen] = useState(false)
     const [isPlaying, setIsPlaying] = useState(false)
 
-
     const HandleMouseEnter = (e) => {
         setTimeout(()=>{
             setShowControls(true)
@@ -61,9 +60,6 @@ export const FunVideoPlayer = ({url, type, isLive, width, height, control, isPla
     }
     
     const HandleFullScreen = (e) => {
-        // findDOMNode(divRef.current).requestFullscreen().catch(
-        //     (err)=>{console.log("err fullscreen", err)}
-        // )
         if(!isFullScreen) {
             findDOMNode(divRef.current).requestFullscreen().then((res)=>{
                 setIsFullScreen(true)
@@ -76,7 +72,6 @@ export const FunVideoPlayer = ({url, type, isLive, width, height, control, isPla
     }
 
     const HandlePlaying = (e) => {
-        console.log(playerRef.current)
         if (playerRef.current.getInternalPlayer().paused) {
             playerRef.current.getInternalPlayer().play()
             setIsPlaying(true)
@@ -84,8 +79,6 @@ export const FunVideoPlayer = ({url, type, isLive, width, height, control, isPla
             playerRef.current.getInternalPlayer().pause()
             setIsPlaying(false)
         }
-        
-        console.log("paused", playerRef.current.getInternalPlayer().paused)
     }
 
     const HandleVideoStart = () => {

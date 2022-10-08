@@ -7,30 +7,33 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import "./FunHighlights.css"
 import ads from "../../../assets/images/ads.svg"
 import ShareIcon from '@mui/icons-material/Share';
-import { ThumbDownAlt, ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
+import { ThumbDown, ThumbDownAlt, ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
 import { useEffect } from "react";
-import { collection, getDocs, limitToLast, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, limitToLast, onSnapshot, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { useState } from "react";
-import { firestore } from "../../../firebase";
+import { auth, firestore } from "../../../firebase";
 import { useNavigate, useParams } from "react-router-dom";
 import { FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton } from "react-share";
 export const FunHighlights = () => {
     const [highlightData, setHighlightData] = useState()
     const [singleHighlightData, setSingleHighlightData] = useState()
+    const [totalLike, setTotalLike] = useState(0)
+    const [hasLiked, setHasLiked] = useState(false)
+    const [totalDisLike, setTotalDislike] = useState(0)
+    const [hasDisliked, setHasDisliked] = useState(false)
     const funNavigate = useNavigate()
-    const {postID} = useParams()
+    
 
     // query all highlight video
-    const QueryDocs = (setData, category) => {
+    const QueryDocs = async (setData, category) => {
         const queryRef = category == "none" ? query(collection(firestore, `/highlights`)) : query(collection(firestore, `/highlights`), where("category", "==", category))
         let vData = [];
-        onSnapshot(queryRef, (snap)=> {
+        await getDocs(queryRef).then((snap)=> {
             snap.docs.forEach((doc)=> {
                 vData.push(doc.data())
             })
             setData(vData)
         })
-        
     }
 
     // Query Latest video
@@ -44,22 +47,164 @@ export const FunHighlights = () => {
     }
 
     // query video by id
-    const QueryByPostID = (setData, postID) => {
-        const queryRef =  query(collection(firestore, `/highlights`), where("videoID", "==", postID))
+    const QueryByvideoID = (setData, videoID) => {
+        const queryRef =  query(collection(firestore, `/highlights`), where("videoID", "==", videoID))
         onSnapshot(queryRef, (snap)=> {
             setData(snap.docs[0].data())
         })
     }
 
+    const UserHasLiked = async(vidID) => {
+        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        await getDocs(likerRef).then(async(snap)=> {
+            if (snap.docs.length <= 0) {
+                setHasLiked(false)
+            }else {
+                setHasLiked(true)
+            }
+        })
+    }
+
+    const UserHasDisliked = async(vidID) => {
+        const likerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        await getDocs(likerRef).then(async(snap)=> {
+            if (snap.docs.length <= 0) {
+                setHasDisliked(false)
+            }else {
+                setHasDisliked(true)
+            }
+        })
+    }
+
+    const CalcTotalLike = async(vidID) => {
+        const likeRef = query(collection(firestore, "highlights"), where("videoID", "==", vidID));
+        await getDocs(likeRef).then(async(snap)=> {
+            setTotalLike(snap.docs[0].data().likeCount)
+        })
+    }
+
+    const CalcTotalDisLike = async(vidID) => {
+        const likeRef = query(collection(firestore, "highlights"), where("videoID", "==", vidID));
+        await getDocs(likeRef).then(async(snap)=> {
+            setTotalDislike(snap.docs[0].data().dislikeCount)
+        })
+    }
+
+    const FunUpdateLikes = async(vidID) => {
+        const likeRef = query(collection(firestore, "highlights"), where("videoID", "==", vidID));
+        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        const dislikerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        if (!hasLiked) {
+            await getDocs(likeRef).then(async(snap)=> {
+                if (snap.docs.length <= 0) {
+                    return
+                }
+                let tempLikeCount = snap.docs[0].data().likeCount + 1;
+                let tempDislikeCount = snap.docs[0].data().dislikeCount;
+                if (tempDislikeCount <= 0) {
+                    tempDislikeCount = 0
+                }else {
+                    if (hasDisliked) {
+                        tempDislikeCount -= 1;
+                        await getDocs(dislikerRef).then(async(snap)=> {
+                            await deleteDoc(doc(firestore, `dislikers`, snap.docs[0].id)).then(async(res)=>{
+                                await getDocs(likeRef).then(async(snap)=>{
+                                    setTotalDislike(snap.docs[0].data().dislikeCount)
+                                    setHasDisliked(false)
+                                })
+                            })
+                        })
+                    }
+                }
+                await updateDoc(doc(firestore, "highlights", snap.docs[0].id), {"likeCount": tempLikeCount, "dislikeCount": tempDislikeCount}).then(async(res)=>{
+                    await getDocs(likerRef).then(async(snap)=> {
+                        if (snap.docs.length <= 0) {
+                            await addDoc(collection(firestore, `likers`), {
+                                "vidID": vidID,
+                                "uid": auth.currentUser.uid
+                            }).then(async(res)=>{
+                                await getDocs(likeRef).then(async(snap)=>{
+                                    setTotalLike(snap.docs[0].data().likeCount)
+                                    setTotalDislike(snap.docs[0].data().dislikeCount)
+                                    setHasDisliked(false)
+                                    setHasLiked(true)
+                                })
+                            })
+                        }else {
+                            await getDocs(likeRef).then(async(snap)=>{
+                                setTotalLike(snap.docs[0].data().likeCount)
+                            })
+                        }
+                    })
+                })
+            })
+        } 
+    }
+
+    const FunUpdateDislikes = async(vidID) => {
+        const likeRef = query(collection(firestore, "highlights"), where("videoID", "==", vidID));
+        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        const dislikerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        if (!hasDisliked) {
+            await getDocs(likeRef).then(async(snap)=> {
+                if (snap.docs.length <= 0) {
+                    return
+                }
+                let tempLikeCount = snap.docs[0].data().likeCount;
+                let tempDislikeCount = snap.docs[0].data().dislikeCount + 1;
+                if (tempLikeCount <= 0) {
+                    tempLikeCount = 0
+                }else {
+                    if (hasLiked) {
+                        tempLikeCount -= 1;
+                        await getDocs(likerRef).then(async(snap)=> {
+                            await deleteDoc(doc(firestore, `likers`, snap.docs[0].id)).then(async(res)=>{
+                                await getDocs(likeRef).then(async(snap)=>{
+                                    setTotalLike(snap.docs[0].data().likeCount)
+                                    setHasLiked(false)
+                                })
+                            })
+                        })
+                    }
+                }
+                await updateDoc(doc(firestore, "highlights", snap.docs[0].id), {"likeCount": tempLikeCount, "dislikeCount": tempDislikeCount}).then(async(res)=>{
+                    await getDocs(dislikerRef).then(async(snap)=> {
+                        if (snap.docs.length <= 0) {
+                            await addDoc(collection(firestore, `dislikers`), {
+                                "vidID": vidID,
+                                "uid": auth.currentUser.uid
+                            }).then(async(res)=>{
+                                await getDocs(likeRef).then(async(snap)=>{
+                                    setTotalLike(snap.docs[0].data().likeCount)
+                                    setTotalDislike(snap.docs[0].data().dislikeCount)
+                                    setHasLiked(false)
+                                    setHasDisliked(true)
+                                })
+                            })
+                        }else {
+                            await getDocs(likeRef).then(async(snap)=>{
+                                setTotalLike(snap.docs[0].data().likeCount)
+                            })
+                        }
+                    })
+                })
+            })
+        } 
+    }
+
+    const {videoID} = useParams()
     useEffect(()=>{
-        if(postID) {
-            QueryByPostID(setSingleHighlightData, postID)
+        if(videoID) {
+            QueryByvideoID(setSingleHighlightData, videoID)
+            UserHasLiked(videoID)
+            CalcTotalLike(videoID)
+            CalcTotalDisLike(videoID)
+            UserHasDisliked(videoID)
         } else {
             QueryLatestVideo(setSingleHighlightData, "none")
         }
         QueryDocs(setHighlightData, "none")
-        
-    },[postID])
+    },[videoID])
 
     const FilterDocs = async(keywords, documentPath, eventType) => {
         const q = eventType ? query(collection(firestore, documentPath), where("eventType", "==", eventType)) : query(collection(firestore, documentPath))
@@ -89,9 +234,9 @@ export const FunHighlights = () => {
         FilterDocs(e.target.value, "/highlights", "")
     }
 
-    const HandlePostClick = (postID) => {
-        console.log(postID)
-        funNavigate(`/highlights/watch/${postID}`)
+    const HandlePostClick = (videoID) => {
+        console.log(videoID)
+        funNavigate(`/highlights/watch/${videoID}`)
     }
 
 
@@ -109,22 +254,33 @@ export const FunHighlights = () => {
                                 </div>
                                 <div className="fun__videoButtons">
                                     <div className="fun__miniButtons">
-                                    <IconButton color="primary" aria-label="upload picture" component="label">
-                                        <ThumbUpOffAlt />
-                                    </IconButton>
-                                        <p>{singleHighlightData ?1:''}</p>
+                                    {
+                                        hasLiked ? 
+                                            <IconButton color="primary">
+                                                <ThumbUpIcon />
+                                            </IconButton>
+                                            :
+                                            <IconButton color="primary" onClick={()=> FunUpdateLikes(videoID)}>
+                                                <ThumbUpOffAlt />
+                                            </IconButton>
+                                    }
+                                    <p>{totalLike}</p>
+
                                     </div>
                                     <div className="fun__miniButtons">
-                                        <IconButton color="primary" aria-label="upload picture" component="label">
-                                            <ThumbDownOffAlt />
-                                        </IconButton>
-                                        <p>{singleHighlightData ?0:''}</p>
+                                        {
+                                            hasDisliked ? 
+                                                <IconButton color="primary">
+                                                    <ThumbDown />
+                                                </IconButton>
+                                                :
+                                                <IconButton color="primary" onClick={()=> FunUpdateDislikes(videoID)}>
+                                                    <ThumbDownOffAlt />
+                                                </IconButton>
+                                        }
+                                        <p>{totalDisLike}</p>
                                     </div>
                                     <div className="fun__miniButtons">
-                                        {/* <IconButton color="primary" aria-label="upload picture" component="label">
-                                            <ShareIcon />
-                                        </IconButton> */}
-                                        
                                         <div className="fun__shareButtons">
                                             <p>Share</p>
                                             <FacebookShareButton url={window.location.href}>
@@ -148,7 +304,7 @@ export const FunHighlights = () => {
                     </div>
                 </div>
                 <div className="fun__highlightsVideoBox">
-                    <FunSearchBar handleSearch={HandleSearch}/>
+                    <FunSearchBar placeholder={`Search Highlights`} handleSearch={HandleSearch} className={`fix__searchWidth`}/>
                     <div className="fun__highlightList">
                         {
                         highlightData && highlightData.map((vDat, idx) => {

@@ -1,0 +1,23 @@
+.fun__backdrop {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(49, 49, 49, 0.411);
+    z-index: 5000;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.showModel {
+    display: flex;
+}
+
+.hideModel {
+    display: none;
+}
