@@ -6,7 +6,7 @@ import { FunLightButton, FunProgressBar, FunSelectComponent, FunVideoPlayer } fr
 import "./AdminHighlightUpload.css"
 import { fireStorage, firestore } from '../../../firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { addDoc, collection, doc, getDoc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import { v4 as uuid} from "uuid"
 export const AdminHighlightUpload = ({className, videoData}) => {
     const [uploadFile, setUploadFile] = useState('');
@@ -20,7 +20,6 @@ export const AdminHighlightUpload = ({className, videoData}) => {
     const [videoURL, setVideoURL] = useState()
     const uploadFileObject = useRef()
     const uploadThumbObject = useRef()
-    const updatedThumbURL = useRef("")
     const uploadURL = useRef();
     const params = useParams()
     const funNav = useNavigate()
@@ -30,7 +29,6 @@ export const AdminHighlightUpload = ({className, videoData}) => {
             if (params.videoID) {
                 const docQuery = query(collection(firestore,'/highlights'), where("videoID", "==", params.videoID))
                 await getDocs(docQuery).then((snap)=>{
-                    console.log("snap",snap.docs[0].data())
                     setUploadVideoTitle(snap.docs[0].data().videoTitle)
                     setUploadVideoDesc(snap.docs[0].data().videoDesc)
                     setUploadVideoEvent(snap.docs[0].data().eventType)
@@ -40,7 +38,6 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                 })
             } else {
                 if (videoURL) {
-                    console.log("state cleaned")
                     CleanUpStates(0)
                 }
             }
@@ -94,14 +91,12 @@ export const AdminHighlightUpload = ({className, videoData}) => {
     ]
 
     const SelectHighlightVideo = (e) => {
-        console.log(e)
         if (e.target.files.length > 0) {
             setUploadFile(e.target.files[0].name)
             setUploadPercentage(0)
             uploadFileObject.current = e.target.files[0]
             uploadURL.current = URL.createObjectURL(uploadFileObject.current)
         } else {
-            console.log("cleared")
             setUploadFile("")
             setUploadPercentage(0)
             uploadFileObject.current = ""
@@ -110,13 +105,11 @@ export const AdminHighlightUpload = ({className, videoData}) => {
     }
 
     const SelectThumbnail = (e) => {
-        console.log(e)
         if (e.target.files.length > 0) {
             setUploadThumb(e.target.files[0].name)
             setUploadPercentage(0)
             uploadThumbObject.current = e.target.files[0]
         } else {
-            console.log("cleared")
             setUploadFile("")
             setUploadPercentage(0)
             uploadThumbObject.current = ""
@@ -148,22 +141,18 @@ export const AdminHighlightUpload = ({className, videoData}) => {
 
     const UploadVideo = async(e) => {
         e.preventDefault()
-        console.log("event", uploadVideoEvent)
-        console.log("cate", uploadVideoCategory)
         if (
                 uploadVideoDesc && 
                 uploadVideoTitle && 
                 uploadVideoEvent && uploadVideoEvent !== "none" &&
                 uploadVideoCategory && uploadVideoCategory !== "none") {
             if (videoURL && params.videoID) {
-                console.log("current",uploadThumbObject.current)
                 if (uploadThumbObject.current) {
                     const fireStorageRef = ref(fireStorage, `/files/${uploadThumbObject.current.name}`)
                     const fireUploadTask = uploadBytesResumable(fireStorageRef, uploadThumbObject.current)
                     fireUploadTask.on("state_changed", (snapshot)=> {
                         const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
                         setUploadPercentage(prog === 100 ? 99: prog)
-                        // console.log("prog", prog)
                     },
                     (err)=>console.log(err),
                     ()=>{
@@ -214,7 +203,7 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                         (err)=>console.log("update err", err))
                     })
                 } else {
-                    console.log("thumbnail not found");
+                    // thumbnail not found handle
                 }
             }else {
                 if (!uploadFileObject.current ) return;
@@ -260,7 +249,7 @@ export const AdminHighlightUpload = ({className, videoData}) => {
                 )
             }
         } else {
-            console.log("upload Fail")
+            // Upload Fail Error
         }
     }
 

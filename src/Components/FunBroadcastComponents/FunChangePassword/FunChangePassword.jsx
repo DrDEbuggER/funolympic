@@ -15,7 +15,6 @@ export const FunChangePassword = () => {
                 auth.currentUser.email,
                 password
             )
-            console.log("auth",auth, password)
             reauthenticateWithCredential(auth.currentUser, credential).then((cred)=>{
                 sendPasswordResetEmail(auth, auth.currentUser.email).then((res)=>{
                     setError("Reset Email Sent!!")

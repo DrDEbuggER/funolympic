@@ -13,7 +13,7 @@ export const FunLandscapeCardBox = ({title, description, category, videoURL, ima
         <div className="fun__landscapeCardBoxWrapper">
             <div className="fun__landscapeCardBox" onClick={()=> HandleClick(postID)}>
                 <div className="fun__lcbImageWrapper">
-                    <img src={imageURL}/>
+                    <img src={imageURL} alt=''/>
                     {
                         // videoURL ? <HoverVideoPlayer videoSrc={videoURL} /> : <img src={imageURL}/>
                     }

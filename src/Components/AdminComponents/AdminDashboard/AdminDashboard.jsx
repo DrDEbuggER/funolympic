@@ -55,8 +55,6 @@ export const AdminDashboard = () => {
     
 
     useEffect(()=>{
-        // if(type != "live") 
-        //     return
         WatchCount()
         const calculateWatchTime = setInterval(() => {
             WatchCount()

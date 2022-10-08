@@ -1,19 +1,17 @@
-
 import { IconButton } from "@mui/material"
 import { FunLandscapeCardBox, FunSearchBar, FunVideoPlayer } from "../../CommonComponents"
-import { FunChatBox } from "../FunChatBox"
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import "./FunHighlights.css"
-import ads from "../../../assets/images/ads.svg"
-import ShareIcon from '@mui/icons-material/Share';
-import { ThumbDown, ThumbDownAlt, ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
+import { ThumbDown, ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
 import { useEffect } from "react";
 import { addDoc, collection, deleteDoc, doc, getDocs, limitToLast, onSnapshot, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { useState } from "react";
 import { auth, firestore } from "../../../firebase";
 import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton } from "react-share";
+
 export const FunHighlights = () => {
     const [highlightData, setHighlightData] = useState()
     const [singleHighlightData, setSingleHighlightData] = useState()
@@ -21,12 +19,13 @@ export const FunHighlights = () => {
     const [hasLiked, setHasLiked] = useState(false)
     const [totalDisLike, setTotalDislike] = useState(0)
     const [hasDisliked, setHasDisliked] = useState(false)
+    const [currentVidID, setCurrentVidID] = useState('')
     const funNavigate = useNavigate()
     
 
     // query all highlight video
     const QueryDocs = async (setData, category) => {
-        const queryRef = category == "none" ? query(collection(firestore, `/highlights`)) : query(collection(firestore, `/highlights`), where("category", "==", category))
+        const queryRef = category === "none" ? query(collection(firestore, `/highlights`)) : query(collection(firestore, `/highlights`), where("category", "==", category))
         let vData = [];
         await getDocs(queryRef).then((snap)=> {
             snap.docs.forEach((doc)=> {
@@ -38,10 +37,16 @@ export const FunHighlights = () => {
 
     // Query Latest video
     const QueryLatestVideo = async(setData, category) => {
-        const queryRef = category == "none" ? query(collection(firestore, `/highlights`), orderBy("uploadedAt","asc"), limitToLast(1)) : query(collection(firestore, `/highlights`), where("category", "==", category))
+        const queryRef = category === "none" ? query(collection(firestore, `/highlights`), orderBy("uploadedAt","asc"), limitToLast(1)) : query(collection(firestore, `/highlights`), where("category", "==", category))
         await getDocs(queryRef).then((snap)=>{
             setData(snap.docs[0].data())
-            // console.log("snap", snap)
+            CalcTotalLike(snap.docs[0].data().videoID)
+            CalcTotalDisLike(snap.docs[0].data().videoID)
+            setCurrentVidID(snap.docs[0].data().videoID)
+            if(auth.currentUser) {
+                UserHasLiked(snap.docs[0].data().videoID)
+                UserHasDisliked(snap.docs[0].data().videoID)
+            }
         })
         
     }
@@ -91,9 +96,13 @@ export const FunHighlights = () => {
     }
 
     const FunUpdateLikes = async(vidID) => {
-        const likeRef = query(collection(firestore, "highlights"), where("videoID", "==", vidID));
-        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
-        const dislikerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        if(!auth.currentUser) {
+            toast("Please login first to like the video");
+            return
+        }
+        const likeRef = query(collection(firestore, "highlights"), where("videoID", "==", currentVidID ? currentVidID : vidID));
+        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", currentVidID ? currentVidID : vidID))
+        const dislikerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", currentVidID ? currentVidID : vidID))
         if (!hasLiked) {
             await getDocs(likeRef).then(async(snap)=> {
                 if (snap.docs.length <= 0) {
@@ -120,7 +129,7 @@ export const FunHighlights = () => {
                     await getDocs(likerRef).then(async(snap)=> {
                         if (snap.docs.length <= 0) {
                             await addDoc(collection(firestore, `likers`), {
-                                "vidID": vidID,
+                                "vidID": currentVidID ? currentVidID : vidID,
                                 "uid": auth.currentUser.uid
                             }).then(async(res)=>{
                                 await getDocs(likeRef).then(async(snap)=>{
@@ -142,9 +151,13 @@ export const FunHighlights = () => {
     }
 
     const FunUpdateDislikes = async(vidID) => {
-        const likeRef = query(collection(firestore, "highlights"), where("videoID", "==", vidID));
-        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
-        const dislikerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        if(!auth.currentUser) {
+            toast("Please login first to dislike the video");
+            return
+        }
+        const likeRef = query(collection(firestore, "highlights"), where("videoID", "==", currentVidID ? currentVidID : vidID));
+        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", currentVidID ? currentVidID : vidID))
+        const dislikerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", currentVidID ? currentVidID : vidID))
         if (!hasDisliked) {
             await getDocs(likeRef).then(async(snap)=> {
                 if (snap.docs.length <= 0) {
@@ -171,7 +184,7 @@ export const FunHighlights = () => {
                     await getDocs(dislikerRef).then(async(snap)=> {
                         if (snap.docs.length <= 0) {
                             await addDoc(collection(firestore, `dislikers`), {
-                                "vidID": vidID,
+                                "vidID": currentVidID ? currentVidID : vidID,
                                 "uid": auth.currentUser.uid
                             }).then(async(res)=>{
                                 await getDocs(likeRef).then(async(snap)=>{
@@ -196,10 +209,12 @@ export const FunHighlights = () => {
     useEffect(()=>{
         if(videoID) {
             QueryByvideoID(setSingleHighlightData, videoID)
-            UserHasLiked(videoID)
             CalcTotalLike(videoID)
             CalcTotalDisLike(videoID)
-            UserHasDisliked(videoID)
+            if(auth.currentUser) {
+                UserHasLiked(videoID)
+                UserHasDisliked(videoID)
+            }
         } else {
             QueryLatestVideo(setSingleHighlightData, "none")
         }
@@ -213,7 +228,6 @@ export const FunHighlights = () => {
         let fireDocuments = []
         let tempData = []
         snapQuery.forEach((doc) => {
-            console.log("docs", doc.data())
             fireDocuments.push(doc.data())
         })
         if(fireDocuments.length > 0) {
@@ -235,13 +249,13 @@ export const FunHighlights = () => {
     }
 
     const HandlePostClick = (videoID) => {
-        console.log(videoID)
         funNavigate(`/highlights/watch/${videoID}`)
     }
 
 
     return (
         <div className="fun__highlightsMain">
+           <ToastContainer />
             <div className="fun__highlightsMainWrapper">
                 <div className="fun__highlightsLiveWatch">
                     <FunVideoPlayer width="100%" height="100%" url={singleHighlightData && singleHighlightData.videoURL? singleHighlightData.videoURL: ``} control={true} isPlayable={true}/>

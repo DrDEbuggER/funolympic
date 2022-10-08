@@ -1,30 +1,28 @@
-
 import { IconButton } from "@mui/material"
 import { FunVideoPlayer } from "../../CommonComponents"
 import { FunChatBox } from "../FunChatBox"
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import {
     FacebookIcon,
-    FacebookShareButton, FacebookShareCount, TwitterIcon, TwitterShareButton
+    FacebookShareButton, TwitterIcon, TwitterShareButton
 } from "react-share"
 import "./FunBroadcastMain.css"
 import ads from "../../../assets/images/ads.svg"
-import ShareIcon from '@mui/icons-material/Share';
-import { ThumbDown, ThumbDownAlt, ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
+import { ThumbDown, ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
 import { useEffect } from "react";
-import { addDoc, collection, deleteDoc, doc, getDocs, limitToLast, onSnapshot, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, limitToLast, onSnapshot, orderBy, query, updateDoc, where } from "firebase/firestore";
 import { auth, firestore } from "../../../firebase";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { async } from "@firebase/util";
-export const FunBroadcastMain = ({}) => {
+
+export const FunBroadcastMain = () => {
 
     const [liveVideoData, setLiveVideoData] = useState()
     const [totalLike, setTotalLike] = useState(0)
     const [hasLiked, setHasLiked] = useState(false)
     const [totalDisLike, setTotalDislike] = useState(0)
     const [hasDisliked, setHasDisliked] = useState(false)
+    const [currentVidID, setCurrentVidID] = useState('')
     const QueryDocs = (setData, videoID) => {
         const queryRef =  query(collection(firestore, `/lives`), where("videoID", "==", videoID))
         onSnapshot(queryRef, (snap)=> {
@@ -34,10 +32,16 @@ export const FunBroadcastMain = ({}) => {
     
     // Query Latest Live video
     const QueryLatestLiveVideo = async(setData, category) => {
-        const queryRef = category == "none" ? query(collection(firestore, `/lives`), orderBy("uploadedAt","asc"), limitToLast(1)) : query(collection(firestore, `/highlights`), where("category", "==", category))
+        const queryRef = category === "none" ? query(collection(firestore, `/lives`), orderBy("uploadedAt","asc"), limitToLast(1)) : query(collection(firestore, `/highlights`), where("category", "==", category))
         await getDocs(queryRef).then((snap)=>{
             setData(snap.docs[0].data())
-            // console.log("snap", snap)
+            CalcTotalLike(snap.docs[0].data().videoID)
+            CalcTotalDisLike(snap.docs[0].data().videoID)
+            setCurrentVidID(snap.docs[0].data().videoID)
+            if(auth.currentUser) {
+                UserHasLiked(snap.docs[0].data().videoID)
+                UserHasDisliked(snap.docs[0].data().videoID)
+            }
         })
     }
 
@@ -79,9 +83,9 @@ export const FunBroadcastMain = ({}) => {
     }
 
     const FunUpdateLikes = async(vidID) => {
-        const likeRef = query(collection(firestore, "lives"), where("videoID", "==", vidID));
-        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
-        const dislikerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        const likeRef = query(collection(firestore, "lives"), where("videoID", "==", currentVidID ? currentVidID : vidID));
+        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", currentVidID ? currentVidID : vidID))
+        const dislikerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", currentVidID ? currentVidID : vidID))
         if (!hasLiked) {
             setHasLiked(true)
             await getDocs(likeRef).then(async(snap)=> {
@@ -109,7 +113,7 @@ export const FunBroadcastMain = ({}) => {
                     await getDocs(likerRef).then(async(snap)=> {
                         if (snap.docs.length <= 0) {
                             await addDoc(collection(firestore, `likers`), {
-                                "vidID": vidID,
+                                "vidID": currentVidID ? currentVidID : vidID,
                                 "uid": auth.currentUser.uid
                             }).then(async(res)=>{
                                 await getDocs(likeRef).then(async(snap)=>{
@@ -131,9 +135,9 @@ export const FunBroadcastMain = ({}) => {
     }
 
     const FunUpdateDislikes = async(vidID) => {
-        const likeRef = query(collection(firestore, "lives"), where("videoID", "==", vidID));
-        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
-        const dislikerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", vidID))
+        const likeRef = query(collection(firestore, "lives"), where("videoID", "==", currentVidID ? currentVidID : vidID));
+        const likerRef = query(collection(firestore, "likers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", currentVidID ? currentVidID : vidID))
+        const dislikerRef = query(collection(firestore, "dislikers"), where("uid", "==", auth.currentUser.uid),where("vidID", "==", currentVidID ? currentVidID : vidID))
         if (!hasDisliked) {
             await getDocs(likeRef).then(async(snap)=> {
                 if (snap.docs.length <= 0) {
@@ -160,7 +164,7 @@ export const FunBroadcastMain = ({}) => {
                     await getDocs(dislikerRef).then(async(snap)=> {
                         if (snap.docs.length <= 0) {
                             await addDoc(collection(firestore, `dislikers`), {
-                                "vidID": vidID,
+                                "vidID": currentVidID ? currentVidID : vidID,
                                 "uid": auth.currentUser.uid
                             }).then(async(res)=>{
                                 await getDocs(likeRef).then(async(snap)=>{
@@ -183,7 +187,6 @@ export const FunBroadcastMain = ({}) => {
 
     const {videoID} = useParams()
     useEffect (()=> {
-        console.log("videourlid", videoID)
         if (videoID) {
             QueryDocs(setLiveVideoData, videoID)
             UserHasLiked(videoID)
@@ -263,7 +266,7 @@ export const FunBroadcastMain = ({}) => {
                     }
                 </div>
                 <div className="fun__advertisement">
-                    <img src={ads}></img>
+                    <img src={ads} alt=''></img>
                 </div>
             </div>
         </div>

@@ -26,7 +26,7 @@ export const VerifyComponent = () => {
                     snapshot.forEach(doc => {
                         docId = doc.id;
                     })
-                    if (docId != '') {
+                    if (docId !== '') {
                         await updateDoc(doc(firestore, `users/${docId}`), {status: "Verified", online:true}).then((res)=> {
                             clearInterval(interval);
                             funNavigate("/broadcast");

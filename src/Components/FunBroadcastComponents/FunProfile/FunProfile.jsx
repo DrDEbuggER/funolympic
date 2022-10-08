@@ -19,7 +19,6 @@ export const FunProfile = ({userType, isDashBoard}) => {
     const isUniqueUsername = async(userName) => {
         const userRef = query(collection(firestore, "users"), where("userName", "==", userName))
         await getDocs(userRef).then((snap)=> {
-            console.log(snap)
             if (snap.docs.length > 0) {
                 isUserExist.current = true
             } else {

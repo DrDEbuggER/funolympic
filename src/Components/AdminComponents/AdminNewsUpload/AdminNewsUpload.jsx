@@ -2,11 +2,11 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
-import { FunLightButton, FunProgressBar, FunSelectComponent, FunVideoPlayer } from '../../CommonComponents';
+import { FunLightButton, FunProgressBar, FunSelectComponent } from '../../CommonComponents';
 import "./AdminNewsUpload.css"
 import { fireStorage, firestore } from '../../../firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { addDoc, collection, doc, getDoc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import { v4 as uuid} from "uuid"
 export const AdminNewsUpload = ({className, videoData}) => {
     const [uploadFile, setUploadFile] = useState('');
@@ -17,7 +17,6 @@ export const AdminNewsUpload = ({className, videoData}) => {
     const [uploadNewsEvent, setUploadNewsEvent] = useState('none');
     const [uploadNewsCategory, setUploadNewsCategory] = useState('none');
     const [thumbnailURL, setThumbnailURL] = useState()
-    const [channel, setChannel] = useState("none")
     const uploadFileObject = useRef()
     const uploadURL = useRef();
     const params = useParams()
@@ -28,7 +27,6 @@ export const AdminNewsUpload = ({className, videoData}) => {
             if (params.postID) {
                 const docQuery = query(collection(firestore,'/news'), where("postID", "==", params.postID))
                 await getDocs(docQuery).then((snap)=>{
-                    console.log("snap",snap.docs[0].data())
                     setUploadNewsTitle(snap.docs[0].data().newsTitle)
                     setUploadNewsDesc(snap.docs[0].data().newsDesc)
                     setUploadNewsEvent(snap.docs[0].data().eventType)
@@ -75,32 +73,7 @@ export const AdminNewsUpload = ({className, videoData}) => {
             optValue: "weightlifting"
         }
     ]
-    const Channels = [
-        {
-            optName: "None",
-            ovtValue: "none"
-        },
-        {
-            optName: "Sky Sport",
-            optValue: "skysport"
-        },
-        {
-            optName: "Dazn",
-            optValue: "dazn"
-        },
-        {
-            optName: "Star Sports Select 2",
-            optValue: "sss2"
-        },
-        {
-            optName: "Star Sports 2",
-            optValue: "ss2"
-        },
-        {
-            optName: "ESPN",
-            optValue: "espn"
-        }
-    ]
+
     const AllCategories = [
         {
             optName: "None",
@@ -117,14 +90,12 @@ export const AdminNewsUpload = ({className, videoData}) => {
     ]
 
     const SelectHighlightVideo = (e) => {
-        console.log(e)
         if (e.target.files.length > 0) {
             setUploadFile(e.target.files[0].name)
             setUploadPercentage(0)
             uploadFileObject.current = e.target.files[0]
             uploadURL.current = URL.createObjectURL(uploadFileObject.current)
         } else {
-            console.log("cleared")
             setUploadFile("")
             setUploadPercentage(0)
             uploadFileObject.current = ""
@@ -155,8 +126,6 @@ export const AdminNewsUpload = ({className, videoData}) => {
     // Update and upload the post
     const UploadNews = async(e) => {
         e.preventDefault()
-        console.log("event", uploadNewsEvent)
-        console.log("cate", uploadNewsCategory)
         if (
                 uploadNewsDesc && 
                 uploadNewsTitle && 
@@ -188,7 +157,6 @@ export const AdminNewsUpload = ({className, videoData}) => {
                 fireUploadTask.on("state_changed", (snapshot)=> {
                     const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
                     setUploadPercentage(prog === 100 ? 99: prog)
-                    // console.log("prog", prog)
                 },
                 (err)=>console.log(err),
                 ()=>{
@@ -213,7 +181,7 @@ export const AdminNewsUpload = ({className, videoData}) => {
                 )
             }
         } else {
-            console.log("upload Fail")
+            //  upload fail handle
         }
     }
 
@@ -238,7 +206,7 @@ export const AdminNewsUpload = ({className, videoData}) => {
                                     </div>
                                 </div> :
                                 <div className='vid__uploadUpperSec vid__uploadPlayer'> 
-                                    <img src={uploadURL.current}/>
+                                    <img src={uploadURL.current} alt=''/>
                                 </div>
                                 :
                                 <div className='vid__uploadUpperSec vid__uploadPlayer'> 
@@ -246,7 +214,7 @@ export const AdminNewsUpload = ({className, videoData}) => {
                                                     height="100%" 
                                                     url={authorName ? authorName : uploadURL.current}
                                                     /> */}
-                                    <img src={thumbnailURL ? thumbnailURL : uploadURL.current} />
+                                    <img src={thumbnailURL ? thumbnailURL : uploadURL.current} alt=''/>
                                 </div>
                     }
                     <div className={`vid__uploadInfoLower ${params.postID ? 'vid__fixBack' : ''}`}>

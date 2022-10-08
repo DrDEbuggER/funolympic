@@ -21,7 +21,7 @@ export const SignupComponent = () => {
    
 
     const isEmpty = (value) => {
-        if(value == "") {
+        if(value === "") {
             return true
         } else {
             return false;
@@ -32,7 +32,6 @@ export const SignupComponent = () => {
     const isUniqueUsername = async(userName) => {
         const userRef = query(collection(firestore, "users"), where("userName", "==", userName))
         await getDocs(userRef).then((snap)=> {
-            console.log(snap)
             if (snap.docs.length > 0) {
                 isUserExist.current = true
             } else {
@@ -57,7 +56,6 @@ export const SignupComponent = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("clicked submit button");
         try {
             if (!isEmpty(fullName) && 
                 !isEmpty(userName) &&
@@ -90,7 +88,7 @@ export const SignupComponent = () => {
                     })
                     
             } else {
-                console.log("please check all the fileds before you register!!")
+                // empty field error
             }
             
         }catch(e) {

@@ -31,7 +31,7 @@ export const FunCardBox = ({watchType, isVideo, videoTitle, eventType, category,
                                 // height="100%"
                             />
                         :
-                        <img src={thumbnail} onClick={()=>HandleClick(videoID)}></img>
+                        <img src={thumbnail} onClick={()=>HandleClick(videoID)} alt=''></img>
                     }
                 </div>
             </div>

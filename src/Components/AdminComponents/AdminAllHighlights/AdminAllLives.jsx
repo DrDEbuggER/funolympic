@@ -25,7 +25,7 @@ export const AdminAllLives = ({docPath}) => {
     }
     useEffect(()=>{
         QueryDocs(setVideoData, "")
-    },[])
+    },[postID])
 
     const FilterDocs = async(keywords, documentPath, eventType) => {
         const q = eventType ? query(collection(firestore, documentPath), where("eventType", "==", eventType)) : query(collection(firestore, documentPath))
@@ -34,7 +34,6 @@ export const AdminAllLives = ({docPath}) => {
         let fireDocuments = []
         let tempData = []
         snapQuery.forEach((doc) => {
-            console.log("docs", doc.data())
             fireDocuments.push(doc.data())
         })
         if(fireDocuments.length > 0) {

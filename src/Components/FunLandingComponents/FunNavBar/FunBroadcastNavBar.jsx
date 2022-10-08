@@ -26,7 +26,7 @@ export const FunBroadcastNavBar = ({navColor, btnText, toPage, userName}) => {
                 <div className='fun__navWrapper'>
                     <div className='fun__navBarStart'>
                         <div className='fun__navLogo'>
-                            <img src={Logo}/>
+                            <img src={Logo} alt=''/>
                         </div>
                     </div>
                     <div className={`fun__navBarMid ${!auth.currentUser.emailVerified ? 'disable__click':``}`}>

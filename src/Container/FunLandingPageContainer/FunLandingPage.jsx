@@ -16,7 +16,7 @@ export function FunLandingPage({pageName}) {
     <div className="fun__landingPage">
         <FunNavBar />
         {
-          pageName == "reset" ?
+          pageName === "reset" ?
             <div className='fun__resetPass'>
               <FunForgotPassword />
             </div>

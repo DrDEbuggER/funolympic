@@ -2,11 +2,11 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom'
-import { FunLightButton, FunProgressBar, FunSelectComponent, FunVideoPlayer } from '../../CommonComponents';
+import { FunLightButton, FunProgressBar, FunSelectComponent } from '../../CommonComponents';
 import "./AdminLiveUpload.css"
 import { fireStorage, firestore } from '../../../firebase';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { addDoc, collection, doc, getDoc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import { v4 as uuid} from "uuid"
 export const AdminLiveUpload = ({className, videoData}) => {
     const [uploadFile, setUploadFile] = useState('');
@@ -28,7 +28,6 @@ export const AdminLiveUpload = ({className, videoData}) => {
             if (params.videoID) {
                 const docQuery = query(collection(firestore,'/lives'), where("videoID", "==", params.videoID))
                 await getDocs(docQuery).then((snap)=>{
-                    console.log("snap",snap.docs[0].data())
                     setUploadVideoTitle(snap.docs[0].data().videoTitle)
                     setUploadVideoDesc(snap.docs[0].data().videoDesc)
                     setUploadVideoEvent(snap.docs[0].data().eventType)
@@ -117,14 +116,12 @@ export const AdminLiveUpload = ({className, videoData}) => {
     ]
 
     const SelectHighlightVideo = (e) => {
-        console.log(e)
         if (e.target.files.length > 0) {
             setUploadFile(e.target.files[0].name)
             setUploadPercentage(0)
             uploadFileObject.current = e.target.files[0]
             uploadURL.current = URL.createObjectURL(uploadFileObject.current)
         } else {
-            console.log("cleared")
             setUploadFile("")
             setUploadPercentage(0)
             uploadFileObject.current = ""
@@ -158,8 +155,6 @@ export const AdminLiveUpload = ({className, videoData}) => {
 
     const UploadVideo = async(e) => {
         e.preventDefault()
-        console.log("event", uploadVideoEvent)
-        console.log("cate", uploadVideoCategory)
         if (
                 uploadVideoDesc && 
                 uploadVideoTitle && 
@@ -191,7 +186,6 @@ export const AdminLiveUpload = ({className, videoData}) => {
                 fireUploadTask.on("state_changed", (snapshot)=> {
                     const prog = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
                     setUploadPercentage(prog === 100 ? 99: prog)
-                    // console.log("prog", prog)
                 },
                 (err)=>console.log(err),
                 ()=>{
@@ -218,7 +212,7 @@ export const AdminLiveUpload = ({className, videoData}) => {
                 )
             }
         } else {
-            console.log("upload Fail")
+            //  Upload Failed handle
         }
     }
 
@@ -243,7 +237,7 @@ export const AdminLiveUpload = ({className, videoData}) => {
                                     </div>
                                 </div> :
                                 <div className='vid__uploadUpperSec vid__uploadPlayer'> 
-                                    <img src={uploadURL.current}/>
+                                    <img src={uploadURL.current} alt=''/>
                                 </div>
                                 :
                                 <div className='vid__uploadUpperSec vid__uploadPlayer'> 
@@ -251,7 +245,7 @@ export const AdminLiveUpload = ({className, videoData}) => {
                                                     height="100%" 
                                                     url={uploadStreamURL ? uploadStreamURL : uploadURL.current}
                                                     /> */}
-                                    <img src={thumbnailURL ? thumbnailURL : uploadURL.current} />
+                                    <img src={thumbnailURL ? thumbnailURL : uploadURL.current} alt="" />
                                 </div>
                     }
                     <div className={`vid__uploadInfoLower ${params.videoID ? 'vid__fixBack' : ''}`}>

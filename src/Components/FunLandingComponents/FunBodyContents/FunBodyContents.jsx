@@ -1,18 +1,19 @@
 import './FunBodyContents.css';
 import { FunButton, FunLightButton, FunVideoCardBox, FunVideoPlayer } from '../../CommonComponents';
 import { FunLandingScore } from '../../FunBroadcastComponents';
-import { AdminAllNews } from '../../AdminComponents';
 import { collection, getDocs, limitToLast, orderBy, query } from 'firebase/firestore';
 import { useEffect } from 'react';
 import { firestore } from '../../../firebase';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 export function FunBodyContents() {
     const [newsData, setNewsData] = useState([])
     const [videoData, setVideoData] = useState([])
     const [fullName, setFullName] = useState()
     const [email, setEmail] = useState()
-    const [error, setError] = useState()
+    // const [error, setError] = useState()
     const [message, setMessage] = useState()
+    const funNavigate = useNavigate()
     // Query Latest News
     const QueryLatestRecord = async(setData, docPath) => {
         const queryRef = query(collection(firestore, docPath), orderBy("uploadedAt","asc"), limitToLast(4))
@@ -23,6 +24,14 @@ export function FunBodyContents() {
             })
             setData(vData)
         })
+    }
+
+    const NavigateToNews = (newsID) =>{
+        funNavigate(`/news/post/${newsID}`)
+    }
+
+    const NavigateToHighlight = (highlightID) =>{
+        funNavigate(`/highlights/watch/${highlightID}`)
     }
 
     useEffect(()=>{
@@ -116,6 +125,8 @@ export function FunBodyContents() {
                                     vidEvent={nDat.eventType}
                                     category={nDat.category}
                                     isLanding={true}
+                                    height={"280px"}
+                                    handleContainerClick={NavigateToNews}
                                     // onEditClick={HandleEdit}
                                     // onDeleteClick={HandleDelete}
                                     />
@@ -127,8 +138,8 @@ export function FunBodyContents() {
                 <p className='fun__seeMore'>See more</p>
             </section>
             <section className="fun__bodyHighlights" id="highlights">
-            <div className='fun__landingHighlightWrapper'>
-                    <div className='fun__landingNewsBrief'>
+                <div className='fun__landingHighlightWrapper'>
+                    <div className='fun__landingHighlightBrief'>
                         <h3>Highlights | FunOlympics 2022</h3>
                         <p>Find all the latest Highlights of FunOlympic 2022 Bayjing games</p>
                     </div>
@@ -136,13 +147,14 @@ export function FunBodyContents() {
                         {
                             videoData && videoData.map((vDat, idx) => {
                                 return <FunVideoCardBox key={idx}
-                                    videoID={vDat.postID}
+                                    videoID={vDat.videoID}
                                     thumbnail={vDat.thumbnail}
                                     vidTitle={vDat.videoTitle}
                                     vidEvent={vDat.eventType}
                                     category={vDat.category}
                                     isLanding={true}
                                     isVideo={true}
+                                    handleContainerClick={NavigateToHighlight}
                                     // onEditClick={HandleEdit}
                                     // onDeleteClick={HandleDelete}
                                     />
@@ -163,7 +175,7 @@ export function FunBodyContents() {
                     <p>Also, you can contact us at: 977981234567</p>
                 </div>
                 <div className='fun__bodySpare'>
-                    <img src='https://cdn.punchng.com/wp-content/uploads/2018/08/02121857/track-race.png' />
+                    <img src='https://cdn.punchng.com/wp-content/uploads/2018/08/02121857/track-race.png' alt=''/>
                     <div className='fun__contactUsOverlay'></div>
                 </div>
                 <div className="fun__contactWrapper">
@@ -183,7 +195,7 @@ export function FunBodyContents() {
                                 <textarea className='vid__uploadDesc'  rows={6} onChange={(e)=>setMessage(e.target.value)} value={message} required></textarea>
                             </div>
                             <div className="vid__sendReset">
-                                <p>{error ? error : "" }</p>
+                                {/* <p>{error ? error : "" }</p> */}
                                 <FunLightButton btnLabel={"Send Message"} />
                             </div>
                         </form>

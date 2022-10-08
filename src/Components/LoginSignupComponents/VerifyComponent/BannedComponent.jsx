@@ -6,7 +6,6 @@ export const BannedComponent = () => {
     const funNavigate = useNavigate()
     const HandleExit = (e) => {
         e.preventDefault()
-        console.log("exited")
         funNavigate("/logout")
     }
 

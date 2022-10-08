@@ -58,7 +58,7 @@ export const AdminSidebar = () => {
                         <ManageAccountsOutlined className='icon'/>
                         <span>Profile</span>
                     </AdminCustomLink>
-                    <AdminCustomLink to="/logout">
+                    <AdminCustomLink to="/signout">
                         <LogoutOutlined className='icon'/>
                         <span>Logout</span>
                     </AdminCustomLink>

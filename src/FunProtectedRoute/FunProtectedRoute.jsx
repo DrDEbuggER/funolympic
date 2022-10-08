@@ -9,7 +9,7 @@ export const FunProtectedRoute = () => {
         GetCurrentUserType()
     },[loading])
     return (
-        loading || banned === undefined ? <div>Loading...</div> :
+        loading && !banned ? <div>Loading...</div> :
         funUser && !funUser.emailVerified ?  <Navigate to="/verify"/>:
         funUser && funUser.emailVerified && banned !== undefined && banned === true ?  <Navigate to="/banned"/>:
         funUser && funUser.emailVerified ? <Outlet /> :

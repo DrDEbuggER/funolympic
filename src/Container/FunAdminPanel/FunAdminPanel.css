@@ -1,6 +1,9 @@
 .fun__adminContainer {
     display: grid;
     grid-template-columns: 17.5rem 4fr;
+    min-height: 100vh;
+    height: fit-content;
+    background-color: white;
 }
 
 .fun__adminPanelSideBar {

@@ -25,7 +25,7 @@ export const AdminAllNews = ({docPath}) => {
     }
     useEffect(()=>{
         QueryDocs(setNewsData, "")
-    },[])
+    },[postID])
 
     // filter news 
     const FilterDocs = async(keywords, documentPath, eventType) => {
@@ -35,7 +35,6 @@ export const AdminAllNews = ({docPath}) => {
         let fireDocuments = []
         let tempData = []
         snapQuery.forEach((doc) => {
-            console.log("docs", doc.data())
             fireDocuments.push(doc.data())
         })
         if(fireDocuments.length > 0) {
@@ -62,7 +61,6 @@ export const AdminAllNews = ({docPath}) => {
     }
 
     const HandleDeleteClick = async(delID) => {
-        console.log("doc", delID)
         if(delID) {
             const delFix = query(collection(firestore, "news"), where("postID", "==", delID))
             await getDocs(delFix).then(async(snap)=> {

@@ -1,13 +1,5 @@
-
-import { IconButton } from "@mui/material"
-import { FunLandscapeCardBox, FunSearchBar, FunVideoPlayer } from "../../CommonComponents"
-import { FunChatBox } from "../FunChatBox"
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import { FunLandscapeCardBox, FunSearchBar } from "../../CommonComponents"
 import "./FunNews.css"
-import ads from "../../../assets/images/ads.svg"
-import ShareIcon from '@mui/icons-material/Share';
-import { ThumbDownAlt, ThumbDownOffAlt, ThumbUpOffAlt } from "@mui/icons-material";
 import { useEffect } from "react";
 import { collection, getDocs, limitToLast, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import { useState } from "react";
@@ -20,7 +12,7 @@ export const FunNews = () => {
     const funNavigate = useNavigate()
     const {postID} = useParams()
     const QueryDocs = (setData, category) => {
-        const queryRef = category == "none" ? query(collection(firestore, `/news`)) : query(collection(firestore, `/highlights`), where("category", "==", category))
+        const queryRef = category === "none" ? query(collection(firestore, `/news`)) : query(collection(firestore, `/highlights`), where("category", "==", category))
         let nData = [];
         onSnapshot(queryRef, (snap)=> {
             snap.docs.forEach((doc)=> {
@@ -41,10 +33,9 @@ export const FunNews = () => {
 
      // Query Latest News
     const QueryLatestNews = async(setData, category) => {
-        const queryRef = category == "none" ? query(collection(firestore, `/news`), orderBy("uploadedAt","asc"), limitToLast(1)) : query(collection(firestore, `/news`), where("category", "==", category))
+        const queryRef = category === "none" ? query(collection(firestore, `/news`), orderBy("uploadedAt","asc"), limitToLast(1)) : query(collection(firestore, `/news`), where("category", "==", category))
         await getDocs(queryRef).then((snap)=>{
             setData(snap.docs[0].data())
-            // console.log("snap", snap)
         })
     }
 
@@ -65,7 +56,6 @@ export const FunNews = () => {
         let fireDocuments = []
         let tempData = []
         snapQuery.forEach((doc) => {
-            console.log("docs", doc.data())
             fireDocuments.push(doc.data())
         })
         if(fireDocuments.length > 0) {
@@ -88,7 +78,6 @@ export const FunNews = () => {
     }
 
     const HandlePostClick = (postID) => {
-        console.log(postID)
         funNavigate(`/news/post/${postID}`)
     }
 
@@ -103,7 +92,7 @@ export const FunNews = () => {
                             singleNewsData && singleNewsData.thumbnail ? singleNewsData.thumbnail:
                                 ""
                             
-                        }></img>
+                        } alt=''></img>
                     </div>
                     <div className="fun__videoDesc">
                         <div className="fun__videoDescHead">

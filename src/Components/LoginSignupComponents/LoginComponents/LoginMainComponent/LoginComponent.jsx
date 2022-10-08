@@ -9,11 +9,9 @@ export const LoginComponent = () => {
     const {funLogin, error} = FunUserAuth();
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("clicked submit button");
         try {
             await funLogin(email, pass);
         }catch(e) {
-            console.log(e.message)
         }
         
     }

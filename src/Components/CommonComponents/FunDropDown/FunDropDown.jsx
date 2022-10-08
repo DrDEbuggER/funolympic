@@ -20,7 +20,7 @@ export const FunDropDown = ({userType}) => {
                     <Link to={`/profile`}>Profile</Link>
                 </div>
                 {
-                    userType == "admin"?
+                    userType === "admin"?
                         <div className="profile__items">
                             <DashboardOutlined />
                             <Link to={`/admin/dashboard`}>Admin Dashboard</Link>

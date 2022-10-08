@@ -19,7 +19,7 @@ export const FunAuthContextProvider = ({children}) => {
     const [logout, setLogout] = useState(false);
     const [userType, setUserType] = useState("")
     const [error, setError] = useState("")
-    const [banned,setBanned] = useState()
+    const [banned,setBanned] = useState(false)
     // const userType = useRef()
     const funSignup = async(fullName, userName, email, phone, country, pass) => {
         return createUserWithEmailAndPassword(auth, email, pass).then(async(funUserCred) => {
@@ -57,16 +57,16 @@ export const FunAuthContextProvider = ({children}) => {
         return signInWithEmailAndPassword(auth, email, pass).then(async(funUser) => {
             setError("")
             if (!funUser.user.emailVerified) {
-                console.log("Login: User not verified");
+                // User Not Verified 
             }  else  {
                 const userRef = query(collection(firestore, "users"), where("uuid", "==", auth.currentUser.uid))
                 window.localStorage.setItem("login", "true")
                 
                 await getDocs(userRef).then(async (snapshot) => {
                     // if (snapshot.docs[0].)
-                    if (snapshot.docs[0].id != '') {
+                    if (snapshot.docs[0].id !== '') {
                         await updateDoc(doc(firestore, `users/${snapshot.docs[0].id}`), {status: "Verified", online:true}).then((res)=> {
-                            console.log("verified login", snapshot.docs[0].id)
+                            
                         })
                     } 
                 })
@@ -77,7 +77,6 @@ export const FunAuthContextProvider = ({children}) => {
     }
 
     const funLogout = async () => {
-        console.log("logout...")
         await auth.signOut().then((res)=> {
             window.localStorage.setItem("login", "false")
             setLogout(true)
@@ -89,8 +88,12 @@ export const FunAuthContextProvider = ({children}) => {
         if(auth.currentUser) {
             const userQuery = query(collection(firestore, "users"), where("uuid", "==",  auth.currentUser.uid))
             onSnapshot(userQuery,(snap)=>{
-                setUserType(snap.docs[0].data().userType)
-                setBanned(snap.docs[0].data().banned)
+                if (snap.docs.length > 0) {
+                    setUserType(snap.docs[0].data().userType)
+                    setBanned(snap.docs[0].data().banned)
+                } else {
+                    setBanned(false)
+                }
             })
         } else {
             // setUserType("none")
@@ -99,7 +102,6 @@ export const FunAuthContextProvider = ({children}) => {
 
     useEffect(()=>{
         const unsubscribe = onAuthStateChanged(auth, (currfunUser) => {
-            console.log("Users:", currfunUser)
             setLoading(false)
             setfunUser(currfunUser)
         })

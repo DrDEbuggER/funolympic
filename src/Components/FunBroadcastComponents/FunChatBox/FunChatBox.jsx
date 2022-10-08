@@ -24,9 +24,7 @@ export const FunChatBox = ({game}) => {
         
         
         if(rmessage && userName) {
-            console.log("top", filter.isProfane(rmessage))
             if (filter.isProfane(rmessage)) {
-                console.log("filter","isprofane")
                 const colRef = collection(firestore, "BadActivity")
                 await addDoc(colRef, {
                     badTitle: "Inappropriate Comment",
@@ -40,7 +38,6 @@ export const FunChatBox = ({game}) => {
             const messageRef = collection(firestore, "livechat","Ju6NdmCCF23yOq8xSqbJ", game);
             setMessage("");
             await addDoc(messageRef,tempMessage).then(res => {
-                // console.log("sent res",res);
             })
         }
         fixScroll.current.scrollIntoView({block:"center", behavior: 'smooth'})

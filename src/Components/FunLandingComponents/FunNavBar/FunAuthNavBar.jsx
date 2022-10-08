@@ -9,7 +9,7 @@ export const FunAuthNavBar = ({btnText, toPage}) => {
                 <div className='fun__navWrapper'>
                     <div className='fun__navBarStart'>
                         <div className='fun__navLogo'>
-                            <img src={Logo}/>
+                            <img src={Logo} alt=''/>
                         </div>
                         
                     </div>

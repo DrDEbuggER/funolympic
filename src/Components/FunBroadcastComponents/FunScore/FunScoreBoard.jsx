@@ -5,7 +5,7 @@ export const FunScoreBoard = ({game, date, teamA, teamB, flagA, flagB, scoreA, s
         <div className="fun__score">
             <div className="fun__scoreLeft">
                 <div className="fun__countryWrap">
-                    <img src={`https://firebasestorage.googleapis.com/v0/b/bayjingfunolympic2022.appspot.com/o/flags%2F${flagA}.svg?alt=media`}/>
+                    <img src={`https://firebasestorage.googleapis.com/v0/b/bayjingfunolympic2022.appspot.com/o/flags%2F${flagA}.svg?alt=media`} alt=''/>
                     <h3>{teamA}</h3>
                 </div>
                 <div className="fun__scorePoint">
@@ -18,7 +18,7 @@ export const FunScoreBoard = ({game, date, teamA, teamB, flagA, flagB, scoreA, s
                 </div>
                 <div className="fun__countryWrap">
                     <h3>{teamB}</h3>
-                    <img src={`https://firebasestorage.googleapis.com/v0/b/bayjingfunolympic2022.appspot.com/o/flags%2F${flagB}.svg?alt=media`}/>
+                    <img src={`https://firebasestorage.googleapis.com/v0/b/bayjingfunolympic2022.appspot.com/o/flags%2F${flagB}.svg?alt=media`} alt=''/>
                 </div>
             </div>
         </div>

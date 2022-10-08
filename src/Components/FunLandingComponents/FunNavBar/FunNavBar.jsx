@@ -9,7 +9,7 @@ export const FunNavBar = () => {
                 <div className='fun__navWrapper'>
                     <div className='fun__navBarStart'>
                         <div className='fun__navLogo'>
-                            <img src={Logo}/>
+                            <img src={Logo} alt=''/>
                         </div>
                         
                     </div>
@@ -29,7 +29,7 @@ export const FunNavBar = () => {
                             <div className='fun__liveBtn'>
                                 <FunButton 
                                     text={"Watch Live"}
-                                    toPage={"/landing"}
+                                    toPage={"/broadcast"}
                                     />
                             </div>
                         </div>

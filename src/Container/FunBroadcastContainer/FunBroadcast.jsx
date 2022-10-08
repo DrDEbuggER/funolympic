@@ -1,6 +1,6 @@
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { BannedComponent, FunBroadcastMain, FunBroadcastNavBar, FunChangePassword, FunHighlights, FunLiveGames, FunLogout, FunNews, FunProfile, FunResultsMain, FunScore } from "../../Components"
+import { BannedComponent, FunBroadcastMain, FunBroadcastNavBar, FunChangePassword, FunHighlights, FunLiveGames, FunLogout, FunNavBar, FunNews, FunProfile, FunResultsMain, FunScore } from "../../Components"
 import { auth, firestore } from "../../firebase";
 
 import "./FunBroadcast.css";
@@ -16,13 +16,22 @@ export const FunBroadcast = ({pageName}) => {
     }
 
     useEffect(()=>{
-        GetCurrentUser()
+        if (auth.currentUser) {
+            GetCurrentUser()
+        }
+        
     },[])
 
     return (
         <div className="fun__broadcastContainer">
             <div className="fun__broadcastNav">
-                <FunBroadcastNavBar navColor="#6A0DAD" userName={userName}/>
+                {
+                    auth.currentUser && userName ? 
+                        <FunBroadcastNavBar navColor="#6A0DAD" userName={userName}/>
+                        :
+                        <FunNavBar />
+                }
+                
             </div>
             <div className="fun__broadcastBody">
                 {   pageName === "home" ? <FunBroadcastMain /> :

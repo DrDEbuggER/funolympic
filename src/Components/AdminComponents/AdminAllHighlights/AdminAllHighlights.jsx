@@ -8,7 +8,6 @@ import "./AdminAllHighlights.css"
 export const AdminAllHighlights = ({docPath}) => {
     const [videoData, setVideoData] = useState([])
     const [postID, showPostID] = useState('')
-    const [showUpload, setShowUpload] = useState(false);
     const [showBackDrop, setShowBackDrop] = useState(false)
     // const womenGamesRef = collection(firestore, `/highlights`)
     const funNavigate = useNavigate()
@@ -26,7 +25,7 @@ export const AdminAllHighlights = ({docPath}) => {
     }
     useEffect(()=>{
         QueryDocs(setVideoData, "")
-    },[])
+    },[postID])
 
     const FilterDocs = async(keywords, documentPath, eventType) => {
         const q = eventType ? query(collection(firestore, documentPath), where("eventType", "==", eventType)) : query(collection(firestore, documentPath))
@@ -35,7 +34,6 @@ export const AdminAllHighlights = ({docPath}) => {
         let fireDocuments = []
         let tempData = []
         snapQuery.forEach((doc) => {
-            console.log("docs", doc.data())
             fireDocuments.push(doc.data())
         })
         if(fireDocuments.length > 0) {

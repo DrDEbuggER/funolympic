@@ -146,7 +146,6 @@ export default function AdminDataGrid({usersData}) {
         headerAlign: 'center',
         width: 160,
         renderCell: (params) => {
-          console.log(params)
             return (
                 params.row.status === "Verified" ? 
                   params.row.banned && params.row.banned === true ?

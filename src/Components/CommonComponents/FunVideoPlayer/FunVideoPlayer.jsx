@@ -1,5 +1,5 @@
-import { Circle, CircleOutlined, Fullscreen, FullscreenExit, PlayArrow, Square, SquareOutlined } from '@mui/icons-material'
-import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from 'firebase/firestore'
+import { Circle, Fullscreen, FullscreenExit, PlayArrow, Square } from '@mui/icons-material'
+import { addDoc, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useRef } from 'react'
@@ -86,13 +86,12 @@ export const FunVideoPlayer = ({url, type, isLive, width, height, control, isPla
     }
 
     useEffect(()=>{
-        // if(type != "live") 
         const calculateWatchTime = setInterval(() => {
             UpdateWatchCount(videoID, playerRef.current.getCurrentTime())
         }, 10000);
         return ()=> clearInterval(calculateWatchTime)
     },[])
-    // console.log("prog", ReactPlayer.getSecondsLoaded())
+
     return (
         <div className='player-wrapper' ref={divRef} onMouseEnter={HandleMouseEnter} onMouseLeave={HandleMouseExit}>
             <ReactPlayer

@@ -13,7 +13,6 @@ export const AdminNavBar = () => {
   
   const chatQuery = query(queryRef)
   const [badComment, loading] = useCollection(chatQuery);
-  console.log("badcomment",badComment)
   const [hideMessage, setHideMessage] = useState(true)
   const HandleMessageBox = () => {
     setHideMessage(!hideMessage)

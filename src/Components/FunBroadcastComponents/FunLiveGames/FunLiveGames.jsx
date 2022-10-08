@@ -29,7 +29,6 @@ export const FunLiveGames = () => {
         let fireDocuments = []
         let tempData = []
         snapQuery.forEach((doc) => {
-            console.log("docs", doc.data())
             fireDocuments.push(doc.data())
         })
         if(fireDocuments.length > 0) {
@@ -51,13 +50,11 @@ export const FunLiveGames = () => {
     }
 
     const HandleCardClick = (videoID) => {
-        console.log("videoID",videoID)
         funNavigate(`/broadcast/watch/${videoID}`)
 
     }
 
     useEffect(()=>{
-        console.log(" uuid ", uuid().split("-").at(-1))
         QueryDocs(setLiveVideoData, "none")
     },[])
 
